@@ -1,0 +1,103 @@
+---
+title: "Point Mutagenesis"
+author: "Chris Ulpinnis"
+date: "5 9 2018"
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Experimental Workflow
+
+###Target sequence
+open reading frame mCherry in pet28a (Kanamycin resistance)
+
+###clone into
+pAGM9121
+
+
+###Genomic sequence mCherry
+
+ATGGTGAGCAAGGGCGAGGAGGATAACATGGCCATCATCAAGGAGTTCATGCGCTTCAAGGTGCACATGGAGGGCTCCG
+TGAACGGCCACGAGTTCGAGATCGAGGGCGAGGGCGAGGGCCGCCCCTACGAGGGCACCCAGACCGCCAAGCTGAAGGT
+GACCAAGGGTGGCCCCCTGCCCTTCGCCTGGGACATC**CTG**TCCCCTCAGTTCATGTACGGCTCCAAGGCCTACGT
+GAAGCACCCCGCCGACATCCCCGACTACTTGAAGCTGTCCTTCCCCGAGGGCTTCAAGTGGGAGCGCGTGATGAACTTC
+GAGGACGGCGGCGTGGTGACCGTGACCCAGGACTCCTCCCTGCAGGACGGCGAGTTCATCTACAAGGTGAAGCTGCGCG
+GCACCAACTTCCCCTCCGACGGCCCCGTAATGCAGAA**_GAAGAC_**GATGGGCTGGGAGGCCTCCTCCGAGCGGATGT
+ACCCCGAGGACGGCGCCCTGAAGGGCGAGATCAAGCAGAGGCTGAAGCTGAAGGACGGCGGCCACTACGACGCTGAGGT
+CAAGACCACCTACAAGGCCAAGAAGCCCGTGCAGCTGCCCGGCGCCTACAACGTCAACATCAAGTTGGACATCACCTCC
+CACAACGAGGACTACACCATCGTGGAACAGTACGAACGCGCCGAGGGCCGCCACTCCACCGGCGGCATGGACGAGCTGT
+ACAAGGTCGACAAGCTTGCGGCCGCACTCGAGCACCACCACCACCACCACTGA
+
+
+
+###Restriction Enzyme
+BbsI
+
+Recognition site: **_GAAGAC_**
+
+###Envisioned Mutation
+Leucine66 to Valine (point mutation)
+
+**CTG** -> **GTG**
+
+## R Workflow
+
+````{r include=FALSE}
+source(file = "functions.R")
+#source(file = "msd_temp.R")
+````
+````{r eval=FALSE}
+library("GoldenMutagenesis")
+````
+````{r}
+input_sequence<-"ATGGTGAGCAAGGGCGAGGAGGATAACATGGCCATCATCAAGGAGTTCATGCGCTTCAAGGTGCACATGGAGGGCTCCGTGAACGGCCACGAGTTCGAGATCGAGGGCGAGGGCGAGGGCCGCCCCTACGAGGGCACCCAGACCGCCAAGCTGAAGGTGACCAAGGGTGGCCCCCTGCCCTTCGCCTGGGACATCCTGTCCCCTCAGTTCATGTACGGCTCCAAGGCCTACGTGAAGCACCCCGCCGACATCCCCGACTACTTGAAGCTGTCCTTCCCCGAGGGCTTCAAGTGGGAGCGCGTGATGAACTTCGAGGACGGCGGCGTGGTGACCGTGACCCAGGACTCCTCCCTGCAGGACGGCGAGTTCATCTACAAGGTGAAGCTGCGCGGCACCAACTTCCCCTCCGACGGCCCCGTAATGCAGAAGAAGACGATGGGCTGGGAGGCCTCCTCCGAGCGGATGTACCCCGAGGACGGCGCCCTGAAGGGCGAGATCAAGCAGAGGCTGAAGCTGAAGGACGGCGGCCACTACGACGCTGAGGTCAAGACCACCTACAAGGCCAAGAAGCCCGTGCAGCTGCCCGGCGCCTACAACGTCAACATCAAGTTGGACATCACCTCCCACAACGAGGACTACACCATCGTGGAACAGTACGAACGCGCCGAGGGCCGCCACTCCACCGGCGGCATGGACGAGCTGTACAAGGTCGACAAGCTTGCGGCCGCACTCGAGCACCACCACCACCACCACTGA"
+recognition_site_bbsi<-"GAAGAC"
+recognition_site_bsai<-"GGTCTC"
+
+````
+The domesticate function checks for internal cleavage sites. If corresponding sites are present silent mutations are introduced to destroy the recognition sites. 
+The functions returns a list containing the position of the choosen amino acid residue for silent mutation.
+
+````{r}
+mutations_bbsi<-domesticate(input_sequence, recognition_site_bbsi)
+mutations_bbsi
+mutations_bsai<-domesticate(input_sequence, recognition_site_bsai)
+mutations_bsai
+
+````
+
+The mutate function designs the necessary set of primers for the desired mutations.\ 
+\
+The function has the following parameters:\
+prefix: Additional nucleobases in 5' position of the recognition site [default: TT]\
+restriction_enzyme: Recognition site sequence of the respective restriction enzyme [default: GGTCTC]\
+suffix: Spacer nucleotides matching the cleavage pattern of the enzyme [default: A]\
+vector: four basepair overhangs complementary to the created overhangs in the acceptor vector  [default: c("AATG", "AAGC")]\
+replacements: the desired substitutions\
+primer_min_length: The minimal threshold value of the template binding sequence [default: 4]\
+primer_length: Maximal length of the binding sequence [default: 9]\
+target_temp: Melting temperature of the binding sequence in °C [default: 60]\
+\
+It will return an object of the class primer_set.
+
+````{r}
+mutations<-c(list(c(66, "V")), mutations_bbsi)
+primers<-mutate(input_sequence, prefix="TT", restriction_enzyme = recognition_site_bbsi, suffix = "AA", vector=c("CTCA", "CTCG"), replacements = mutations, binding_min_length=4 ,primer_length=9, target_temp=60)
+primers
+````
+Objects of the classes "primer", "primer_msd" and "primer_set" can have a slim textual output by using the function print_primer.
+````{r}
+print_primer(primers)
+````
+The textual output can be printed into a file.
+````{r eval=FALSE}
+sink("primers.txt", append=FALSE, split=FALSE)
+print_primer(primers)
+sink()
+````
