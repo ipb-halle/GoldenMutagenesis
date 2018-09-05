@@ -3,8 +3,10 @@ title: "Point Mutagenesis"
 author: "Chris Ulpinnis"
 date: "5 9 2018"
 output:
-  word_document: default
+  md_document:
+    variant: markdown_github
   pdf_document: default
+  word_document: default
   html_document: default
 ---
 
@@ -14,14 +16,14 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Experimental Workflow
 
-###Target sequence
+### Target sequence
 open reading frame mCherry in pet28a (Kanamycin resistance)
 
-###clone into
+### Clone into
 pAGM9121
 
 
-###Genomic sequence mCherry
+### Genomic sequence mCherry
 
 ATGGTGAGCAAGGGCGAGGAGGATAACATGGCCATCATCAAGGAGTTCATGCGCTTCAAGGTGCACATGGAGGGCTCCG
 TGAACGGCCACGAGTTCGAGATCGAGGGCGAGGGCGAGGGCCGCCCCTACGAGGGCACCCAGACCGCCAAGCTGAAGGT
@@ -36,12 +38,12 @@ ACAAGGTCGACAAGCTTGCGGCCGCACTCGAGCACCACCACCACCACCACTGA
 
 
 
-###Restriction Enzyme
+### Restriction Enzyme
 BbsI
 
 Recognition site: **_GAAGAC_**
 
-###Envisioned Mutation
+### Envisioned Mutation
 Leucine66 to Valine (point mutation)
 
 **CTG** -> **GTG**
