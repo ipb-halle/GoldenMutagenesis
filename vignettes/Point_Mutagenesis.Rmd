@@ -1,14 +1,17 @@
 ---
 title: "Point Mutagenesis"
-author: "Chris Ulpinnis"
+author: "Chris Ulpinnis & Pascal Püllmann"
 date: "5 9 2018"
 output:
+  word_document: default
+  pdf_document: default
   md_document:
     variant: markdown_github
-  pdf_document: default
-  word_document: default
   html_document: default
 ---
+# Point Mutagenesis
+
+You can find the lastest version of this file at https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/Point_Mutagenesis.md
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)

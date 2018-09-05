@@ -1,3 +1,8 @@
+Point Mutagenesis
+=================
+
+You can find the lastest version of this file at <https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/Point_Mutagenesis.md>
+
 Experimental Workflow
 ---------------------
 
