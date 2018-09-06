@@ -1,0 +1,14 @@
+exportPattern("^[[:alpha:]]+")
+exportMethods(
+    "print_primer",
+    "mutate",
+    "domesticate",
+    "msd_mutate",
+    "primer_add_level"
+)
+exportClasses(
+    "Fragment",
+     "Primer MSD",
+     "Primer",
+     "Primerset" 
+)
