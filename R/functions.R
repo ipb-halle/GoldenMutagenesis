@@ -6,15 +6,21 @@ list_cu_table<-function(){
   return(list.files(system.file("cuf", package="GoldenMutagenesis")))
 }
 
-get_cu_table<-function(name) {
+get_cu_table<-function(name, list=T) {
   stopifnot(is.character(name))
-  file<-system.file(system.path("cuf", name, package="GoldenMutagenesis"))
+  file<-system.file("cuf", name, package="GoldenMutagenesis")
   cuf<-read.csv(file)
   cuf[, "codon"]<-str_replace_all(cuf[,"codon"], "U", "T")
   cuf_vector<-as.vector(cuf$relative_frequency)
   names(cuf_vector)<-gsub("U","T",cuf$codon)
   cuf_list<-lapply(unique(cuf$amino_acid), function(x){a<-cuf[which(cuf$amino_acid==x),"relative_frequency"];a<-a*1000;names(a)<-str_to_lower(cuf[which(cuf$amino_acid==x),"codon"]);return(as.table(a))})
   names(cuf_list)<-unique(cuf$amino_acid)
+  if(list==T) {
+    return(cuf_list)
+  }
+  else{
+    return(cuf_vector)
+  }
 }
 
 #cuf<-read.csv("")
@@ -221,7 +227,7 @@ sequence_check<-function(input_sequence){
 }
 
 
-mutate<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", suffix="A", vector=c("AATG", "AAGC"), replacements, binding_min_length=4 ,primer_length=9, target_temp=60, cuf_list=get_cu_table("cuf/e_coli_316407.csv")) {#change to primer_length_max? and min?
+mutate<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", suffix="A", vector=c("AATG", "AAGC"), replacements, binding_min_length=4 ,primer_length=9, target_temp=60, cuf_list=get_cu_table("e_coli_316407.csv")) {#change to primer_length_max? and min?
   replacements<-order_replacements(replacements)
   sequence<-s2c(input_sequence)
   codon_seq<-sequence_check(input_sequence)
@@ -253,6 +259,15 @@ mutate<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", suffi
     position<-position_aa*3
     aminoacid<-replacements[[i]][2]
     codon<-str_to_upper(names(which.max(cuf_list[[aminoacid]]))[1])
+    if(codon == codon_seq[position_aa]) {
+      if(length(cuf_list[[aminoacid]] == 1)) {
+        stop(paste("There is no syn. codon for", aminoacid ,sep=""))
+      }
+      else {
+        old_codon<-which.max(cuf_list[[aminoacid]])
+        codon<-str_to_upper(names(which.max(cuf_list[[aminoacid]][-old_codon]))[1])
+      }
+    }
     codon_seq[position_aa]<-codon
     forward<-pc(prefix=prefix, restriction_enzyme = restriction_enzyme, suffix=suffix, vector="", overhang=paste(str_split(codon_seq[position_aa-1], "", simplify = T)[3], codon_seq[position_aa], sep=""))
     forward@binding_sequence<-paste(paste(codon_seq[(position_aa+1):(position_aa+min(primer_length, length(codon_seq)-position_aa))], collapse=""), sep="") 
@@ -673,7 +688,7 @@ primer_add_level<-function(primerset, prefix="TT" ,restriction_enzyme="GAAGAC", 
   return(primerset)
 }
 
-domesticate<-function(input_sequence, restriction_enzyme="GGTCTC"){
+domesticate<-function(input_sequence, restriction_enzyme="GGTCTC", cuf_vector=get_cu_table("e_coli_316407.csv", list = F)){
   sequence<-s2c(input_sequence)
   restriction_enzyme_s2c<-s2c(restriction_enzyme)
   restriction_enzyme_s2c_reverse<-comp(restriction_enzyme_s2c)
