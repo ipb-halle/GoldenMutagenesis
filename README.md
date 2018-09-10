@@ -9,11 +9,11 @@ This library is currently still under development and will be enhanced by an R s
 Installation
 ------------
 
-You can install GoldenMutagenesis from github with:
+You can install this development prerelease version of GoldenMutagenesis from github with:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("ipb-halle/GoldenMutagenesis")
+devtools::install_github("ipb-halle/GoldenMutagenesis", ref="prerelease-dev")
 ```
 
 Example
