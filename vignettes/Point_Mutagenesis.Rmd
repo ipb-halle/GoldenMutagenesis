@@ -64,15 +64,16 @@ library("GoldenMutagenesis")
 input_sequence<-"ATGGTGAGCAAGGGCGAGGAGGATAACATGGCCATCATCAAGGAGTTCATGCGCTTCAAGGTGCACATGGAGGGCTCCGTGAACGGCCACGAGTTCGAGATCGAGGGCGAGGGCGAGGGCCGCCCCTACGAGGGCACCCAGACCGCCAAGCTGAAGGTGACCAAGGGTGGCCCCCTGCCCTTCGCCTGGGACATCCTGTCCCCTCAGTTCATGTACGGCTCCAAGGCCTACGTGAAGCACCCCGCCGACATCCCCGACTACTTGAAGCTGTCCTTCCCCGAGGGCTTCAAGTGGGAGCGCGTGATGAACTTCGAGGACGGCGGCGTGGTGACCGTGACCCAGGACTCCTCCCTGCAGGACGGCGAGTTCATCTACAAGGTGAAGCTGCGCGGCACCAACTTCCCCTCCGACGGCCCCGTAATGCAGAAGAAGACGATGGGCTGGGAGGCCTCCTCCGAGCGGATGTACCCCGAGGACGGCGCCCTGAAGGGCGAGATCAAGCAGAGGCTGAAGCTGAAGGACGGCGGCCACTACGACGCTGAGGTCAAGACCACCTACAAGGCCAAGAAGCCCGTGCAGCTGCCCGGCGCCTACAACGTCAACATCAAGTTGGACATCACCTCCCACAACGAGGACTACACCATCGTGGAACAGTACGAACGCGCCGAGGGCCGCCACTCCACCGGCGGCATGGACGAGCTGTACAAGGTCGACAAGCTTGCGGCCGCACTCGAGCACCACCACCACCACCACTGA"
 recognition_site_bbsi<-"GAAGAC"
 recognition_site_bsai<-"GGTCTC"
+cuf<-"e_coli_316407.csv"
 
 ````
 The domesticate function checks for internal cleavage sites. If corresponding sites are present silent mutations are introduced to destroy the recognition sites. 
 The functions returns a list containing the position of the choosen amino acid residue for silent mutation.
 
 ````{r}
-mutations_bbsi<-domesticate(input_sequence, recognition_site_bbsi)
+mutations_bbsi<-domesticate(input_sequence, recognition_site_bbsi, cuf)
 mutations_bbsi
-mutations_bsai<-domesticate(input_sequence, recognition_site_bsai)
+mutations_bsai<-domesticate(input_sequence, recognition_site_bsai, cuf)
 mutations_bsai
 
 ````
@@ -83,17 +84,18 @@ The function has the following parameters:\
 prefix: Additional nucleobases in 5' position of the recognition site [default: TT]\
 restriction_enzyme: Recognition site sequence of the respective restriction enzyme [default: GGTCTC]\
 suffix: Spacer nucleotides matching the cleavage pattern of the enzyme [default: A]\
-vector: four basepair overhangs complementary to the created overhangs in the acceptor vector  [default: c("AATG", "AAGC")]\
-replacements: the desired substitutions\
+vector: Four basepair overhangs complementary to the created overhangs in the acceptor vector  [default: c("AATG", "AAGC")]\
+replacements: The desired substitutions\
 primer_min_length: The minimal threshold value of the template binding sequence [default: 4]\
 primer_length: Maximal length of the binding sequence [default: 9]\
 target_temp: Melting temperature of the binding sequence in °C [default: 60]\
+cuf: The Codon Usage Table which is being used to select the codon for an exchanged amino acid. [default: e_coli_316407.csv]\
 \
 It will return an object of the class primer_set.
 
 ````{r}
 mutations<-c(list(c(66, "V")), mutations_bbsi)
-primers<-mutate(input_sequence, prefix="TT", restriction_enzyme = recognition_site_bbsi, suffix = "AA", vector=c("CTCA", "CTCG"), replacements = mutations, binding_min_length=4 ,primer_length=9, target_temp=60)
+primers<-mutate(input_sequence, prefix="TT", restriction_enzyme = recognition_site_bbsi, suffix = "AA", vector=c("CTCA", "CTCG"), replacements = mutations, binding_min_length=4 ,primer_length=9, target_temp=60, cuf=cuf)
 primers
 ````
 Objects of the classes "primer", "primer_msd" and "primer_set" can have a slim textual output by using the function print_primer.
