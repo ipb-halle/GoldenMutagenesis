@@ -12,3 +12,6 @@ Depends: seqinr, stringr
 Imports: methods, utils, stats
 LazyData: false
 RoxygenNote: 6.1.0
+Suggests: knitr,
+    rmarkdown
+VignetteBuilder: knitr

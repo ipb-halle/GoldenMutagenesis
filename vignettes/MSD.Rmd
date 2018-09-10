@@ -3,20 +3,19 @@ title: "Multiple Site Saturation Mutagenesis"
 author: "Chris Ulpinnis & Pascal Püllmann"
 date: "`r Sys.Date()`"
 output:
-  pdf_document: default
+  word_document: default
   md_document:
     variant: markdown_github
-  word_document: default
+  pdf_document: default
   html_document: default
 ---
-#Active site
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_chunk$set(tidy.opts=list(width.cutoff=60),tidy=TRUE)
 ```
 
-# Multiple Site Saturation Mutagenesis
+# Multiple Site Saturation Mutagenesis -- Active site
 
 You can find the lastest version of this file at https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/MSD.md
 

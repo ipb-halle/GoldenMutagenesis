@@ -9,14 +9,13 @@ output:
   pdf_document: default
   html_document: default
 ---
-#Active site
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_chunk$set(tidy.opts=list(width.cutoff=60),tidy=TRUE)
 ```
 
-# Multiple Site Saturation Mutagenesis
+# Multiple Site Saturation Mutagenesis -- Active Site
 
 You can find the lastest version of this file at https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/MSD.md
 
