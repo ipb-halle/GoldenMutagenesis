@@ -19,7 +19,7 @@ devtools::install_github("ipb-halle/GoldenMutagenesis")
 Example
 -------
 
-To start with this library we recommend to have a look on our vignettes!
-[Point Mutagenesis](https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/Point_Mutagenesis.md)
-[Multiple Site Directed Mutagenesis - Example1](https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/MSD.md)
+To start with this library we recommend to have a look on our vignettes!  
+[Point Mutagenesis](https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/Point_Mutagenesis.md)  
+[Multiple Site Directed Mutagenesis - Example1](https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/MSD.md)  
 [Multiple Site Directed Mutagenesis - Example2](https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/MSD2.md)
