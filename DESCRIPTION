@@ -2,7 +2,7 @@ Package: GoldenMutagenesis
 Type: Package
 Encoding: UTF-8
 Title: A tool to generate primers for Golden Gate Cloning
-Version: prerelease
+Version: 1.0.0
 Date: 2018-09-10
 Author: Chris Ulpinnis & Pascal Püllmann
 Maintainer: Chris Ulpinnis <Chris.Ulpinnis@ipb-halle.de>
