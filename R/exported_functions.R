@@ -15,11 +15,13 @@ list_cu_table<-function(){
 #' 
 #' @param primer An object of class Primer, Primer MSD or Primerset
 #'
-#' @return A textual output
+#' @return Textual output
 #' @export
 #'
 #' @examples
-#' 
+#' #Load results of the Point Mutation vignette and print it
+#' data(Point_Mutagenesis_BbsI_result)
+#' print_primer(primers)
 setGeneric("print_primer" , function(primer) {
   standardGeneric("print_primer")
 })
@@ -27,14 +29,14 @@ setGeneric("print_primer" , function(primer) {
 setMethod("print_primer", signature(primer="Primer"),
           function(primer){
             cat(primer@prefix, primer@restriction_enzyme, primer@suffix, primer@vector, primer@overhang, primer@binding_sequence, "\n" , sep="")
-            cat("Temperature of binding site: ", primer@temperature, " °C" , "\n")
+            cat("Temperature of binding site: ", primer@temperature, " \u00b0C" , "\n")
             cat("Temperature difference: ", primer@difference, " K", "\n")
           }
 )
 setMethod("print_primer", signature(primer="Primer MSD"),
           function(primer){
             cat(primer@prefix, primer@restriction_enzyme, primer@suffix, primer@vector, primer@overhang, primer@NDT, primer@binding_sequence, "\n", sep="")
-            cat("Temperature of binding site: ", primer@temperature, " °C" , "\n")
+            cat("Temperature of binding site: ", primer@temperature, " \u00b0C" , "\n")
             cat("Temperature difference: ", primer@difference, " K", "\n")
           }
 )
@@ -65,6 +67,9 @@ setMethod("print_primer", signature(primer="Primerset"),
 #' @export
 #'
 #' @examples
+#' #Load the setup of the Point Mutation vignette and run the domestication
+#' data(Point_Mutagenesis_BbsI_setup)
+#' domesticate(input_sequence, restriction_enzyme=recognition_site_bbsi, cuf=cuf)
 domesticate<-function(input_sequence, restriction_enzyme="GGTCTC", cuf="e_coli_316407.csv"){
   cuf_vector<-get_cu_table(cuf, list=F)
   sequence<-s2c(input_sequence)
@@ -109,13 +114,18 @@ domesticate<-function(input_sequence, restriction_enzyme="GGTCTC", cuf="e_coli_3
 #' @param replacements The desired substitutions
 #' @param binding_min_length The minimal threshold value of the template binding sequence [default: 4]
 #' @param primer_length Maximal length of the binding sequence [default: 9]
-#' @param target_temp Melting temperature of the binding sequence in °C [default: 60]
+#' @param target_temp Melting temperature of the binding sequence in \code{print('\u00B0')}C [default: 60]
 #' @param cuf The Codon Usage Table which is being used to select the codon for an exchanged amino acid. [default: e_coli_316407.csv]
 #'
 #' @return An object of class Primerset with the designed Primers.
 #' @export
 #'
 #' @examples
+#' #Load the setup of the Point Mutation vignette and design the primers
+#' data(Point_Mutagenesis_BbsI_setup)
+#' primers<-mutate(input_sequence, prefix="TT", restriction_enzyme = recognition_site_bbsi, 
+#' suffix = "AA", vector=c("CTCA", "CTCG"), replacements = mutations, binding_min_length=4 ,
+#' primer_length=9, target_temp=60, cuf=cuf)
 #' 
 mutate<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", suffix="A", vector=c("AATG", "AAGC"), replacements, binding_min_length=4 ,primer_length=9, target_temp=60, cuf="e_coli_316407.csv") {#change to primer_length_max? and min?
   cuf_list<-get_cu_table(cuf)
@@ -194,7 +204,7 @@ mutate<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", suffi
 #' @param replacements The desired substitutions
 #' @param replacement_range The minimal threshold value of the template binding sequence in amino acid residues [default: 4]
 #' @param binding_min_length Maximal length of the binding sequence [default: 9]
-#' @param primer_length Melting temperature of the binding sequence in °C [default: 60]
+#' @param primer_length Melting temperature of the binding sequence in \code{print('\u00B0')}C [default: 60]
 #' @param target_temp Maximum distance between two randomization sites to be incoporated into a single primer in amino acid residues [default: 5]
 #' @param fragment_min_size Minimal size of a generated gene fragment in base pairs [default 100]
 #'
@@ -202,6 +212,15 @@ mutate<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", suffi
 #' @export
 #'
 #' @examples
+#' #Load the setup of the MSD vignette and design the primers
+#' data(MSD_BsaI_setup_lv2)
+#' print(mutations)
+#' print(recognition_site_bsai)
+#' primers<-msd_mutate(input_sequence, prefix="TT" ,
+#' restriction_enzyme=recognition_site_bsai, suffix="A", 
+#' vector=c("AATG", "AAGC"), replacements=mutations, replacement_range=5,
+#' binding_min_length=4 , primer_length=9, target_temp=60,
+#' fragment_min_size=60 )
 msd_mutate<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", suffix="A", vector=c("AATG", "AAGC"), replacements, replacement_range=5, binding_min_length=4 ,primer_length=9, target_temp=60, fragment_min_size=60 ) {#change to primer_length_max? and min?
   replacements<-sort(replacements)
   sequence<-s2c(input_sequence)
@@ -487,6 +506,27 @@ msd_mutate<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", s
   return(ps(oldsequence=input_sequence, primers=primers, newsequence=paste(codon_seq, collapse = "")))
 }
 
+#' Add a level to exisiting Primerset
+#' 
+#' This function replaces the prefix, the suffix and the restriction enzyme of a given Primerset to change the design to another Level.
+#' You can use this function to convert an exisiting Level 2 Primerset to a Level 0 Primerset for example.
+#' Also the overhangs of the first and the last primer will be modified to match the plasmid of the new level.
+#'
+#' @param primerset An exisiting Primerset (in Level 2)
+#' @param prefix Additional nucleobases in 5' position of the new recognition site [default: TT]
+#' @param restriction_enzyme Recognition site sequence of the new restriction enzyme (Level 0) [default: GAAGAC]
+#' @param suffix Spacer nucleotides matching the cleavage pattern of the enzyme (Level 0) [default: AA]
+#' @param vector Four basepair overhangs complementary to the created overhangs in the acceptor vector [default: c("CTCA", "CTCG")]
+#'
+#' @return A Primerset in the new Level (Level 0)
+#' @export
+#'
+#' @examples
+#' #Load level 2 results of the MSD vignette
+#' data(MSD_BsaI_result_lv2)
+#' primer_add_level(primers,  prefix="TT", 
+#' restriction_enzyme="GAAGAC", suffix="AA", vector=c("CTCA", "CTCG"))
+#' 
 primer_add_level<-function(primerset, prefix="TT" ,restriction_enzyme="GAAGAC", suffix="AA", vector=c("CTCA", "CTCG")){
   for(i in 1:length(primerset@primers)) {
     if(primerset@primers[[i]][[1]]@overhang=="" && primerset@primers[[i]][[1]]@vector!=""){
