@@ -26,7 +26,7 @@ msd_mutate(input_sequence, prefix = "TT",
 
 \item{binding_min_length}{Maximal length of the binding sequence [default: 9]}
 
-\item{primer_length}{Melting temperature of the binding sequence in °C [default: 60]}
+\item{primer_length}{Melting temperature of the binding sequence in \code{print('\u00B0')}C [default: 60]}
 
 \item{target_temp}{Maximum distance between two randomization sites to be incoporated into a single primer in amino acid residues [default: 5]}
 
@@ -37,4 +37,15 @@ An object of class Primerset with the designed Primers.
 }
 \description{
 The mutate_msd function designs the necessary set of primers for the desired mutations.
+}
+\examples{
+#Load the setup of the MSD vignette and design the primers
+data(MSD_BsaI_setup_lv2)
+print(mutations)
+print(recognition_site_bsai)
+primers<-msd_mutate(input_sequence, prefix="TT" ,
+restriction_enzyme=recognition_site_bsai, suffix="A", 
+vector=c("AATG", "AAGC"), replacements=mutations, replacement_range=5,
+binding_min_length=4 , primer_length=9, target_temp=60,
+fragment_min_size=60 )
 }

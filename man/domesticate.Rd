@@ -21,3 +21,8 @@ A list with replacments: Each element has a vector with the codon number at the 
 The domesticate function checks for internal cleavage sites. If corresponding sites are present silent mutations are introduced to destroy the recognition sites. 
 The functions returns a list containing the position of the choosen amino acid residue for silent mutation.
 }
+\examples{
+#Load the setup of the Point Mutation vignette and run the domestication
+data(Point_Mutagenesis_BbsI_setup)
+domesticate(input_sequence, restriction_enzyme=recognition_site_bbsi, cuf=cuf)
+}

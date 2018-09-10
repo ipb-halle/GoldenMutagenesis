@@ -26,7 +26,7 @@ mutate(input_sequence, prefix = "TT", restriction_enzyme = "GGTCTC",
 
 \item{primer_length}{Maximal length of the binding sequence [default: 9]}
 
-\item{target_temp}{Melting temperature of the binding sequence in °C [default: 60]}
+\item{target_temp}{Melting temperature of the binding sequence in \code{print('\u00B0')}C [default: 60]}
 
 \item{cuf}{The Codon Usage Table which is being used to select the codon for an exchanged amino acid. [default: e_coli_316407.csv]}
 }
@@ -38,5 +38,10 @@ The mutate function designs the necessary set of primers for the desired mutatio
 An example is given in the vignette at \url{https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/Point_Mutagenesis.md}
 }
 \examples{
+#Load the setup of the Point Mutation vignette and design the primers
+data(Point_Mutagenesis_BbsI_setup)
+primers<-mutate(input_sequence, prefix="TT", restriction_enzyme = recognition_site_bbsi, 
+suffix = "AA", vector=c("CTCA", "CTCG"), replacements = mutations, binding_min_length=4 ,
+primer_length=9, target_temp=60, cuf=cuf)
 
 }

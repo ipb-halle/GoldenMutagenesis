@@ -10,11 +10,13 @@ print_primer(primer)
 \item{primer}{An object of class Primer, Primer MSD or Primerset}
 }
 \value{
-A textual output
+Textual output
 }
 \description{
 An example is shown in the vignette at \url{https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/Point_Mutagenesis.md}
 }
 \examples{
-
+#Load results of the Point Mutation vignette and print it
+data(Point_Mutagenesis_BbsI_result)
+print_primer(primers)
 }
