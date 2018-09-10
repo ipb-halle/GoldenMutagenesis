@@ -1,7 +1,7 @@
 ---
 title: "Point Mutagenesis"
 author: "Chris Ulpinnis & Pascal Püllmann"
-date: "5 9 2018"
+date: "`r Sys.Date()`"
 output:
   word_document: default
   pdf_document: default
@@ -37,8 +37,7 @@ GCACCAACTTCCCCTCCGACGGCCCCGTAATGCAGAA**_GAAGAC_**GATGGGCTGGGAGGCCTCCTCCGAGCGGATG
 ACCCCGAGGACGGCGCCCTGAAGGGCGAGATCAAGCAGAGGCTGAAGCTGAAGGACGGCGGCCACTACGACGCTGAGGT
 CAAGACCACCTACAAGGCCAAGAAGCCCGTGCAGCTGCCCGGCGCCTACAACGTCAACATCAAGTTGGACATCACCTCC
 CACAACGAGGACTACACCATCGTGGAACAGTACGAACGCGCCGAGGGCCGCCACTCCACCGGCGGCATGGACGAGCTGT
-ACAAGGTCGACAAGCTTGCGGCCGCACTCGAGCACCACCACCACCACCACTGA
-
+ACAAGGTCGACAAGCTTGCGGCCGCACTCGAGTGA
 
 
 ### Restriction Enzyme
@@ -53,15 +52,12 @@ Leucine66 to Valine (point mutation)
 
 ## R Workflow
 
-````{r include=FALSE}
-source(file = "functions.R")
-#source(file = "msd_temp.R")
-````
-````{r eval=FALSE}
+
+````{r}
 library("GoldenMutagenesis")
 ````
 ````{r}
-input_sequence<-"ATGGTGAGCAAGGGCGAGGAGGATAACATGGCCATCATCAAGGAGTTCATGCGCTTCAAGGTGCACATGGAGGGCTCCGTGAACGGCCACGAGTTCGAGATCGAGGGCGAGGGCGAGGGCCGCCCCTACGAGGGCACCCAGACCGCCAAGCTGAAGGTGACCAAGGGTGGCCCCCTGCCCTTCGCCTGGGACATCCTGTCCCCTCAGTTCATGTACGGCTCCAAGGCCTACGTGAAGCACCCCGCCGACATCCCCGACTACTTGAAGCTGTCCTTCCCCGAGGGCTTCAAGTGGGAGCGCGTGATGAACTTCGAGGACGGCGGCGTGGTGACCGTGACCCAGGACTCCTCCCTGCAGGACGGCGAGTTCATCTACAAGGTGAAGCTGCGCGGCACCAACTTCCCCTCCGACGGCCCCGTAATGCAGAAGAAGACGATGGGCTGGGAGGCCTCCTCCGAGCGGATGTACCCCGAGGACGGCGCCCTGAAGGGCGAGATCAAGCAGAGGCTGAAGCTGAAGGACGGCGGCCACTACGACGCTGAGGTCAAGACCACCTACAAGGCCAAGAAGCCCGTGCAGCTGCCCGGCGCCTACAACGTCAACATCAAGTTGGACATCACCTCCCACAACGAGGACTACACCATCGTGGAACAGTACGAACGCGCCGAGGGCCGCCACTCCACCGGCGGCATGGACGAGCTGTACAAGGTCGACAAGCTTGCGGCCGCACTCGAGCACCACCACCACCACCACTGA"
+input_sequence<-"ATGGTGAGCAAGGGCGAGGAGGATAACATGGCCATCATCAAGGAGTTCATGCGCTTCAAGGTGCACATGGAGGGCTCCGTGAACGGCCACGAGTTCGAGATCGAGGGCGAGGGCGAGGGCCGCCCCTACGAGGGCACCCAGACCGCCAAGCTGAAGGTGACCAAGGGTGGCCCCCTGCCCTTCGCCTGGGACATCCTGTCCCCTCAGTTCATGTACGGCTCCAAGGCCTACGTGAAGCACCCCGCCGACATCCCCGACTACTTGAAGCTGTCCTTCCCCGAGGGCTTCAAGTGGGAGCGCGTGATGAACTTCGAGGACGGCGGCGTGGTGACCGTGACCCAGGACTCCTCCCTGCAGGACGGCGAGTTCATCTACAAGGTGAAGCTGCGCGGCACCAACTTCCCCTCCGACGGCCCCGTAATGCAGAAGAAGACGATGGGCTGGGAGGCCTCCTCCGAGCGGATGTACCCCGAGGACGGCGCCCTGAAGGGCGAGATCAAGCAGAGGCTGAAGCTGAAGGACGGCGGCCACTACGACGCTGAGGTCAAGACCACCTACAAGGCCAAGAAGCCCGTGCAGCTGCCCGGCGCCTACAACGTCAACATCAAGTTGGACATCACCTCCCACAACGAGGACTACACCATCGTGGAACAGTACGAACGCGCCGAGGGCCGCCACTCCACCGGCGGCATGGACGAGCTGTACAAGGTCGACAAGCTTGCGGCCGCACTCGAGTGA"
 recognition_site_bbsi<-"GAAGAC"
 recognition_site_bsai<-"GGTCTC"
 cuf<-"e_coli_316407.csv"
@@ -81,15 +77,15 @@ mutations_bsai
 The mutate function designs the necessary set of primers for the desired mutations.\ 
 \
 The function has the following parameters:\
-prefix: Additional nucleobases in 5' position of the recognition site [default: TT]\
-restriction_enzyme: Recognition site sequence of the respective restriction enzyme [default: GGTCTC]\
-suffix: Spacer nucleotides matching the cleavage pattern of the enzyme [default: A]\
-vector: Four basepair overhangs complementary to the created overhangs in the acceptor vector  [default: c("AATG", "AAGC")]\
-replacements: The desired substitutions\
-primer_min_length: The minimal threshold value of the template binding sequence [default: 4]\
-primer_length: Maximal length of the binding sequence [default: 9]\
-target_temp: Melting temperature of the binding sequence in °C [default: 60]\
-cuf: The Codon Usage Table which is being used to select the codon for an exchanged amino acid. [default: e_coli_316407.csv]\
+**prefix**: Additional nucleobases in 5' position of the recognition site [default: TT]\
+**restriction_enzyme**: Recognition site sequence of the respective restriction enzyme [default: GGTCTC]\
+**suffix**: Spacer nucleotides matching the cleavage pattern of the enzyme [default: A]\
+**vector**: Four basepair overhangs complementary to the created overhangs in the acceptor vector  [default: c("AATG", "AAGC")]\
+**replacements**: The desired substitutions\
+**primer_min_length**: The minimal threshold value of the template binding sequence [default: 4]\
+**primer_length**: Maximal length of the binding sequence [default: 9]\
+**target_temp**: Melting temperature of the binding sequence in °C [default: 60]\
+**cuf**: The Codon Usage Table which is being used to select the codon for an exchanged amino acid. [default: e_coli_316407.csv]\
 \
 It will return an object of the class primer_set.
 
