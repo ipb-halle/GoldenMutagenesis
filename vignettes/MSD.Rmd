@@ -86,7 +86,7 @@ The function has the following parameters:\
 **suffix**: Spacer nucleotides matching the cleavage pattern of the enzyme [default: A]\
 **vector**: Four basepair overhangs complementary to the created overhangs in the acceptor vector  [default: c("AATG", "AAGC")]\
 **replacements**: The desired substitutions\
-**primer_min_length**: The minimal threshold value of the template binding sequence in amino acid residues [default: 4]\
+**binding_min_length**: The minimal threshold value of the template binding sequence in amino acid residues [default: 4]\
 **primer_length**: Maximal length of the binding sequence [default: 9]\
 **target_temp**: Melting temperature of the binding sequence in °C [default: 60]\
 **replacement_range**: Maximum distance between two randomization sites to be incoporated into a single primer in amino acid residues [default: 5]\
