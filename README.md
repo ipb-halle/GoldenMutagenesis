@@ -21,5 +21,10 @@ Example
 
 To start with this library we recommend to have a look on our vignettes!  
 [Point Mutagenesis](https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/Point_Mutagenesis.md)  
-[Multiple Site Directed Mutagenesis - Example1](https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/MSD.md) [![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/ipb-halle/GoldenMutagenesis/prerelease-dev?urlpath=https%3A%2F%2Fgithub.com%2Fipb-halle%2FGoldenMutagenesis%2Fblob%2Fprerelease-dev%2Fnotebooks%2FMSD.ipynb)  
+[Multiple Site Directed Mutagenesis - Example1](https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/MSD.md)   
 [Multiple Site Directed Mutagenesis - Example2](https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/MSD2.md)
+
+Interactive Example
+-------
+
+You can try out our interactive user notebook for Multiple Site Directed Mutagenesis: [![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/ipb-halle/GoldenMutagenesis/prerelease-dev?filepath=notebooks%2FMSD_USER.ipynb)
