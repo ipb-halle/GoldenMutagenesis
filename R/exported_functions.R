@@ -221,7 +221,11 @@ mutate<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", suffi
 #' vector=c("AATG", "AAGC"), replacements=mutations, replacement_range=5,
 #' binding_min_length=4 , primer_length=9, target_temp=60,
 #' fragment_min_size=60 )
-msd_mutate<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", suffix="A", vector=c("AATG", "AAGC"), replacements, replacement_range=5, binding_min_length=4 ,primer_length=9, target_temp=60, fragment_min_size=60 ) {#change to primer_length_max? and min?
+msd_mutate<-function(input_sequence, codon="NDT" ,prefix="TT" ,restriction_enzyme="GGTCTC", suffix="A", vector=c("AATG", "AAGC"), replacements, replacement_range=5, binding_min_length=4 ,primer_length=9, target_temp=60, fragment_min_size=60 ) {#change to primer_length_max? and min?
+  possible_codons<-c("NNN", "NNK", "NNS", "NDT", "DBK", "NRT")
+  if(!(codon %in% possible_codons)) {
+    stop(paste(codon, "is not a valid codon. Please select one of the following:", paste(possible_codons, collapse = " ") ,sep=" "))
+  }
   replacements<-sort(replacements)
   sequence<-s2c(input_sequence)
   codon_seq<-sequence_check(input_sequence)
