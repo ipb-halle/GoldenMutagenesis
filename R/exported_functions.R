@@ -552,3 +552,75 @@ primer_add_level<-function(primerset, prefix="TT" ,restriction_enzyme="GAAGAC", 
   }
   return(primerset)
 }
+
+#' Title
+#'
+#' @param input_sequence 
+#' @param ab1file 
+#' @param replacements 
+#' @param trace_cutoff 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+base_distribution<-function(input_sequence, ab1file, replacements, trace_cutoff=80){
+  sanger_seq<-readsangerseq(ab1file) #reading in the data
+  global_Align<-pairwiseAlignment(input_sequence, sanger_seq@primarySeq)
+  global_Align_rev<-pairwiseAlignment(input_sequence, reverseComplement(sanger_seq@primarySeq))
+  reverse=F
+  if(global_Align_rev@score > global_Align@score) {
+    reverse=T
+    global_Align<-global_Align_rev
+  }
+  mismatches<-mismatchTable(global_Align)
+  replacements_basepairs<-as.vector(sapply(replacements, FUN<-function(x){return(c(x*3-2, x*3-1, x*3))}))
+  candidates<-unlist(sapply(replacements_basepairs, FUN = function(x){which(mismatches[,"PatternStart"]==x)}, simplify = array))
+  mismatches_candidates<-mismatches[candidates, ]
+  mismatches_candidates$pos<-mismatches_candidates[,"PatternStart"]%%3
+  mismatches_candidates[mismatches_candidates["pos"]==0, "pos"]<-3
+  subject_pos<-vector()
+  pattern_pos<-vector()
+  for (i in 1:nrow(mismatches_candidates)) {
+    subject_start<-mismatches_candidates[i, "SubjectStart"]
+    pos<-mismatches_candidates[i, "pos"]
+    pattern_start<-mismatches_candidates[i, "PatternStart"]
+    if(pos==1) {
+      subject_pos<-c(subject_pos, subject_start, subject_start+1, subject_start+2)
+      pattern_pos<-c(pattern_pos, pattern_start, pattern_start+1, pattern_start+2)
+      
+    }
+    if(pos==2) {
+      subject_pos<-c(subject_pos, subject_start-1, subject_start, subject_start+1)
+      pattern_pos<-c(pattern_pos, pattern_start-1, pattern_start, pattern_start+1)
+      
+    }
+    if(pos==3) {
+      subject_pos<-c(subject_pos, subject_start-2, subject_start-1, subject_start)
+      pattern_pos<-c(pattern_pos, pattern_start-2, pattern_start-1, pattern_start)
+      
+    }
+  }
+  subject_pos<-unique(subject_pos)
+  pattern_pos<-unique(pattern_pos)
+  
+  if(reverse==T) {
+    subject_pos<-nchar(sanger_seq@primarySeq)-mismatches_candidates[,"SubjectStart"]+1
+  }
+  tracematrix_subject<-traceMatrix(sanger_seq)[peakPosMatrix(sanger_seq)[subject_pos],]
+  sums_row<-which(rowSums(tracematrix_subject)>=trace_cutoff)
+  tracematrix_subject<-as.data.frame(tracematrix_subject[sums_row,])
+  for(element in sums_row) {
+    # plotting as pie chart
+    sliceit <- dplyr::slice (tracematrix_subject,element)
+    slices <- as.numeric(sliceit)
+    if(reverse==T) {
+      lbls <- c("Thymine", "Guanine", "Cytosine", "Adenine")
+    }
+    lbls <- c("Adenine", "Cytosine", "Guanine", "Thymine")
+    pct <- round(slices/sum(slices)*100)
+    lbls <- paste(lbls, pct) # add percents to labels
+    lbls <- paste(lbls,"%",sep="") # ad % to labels
+    pie(slices,labels = lbls, col=brewer.pal(4,"Spectral"),main = paste("Peak intensity distribution for Postion", pattern_pos[element], "(Template) -", subject_pos[element], "(Sequencing)", sep=" ")) 
+    }
+}
