@@ -396,11 +396,18 @@ msd_mutate<-function(input_sequence, codon="NDT" ,prefix="TT" ,restriction_enzym
       }
       else{
         if ((length(codon_seq) - replacements[i-1]) >= (min_fragment)) {
-          temp_new_fragment <- fragment(start = temp_fragment@stop + 1)
-          temp_old_fragment <- temp_fragment
-          temp_fragment <- temp_new_fragment
-          rm(temp_new_fragment)
-          if(replacements[i]-temp_fragment@start < primer_length+2) {
+          if(length(temp_fragment@stop)!=0) {
+            temp_new_fragment <- fragment(start = temp_fragment@stop + 1)
+            #temp_old_fragment <- temp_fragment
+            temp_fragment <- temp_new_fragment
+            rm(temp_new_fragment)
+          }
+          else {
+            if(length(temp_fragment@start)==0) {
+              stop("Internal error. Please give a bug report!")
+            }
+          }
+          if(replacements[i]-temp_fragment@start < primer_length+2 ) {
             temp_fragment@start_mutation<-replacements[i]
             temp_fragment@stop<-length(codon_seq)
             fragments <- c(fragments, temp_fragment)
