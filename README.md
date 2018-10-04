@@ -29,6 +29,6 @@ Interactive Example
 
 ## You can try out our interactive user notebooks for Mutagenesis: 
 ### Multiple Site Directed
-[![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/ipb-halle/GoldenMutagenesis/prerelease-dev?filepath=notebooks%2FMSD_USER.ipynb)
+[![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/ipb-halle/GoldenMutagenesis/binder?filepath=notebooks%2FMSD_USER.ipynb)
 ### Single Point
-[![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/ipb-halle/GoldenMutagenesis/prerelease-dev?filepath=notebooks%2FSPM_USER.ipynb)
+[![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/ipb-halle/GoldenMutagenesis/binder?filepath=notebooks%2FSPM_USER.ipynb)
