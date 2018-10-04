@@ -27,4 +27,8 @@ To start with this library we recommend to have a look on our vignettes!
 Interactive Example
 -------
 
-You can try out our interactive user notebook for Multiple Site Directed Mutagenesis: [![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/ipb-halle/GoldenMutagenesis/binder?filepath=notebooks%2FMSD_USER.ipynb)
+## You can try out our interactive user notebooks for Mutagenesis: 
+### Multiple Site Directed
+[![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/ipb-halle/GoldenMutagenesis/binder?filepath=notebooks%2FMSD_USER.ipynb)
+### Single Point
+[![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/ipb-halle/GoldenMutagenesis/binder?filepath=notebooks%2FSPM_USER.ipynb)

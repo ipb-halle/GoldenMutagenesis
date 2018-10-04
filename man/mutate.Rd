@@ -10,7 +10,7 @@ mutate(input_sequence, prefix = "TT", restriction_enzyme = "GGTCTC",
   cuf = "e_coli_316407.csv")
 }
 \arguments{
-\item{input_sequence}{The sequence which should be modified. This is just an object of type character containing the sequence.}
+\item{input_sequence}{The sequence which should be modified. This is an object of type character containing the sequence.}
 
 \item{prefix}{Additional nucleobases in 5' position of the recognition site [default: TT]}
 

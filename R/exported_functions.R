@@ -59,7 +59,7 @@ setMethod("print_primer", signature(primer="Primerset"),
 #' The domesticate function checks for internal cleavage sites. If corresponding sites are present silent mutations are introduced to destroy the recognition sites. 
 #' The functions returns a list containing the position of the choosen amino acid residue for silent mutation.
 #'
-#' @param input_sequence The sequence which should be modified. This is just an object of type character containing the sequence. 
+#' @param input_sequence The sequence which should be modified. This is an object of type character containing the sequence. 
 #' @param restriction_enzyme Recognition site sequence of the respective restriction enzyme [default: GGTCTC]
 #' @param cuf The Codon Usage Table which is being used to select the codon for an exchanged amino acid (and in this case to select the codon which shoulb be replaced). [default: e_coli_316407.csv]
 #'
@@ -106,7 +106,7 @@ domesticate<-function(input_sequence, restriction_enzyme="GGTCTC", cuf="e_coli_3
 #' The mutate function designs the necessary set of primers for the desired mutations.
 #' An example is given in the vignette at \url{https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/Point_Mutagenesis.md}
 #' 
-#' @param input_sequence The sequence which should be modified. This is just an object of type character containing the sequence. 
+#' @param input_sequence The sequence which should be modified. This is an object of type character containing the sequence. 
 #' @param prefix Additional nucleobases in 5' position of the recognition site [default: TT]
 #' @param restriction_enzyme Recognition site sequence of the respective restriction enzyme [default: GGTCTC]
 #' @param suffix Spacer nucleotides matching the cleavage pattern of the enzyme [default: A]
@@ -196,7 +196,8 @@ mutate<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", suffi
 #' 
 #' The mutate_msd function designs the necessary set of primers for the desired mutations.
 #' 
-#' @param input_sequence The sequence which should be modified. This is just an object of type character containing the sequence. 
+#' @param input_sequence The sequence which should be modified. This is an object of type character containing the sequence. 
+#' @param codon The desired type of MSD mutation [default: NDT]
 #' @param prefix Additional nucleobases in 5' position of the recognition site [default: TT]
 #' @param restriction_enzyme Recognition site sequence of the respective restriction enzyme [default: GGTCTC]
 #' @param suffix Spacer nucleotides matching the cleavage pattern of the enzyme [default: A]
@@ -396,11 +397,18 @@ msd_mutate<-function(input_sequence, codon="NDT" ,prefix="TT" ,restriction_enzym
       }
       else{
         if ((length(codon_seq) - replacements[i-1]) >= (min_fragment)) {
-          temp_new_fragment <- fragment(start = temp_fragment@stop + 1)
-          temp_old_fragment <- temp_fragment
-          temp_fragment <- temp_new_fragment
-          rm(temp_new_fragment)
-          if(replacements[i]-temp_fragment@start < primer_length+2) {
+          if(length(temp_fragment@stop)!=0) {
+            temp_new_fragment <- fragment(start = temp_fragment@stop + 1)
+            #temp_old_fragment <- temp_fragment
+            temp_fragment <- temp_new_fragment
+            rm(temp_new_fragment)
+          }
+          else {
+            if(length(temp_fragment@start)==0) {
+              stop("Internal error. Please give a bug report!")
+            }
+          }
+          if(replacements[i]-temp_fragment@start < primer_length+2 ) {
             temp_fragment@start_mutation<-replacements[i]
             temp_fragment@stop<-length(codon_seq)
             fragments <- c(fragments, temp_fragment)
@@ -551,4 +559,92 @@ primer_add_level<-function(primerset, prefix="TT" ,restriction_enzyme="GAAGAC", 
     primerset@primers[[i]][[2]]@suffix<-suffix
   }
   return(primerset)
+}
+
+#' Create a graphical evaluation of sequencing results
+#' 
+#' This function creates a graphical evalution of the sequencing results to determine the quality of the created library.
+#' How it works: 
+#' The functions aligns the given input_sequence to the sequenced sequence (it also tries to align the reverse complement). Afterwards it searches for mismatches between the sequences.
+#' Mismatches can be sucessfully mutated nucleotides. For the positions with a mismatch a pie chart showing the distribution of signals for each nucleotide is created.
+#' You can controll the quality of the created library by comparing the pie chart to your expections about the modidication of the sequence.
+#' @importFrom dplyr slice
+#' @importFrom graphics pie
+#' @import sangerseqR
+#' @import seqinr
+#' @import Biostrings
+#' @import RColorBrewer
+#' @param input_sequence The sequence which was modified. This is an object of type character containing the sequence. 
+#' @param ab1file The path to the ab1file which was provided by the sequencer/sequencing service
+#' @param replacements The mutations which were desired.
+#' @param trace_cutoff The minimal sum of signals (4 nucleotides) for a position in the sequence. [default: 80]
+#'
+#' @return Plots on the active/default graphics device.
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' data(MSD_BsaI_setup_lv2)
+#' abfile<-"activesite_for_200718.ab1"
+#' base_distribution(input_sequence=input_sequence, ab1file=abfile, replacements=mutations)
+#' }
+base_distribution<-function(input_sequence, ab1file, replacements, trace_cutoff=80){
+  sanger_seq<-readsangerseq(ab1file) #reading in the data
+  global_Align<-pairwiseAlignment(input_sequence, sanger_seq@primarySeq)
+  global_Align_rev<-pairwiseAlignment(input_sequence, reverseComplement(sanger_seq@primarySeq))
+  reverse=F
+  if(global_Align_rev@score > global_Align@score) {
+    reverse=T
+    global_Align<-global_Align_rev
+  }
+  mismatches<-mismatchTable(global_Align)
+  replacements_basepairs<-as.vector(sapply(replacements, FUN<-function(x){return(c(x*3-2, x*3-1, x*3))}))
+  candidates<-unlist(sapply(replacements_basepairs, FUN = function(x){which(mismatches[,"PatternStart"]==x)}, simplify = array))
+  mismatches_candidates<-mismatches[candidates, ]
+  mismatches_candidates$pos<-mismatches_candidates[,"PatternStart"]%%3
+  mismatches_candidates[mismatches_candidates["pos"]==0, "pos"]<-3
+  subject_pos<-vector()
+  pattern_pos<-vector()
+  for (i in 1:nrow(mismatches_candidates)) {
+    subject_start<-mismatches_candidates[i, "SubjectStart"]
+    pos<-mismatches_candidates[i, "pos"]
+    pattern_start<-mismatches_candidates[i, "PatternStart"]
+    if(pos==1) {
+      subject_pos<-c(subject_pos, subject_start, subject_start+1, subject_start+2)
+      pattern_pos<-c(pattern_pos, pattern_start, pattern_start+1, pattern_start+2)
+      
+    }
+    if(pos==2) {
+      subject_pos<-c(subject_pos, subject_start-1, subject_start, subject_start+1)
+      pattern_pos<-c(pattern_pos, pattern_start-1, pattern_start, pattern_start+1)
+      
+    }
+    if(pos==3) {
+      subject_pos<-c(subject_pos, subject_start-2, subject_start-1, subject_start)
+      pattern_pos<-c(pattern_pos, pattern_start-2, pattern_start-1, pattern_start)
+      
+    }
+  }
+  subject_pos<-unique(subject_pos)
+  pattern_pos<-unique(pattern_pos)
+  
+  if(reverse==T) {
+    subject_pos<-nchar(sanger_seq@primarySeq)-mismatches_candidates[,"SubjectStart"]+1
+  }
+  tracematrix_subject<-traceMatrix(sanger_seq)[peakPosMatrix(sanger_seq)[subject_pos],]
+  sums_row<-which(rowSums(tracematrix_subject)>=trace_cutoff)
+  tracematrix_subject<-as.data.frame(tracematrix_subject[sums_row,])
+  for(element in sums_row) {
+    # plotting as pie chart
+    sliceit <- dplyr::slice (tracematrix_subject,element)
+    slices <- as.numeric(sliceit)
+    if(reverse==T) {
+      lbls <- c("Thymine", "Guanine", "Cytosine", "Adenine")
+    }
+    lbls <- c("Adenine", "Cytosine", "Guanine", "Thymine")
+    pct <- round(slices/sum(slices)*100)
+    lbls <- paste(lbls, pct) # add percents to labels
+    lbls <- paste(lbls,"%",sep="") # ad % to labels
+    pie(slices,labels = lbls, col=brewer.pal(4,"Spectral"),main = paste("Peak intensity distribution for Postion", pattern_pos[element], "(Template) -", subject_pos[element], "(Sequencing)", sep=" ")) 
+    }
 }
