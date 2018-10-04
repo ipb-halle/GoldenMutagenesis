@@ -187,7 +187,8 @@ setMethod("sequence_length_temperature", signature(primer="Primer MSD"),
 
 
 sequence_check<-function(input_sequence){
-  codon_seq<-splitseq(s2c(input_sequence))
+  input_sequence<-
+  codon_seq<-splitseq(s2c(str_to_upper(input_sequence)))
   met<-which(str_detect(codon_seq, "ATG"))
   if(length(met) == 0) {
     stop("No Methionine in the provided sequence. Stopping here. Please check the provided sequence.")
