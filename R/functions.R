@@ -191,7 +191,7 @@ sequence_check<-function(input_sequence){
   if(nchar(input_sequence)%%3!=0) {
     stop(paste("The length of the sequence is no factor of 3. Please check your sequence.", "The length of the sequence was:", nchar(input_sequence),  sep=" "))
   }
-  codon_seq<-splitseq(s2c(str_to_upper(input_sequence)))
+  codon_seq<-splitseq(s2c(input_sequence))
   met<-which(str_detect(codon_seq, "ATG"))
   if(length(met) == 0) {
     stop("No Methionine in the provided sequence. Stopping here. Please check the provided sequence.")
