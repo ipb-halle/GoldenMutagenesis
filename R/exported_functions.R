@@ -59,7 +59,7 @@ setMethod("print_primer", signature(primer="Primerset"),
 #' The domesticate function checks for internal cleavage sites. If corresponding sites are present silent mutations are introduced to destroy the recognition sites. 
 #' The functions returns a list containing the position of the choosen amino acid residue for silent mutation.
 #'
-#' @param input_sequence The sequence which should be modified. This is just an object of type character containing the sequence. 
+#' @param input_sequence The sequence which should be modified. This is an object of type character containing the sequence. 
 #' @param restriction_enzyme Recognition site sequence of the respective restriction enzyme [default: GGTCTC]
 #' @param cuf The Codon Usage Table which is being used to select the codon for an exchanged amino acid (and in this case to select the codon which shoulb be replaced). [default: e_coli_316407.csv]
 #'
@@ -106,7 +106,7 @@ domesticate<-function(input_sequence, restriction_enzyme="GGTCTC", cuf="e_coli_3
 #' The mutate function designs the necessary set of primers for the desired mutations.
 #' An example is given in the vignette at \url{https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/Point_Mutagenesis.md}
 #' 
-#' @param input_sequence The sequence which should be modified. This is just an object of type character containing the sequence. 
+#' @param input_sequence The sequence which should be modified. This is an object of type character containing the sequence. 
 #' @param prefix Additional nucleobases in 5' position of the recognition site [default: TT]
 #' @param restriction_enzyme Recognition site sequence of the respective restriction enzyme [default: GGTCTC]
 #' @param suffix Spacer nucleotides matching the cleavage pattern of the enzyme [default: A]
@@ -196,7 +196,8 @@ mutate<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", suffi
 #' 
 #' The mutate_msd function designs the necessary set of primers for the desired mutations.
 #' 
-#' @param input_sequence The sequence which should be modified. This is just an object of type character containing the sequence. 
+#' @param input_sequence The sequence which should be modified. This is an object of type character containing the sequence. 
+#' @param codon The desired type of MSD mutation [default: NDT]
 #' @param prefix Additional nucleobases in 5' position of the recognition site [default: TT]
 #' @param restriction_enzyme Recognition site sequence of the respective restriction enzyme [default: GGTCTC]
 #' @param suffix Spacer nucleotides matching the cleavage pattern of the enzyme [default: A]
@@ -560,17 +561,33 @@ primer_add_level<-function(primerset, prefix="TT" ,restriction_enzyme="GAAGAC", 
   return(primerset)
 }
 
-#' Title
+#' Create a graphical evaluation of sequencing results
+#' 
+#' This function creates a graphical evalution of the sequencing results to determine the quality of the created library.
+#' How it works: 
+#' The functions aligns the given input_sequence to the sequenced sequence (it also tries to align the reverse complement). Afterwards it searches for mismatches between the sequences.
+#' Mismatches can be sucessfully mutated nucleotides. For the positions with a mismatch a pie chart showing the distribution of signals for each nucleotide is created.
+#' You can controll the quality of the created library by comparing the pie chart to your expections about the modidication of the sequence.
+#' @importFrom dplyr slice
+#' @importFrom graphics pie
+#' @import sangerseqR
+#' @import seqinr
+#' @import Biostrings
+#' @import RColorBrewer
+#' @param input_sequence The sequence which was modified. This is an object of type character containing the sequence. 
+#' @param ab1file The path to the ab1file which was provided by the sequencer/sequencing service
+#' @param replacements The mutations which were desired.
+#' @param trace_cutoff The minimal sum of signals (4 nucleotides) for a position in the sequence. [default: 80]
 #'
-#' @param input_sequence 
-#' @param ab1file 
-#' @param replacements 
-#' @param trace_cutoff 
-#'
-#' @return
+#' @return Plots on the active/default graphics device.
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#' data(MSD_BsaI_setup_lv2)
+#' abfile<-"activesite_for_200718.ab1"
+#' base_distribution(input_sequence=input_sequence, ab1file=abfile, replacements=mutations)
+#' }
 base_distribution<-function(input_sequence, ab1file, replacements, trace_cutoff=80){
   sanger_seq<-readsangerseq(ab1file) #reading in the data
   global_Align<-pairwiseAlignment(input_sequence, sanger_seq@primarySeq)

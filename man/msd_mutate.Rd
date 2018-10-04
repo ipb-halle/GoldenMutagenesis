@@ -10,7 +10,9 @@ msd_mutate(input_sequence, codon = "NDT", prefix = "TT",
   primer_length = 9, target_temp = 60, fragment_min_size = 60)
 }
 \arguments{
-\item{input_sequence}{The sequence which should be modified. This is just an object of type character containing the sequence.}
+\item{input_sequence}{The sequence which should be modified. This is an object of type character containing the sequence.}
+
+\item{codon}{The desired type of MSD mutation [default: NDT]}
 
 \item{prefix}{Additional nucleobases in 5' position of the recognition site [default: TT]}
 

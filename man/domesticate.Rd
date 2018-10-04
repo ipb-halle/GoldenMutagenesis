@@ -8,7 +8,7 @@ domesticate(input_sequence, restriction_enzyme = "GGTCTC",
   cuf = "e_coli_316407.csv")
 }
 \arguments{
-\item{input_sequence}{The sequence which should be modified. This is just an object of type character containing the sequence.}
+\item{input_sequence}{The sequence which should be modified. This is an object of type character containing the sequence.}
 
 \item{restriction_enzyme}{Recognition site sequence of the respective restriction enzyme [default: GGTCTC]}
 
