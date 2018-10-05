@@ -570,9 +570,8 @@ primer_add_level<-function(primerset, prefix="TT" ,restriction_enzyme="GAAGAC", 
 #' You can controll the quality of the created library by comparing the pie chart to your expections about the modidication of the sequence.
 #' @importFrom dplyr slice
 #' @importFrom graphics pie
-#' @import sangerseqR
-#' @import seqinr
-#' @import Biostrings
+#' @importFrom sangerseqR readsangerseq peakPosMatrix
+#' @importFrom Biostrings pairwiseAlignment mismatchTable reverseComplement
 #' @import RColorBrewer
 #' @param input_sequence The sequence which was modified. This is an object of type character containing the sequence. 
 #' @param ab1file The path to the ab1file which was provided by the sequencer/sequencing service
@@ -589,15 +588,15 @@ primer_add_level<-function(primerset, prefix="TT" ,restriction_enzyme="GAAGAC", 
 #' base_distribution(input_sequence=input_sequence, ab1file=abfile, replacements=mutations)
 #' }
 base_distribution<-function(input_sequence, ab1file, replacements, trace_cutoff=80){
-  sanger_seq<-readsangerseq(ab1file) #reading in the data
-  global_Align<-pairwiseAlignment(input_sequence, sanger_seq@primarySeq)
-  global_Align_rev<-pairwiseAlignment(input_sequence, reverseComplement(sanger_seq@primarySeq))
+  sanger_seq<-sangerseqR::readsangerseq(ab1file) #reading in the data
+  global_Align<-Biostrings::pairwiseAlignment(input_sequence, sanger_seq@primarySeq)
+  global_Align_rev<-Biostrings::pairwiseAlignment(input_sequence, Biostrings::reverseComplement(sanger_seq@primarySeq))
   reverse=F
   if(global_Align_rev@score > global_Align@score) {
     reverse=T
     global_Align<-global_Align_rev
   }
-  mismatches<-mismatchTable(global_Align)
+  mismatches<-Biostrings::mismatchTable(global_Align)
   replacements_basepairs<-as.vector(sapply(replacements, FUN<-function(x){return(c(x*3-2, x*3-1, x*3))}))
   candidates<-unlist(sapply(replacements_basepairs, FUN = function(x){which(mismatches[,"PatternStart"]==x)}, simplify = array))
   mismatches_candidates<-mismatches[candidates, ]
@@ -631,7 +630,7 @@ base_distribution<-function(input_sequence, ab1file, replacements, trace_cutoff=
   if(reverse==T) {
     subject_pos<-nchar(sanger_seq@primarySeq)-mismatches_candidates[,"SubjectStart"]+1
   }
-  tracematrix_subject<-traceMatrix(sanger_seq)[peakPosMatrix(sanger_seq)[subject_pos],]
+  tracematrix_subject<-sangerseqR::traceMatrix(sanger_seq)[sangerseqR::peakPosMatrix(sanger_seq)[subject_pos],]
   sums_row<-which(rowSums(tracematrix_subject)>=trace_cutoff)
   tracematrix_subject<-as.data.frame(tracematrix_subject[sums_row,])
   for(element in sums_row) {
