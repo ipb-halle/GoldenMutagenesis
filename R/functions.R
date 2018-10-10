@@ -1,10 +1,11 @@
-#Functions for GoldenGateProject
 #' @import seqinr
 #' @import stringr
 #' @import methods
 #' @importFrom stats dist
 #' @importFrom utils read.csv
 NULL
+
+#' 
 #' Order the replacement list
 #'
 #' @param replacements A list containing vectors which have a number at the first slot and the amino acid at the second one
@@ -179,7 +180,7 @@ setMethod("sequence_length_temperature", signature(primer="Primer"),
           }
 )
 
-setMethod("sequence_length_temperature", signature(primer="Primer MSD"),
+setMethod("sequence_length_temperature", signature(primer="Primer_MSD"),
           function(primer, temp_func=calculate_tm_nnb, primer_min=3, target_temp=60){
             callNextMethod()
           }
@@ -216,7 +217,7 @@ sequence_check<-function(input_sequence){
   return(codon_seq)
 }
 
-check_primers<-function(primers, fragments, binding_min_length=4, target_temp=60) {
+check_primer_dupplicates<-function(primers, fragments, binding_min_length=4, target_temp=60) {
   overhangs<-sapply(primers, function(x){return(c(x[[1]]@overhang, x[[2]]@overhang))})
   duplicates<-table(overhangs)
   duplicates<-duplicates[names(duplicates)!="" & duplicates > 1]
@@ -242,8 +243,9 @@ check_primers<-function(primers, fragments, binding_min_length=4, target_temp=60
     primer_rv<-primer_unlist[[primer_rv_num]]
     #we will move to the left direction 
     #check if primer_rv is an NDT primer
-    if(class(primer_rv)=="Primer MSD") {
-      if(str_sub(primer_rv@NDT, 1, 3) == "AHN") {
+    if(class(primer_rv)=="Primer_MSD") {
+      msd_mut<-sapply(c("NNN", "NNK", "NNS", "NDT", "DBK", "NRT"), FUN = function(x){paste(stringr::str_to_upper(rev(seqinr::comp(seqinr::s2c(x), , ambiguous=T))), sep="", collapse="")}, USE.NAMES = F)
+      if(str_sub(primer_rv@NDT, 1, 3) %in% msd_mut) {
         if(i == length(primer_num)) {
           stop(paste("We can not fix overlaps in the primers. Please consider a silent mutation at position", fragments[[ceiling((primer_rv_num+1)/2)]]@start))
         }
@@ -275,7 +277,7 @@ check_primers<-function(primers, fragments, binding_min_length=4, target_temp=60
         primer_rv@difference<-abs(primer_rv@temperature - primer_unlist[[primer_rv_num -1 ]]@temperature)
       }
     }
-    if(class(primer_fd)=="Primer MSD") {
+    if(class(primer_fd)=="Primer_MSD") {
       primer_fd@overhang<-paste(comp(shift_base, forceToLower = F), primer_fd@overhang, sep="")
       primer_fd@NDT<-paste(str_sub(primer_fd@overhang, 5), primer_fd@NDT ,sep="")
       primer_fd@overhang<-str_sub(primer_fd@overhang, 1, 4)
@@ -302,7 +304,9 @@ check_primers<-function(primers, fragments, binding_min_length=4, target_temp=60
   #  return(primers)
   #}
   #else{
-  return(check_primers(primers = primers, fragments = fragments, binding_min_length = binding_min_length, target_temp = target_temp))
+  return(check_primer_dupplicates(primers = primers, fragments = fragments, binding_min_length = binding_min_length, target_temp = target_temp))
   #}
 } 
+
+
 

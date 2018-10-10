@@ -13,11 +13,11 @@ list_cu_table<-function(){
 #' 
 #' An example is shown in the vignette at \url{https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/Point_Mutagenesis.md}
 #' 
-#' @param primer An object of class Primer, Primer MSD or Primerset
-#'
+#' @param primer An object of class Primer, Primer_MSD or Primerset
 #' @return Textual output
 #' @export
-#'
+#' @docType methods
+#' @rdname print_primer-methods
 #' @examples
 #' #Load results of the Point Mutation vignette and print it
 #' data(Point_Mutagenesis_BbsI_result)
@@ -25,7 +25,8 @@ list_cu_table<-function(){
 setGeneric("print_primer" , function(primer) {
   standardGeneric("print_primer")
 })
-
+#' @rdname print_primer-methods
+#' @aliases print_primer,Primer-method 
 setMethod("print_primer", signature(primer="Primer"),
           function(primer){
             cat(primer@prefix, primer@restriction_enzyme, primer@suffix, primer@vector, primer@overhang, primer@binding_sequence, "\n" , sep="")
@@ -33,13 +34,16 @@ setMethod("print_primer", signature(primer="Primer"),
             cat("Temperature difference: ", primer@difference, " K", "\n")
           }
 )
-setMethod("print_primer", signature(primer="Primer MSD"),
+#' @rdname print_primer-methods
+setMethod("print_primer", signature(primer="Primer_MSD"),
           function(primer){
             cat(primer@prefix, primer@restriction_enzyme, primer@suffix, primer@vector, primer@overhang, primer@NDT, primer@binding_sequence, "\n", sep="")
             cat("Temperature of binding site: ", primer@temperature, " \u00b0C" , "\n")
             cat("Temperature difference: ", primer@difference, " K", "\n")
           }
 )
+#' @rdname print_primer-methods
+#' @aliases print_primer,Primerset-method 
 setMethod("print_primer", signature(primer="Primerset"),
           function(primer){
             primerset<-primer
@@ -54,7 +58,9 @@ setMethod("print_primer", signature(primer="Primerset"),
             cat("\nModified Sequence:\n", primerset@newsequence, "\n")
           }
 )
-setMethod("print_primer", signature(primer="Extended Primerset"),
+#' @rdname print_primer-methods
+#' @aliases print_primer,Extended_Primerset-method 
+setMethod("print_primer", signature(primer="Extended_Primerset"),
           function(primer){
             primerset<-primer
             for(i in 1:length(primerset@fragments)){
@@ -548,7 +554,7 @@ msd_mutate<-function(input_sequence, codon="NDT" ,prefix="TT" ,restriction_enzym
   #Replace them based on ? -> Primer without mutation/length of the primer in total?
   #It is easier to modify the exisiting primer 
   #If it is not possible to correct all overlaps -> return message with postion for silent mutation
-  primers<-check_primers(primers, fragments, binding_min_length, target_temp)
+  primers<-check_primer_dupplicates(primers, fragments, binding_min_length, target_temp)
   return(eps(oldsequence=input_sequence, primers=primers, newsequence=paste(codon_seq, collapse = ""), fragments=fragments))
 }
 
@@ -598,10 +604,14 @@ primer_add_level<-function(primerset, prefix="TT" ,restriction_enzyme="GAAGAC", 
 #' Create a graphical evaluation of sequencing results
 #' 
 #' This function creates a graphical evalution of the sequencing results to determine the quality of the created library.
-#' How it works: 
-#' The functions aligns the given input_sequence to the sequenced sequence (it also tries to align the reverse complement). Afterwards it searches for mismatches between the sequences.
-#' Mismatches can be sucessfully mutated nucleotides. For the positions with a mismatch a pie chart showing the distribution of signals for each nucleotide is created.
-#' You can controll the quality of the created library by comparing the pie chart to your expections about the modidication of the sequence.
+#'
+#'The functions aligns the obtained sequencing results to the target gene sequence. 
+#'It also tries to align the reverse complement of the obtained sequence. 
+#'Afterwards it checks for mismatches between the sequences.
+#'Mismatches are likely to be sucessfully mutated nucleotides. 
+#'Positions regarded as mismatches are displayed as pie charts. 
+#'The shown distributions are based on the signal intensities of the four nucleobases at the mismatch positions.
+#'You can compare the pie charts with expected pattern of randomization, therefore validating the quality of the created library.
 #' @importFrom dplyr slice
 #' @importFrom graphics pie
 #' @importFrom sangerseqR readsangerseq peakPosMatrix
@@ -629,6 +639,7 @@ base_distribution<-function(input_sequence, ab1file, replacements, trace_cutoff=
   if(global_Align_rev@score > global_Align@score) {
     reverse=T
     global_Align<-global_Align_rev
+    print("Reverse sequence detected!")
   }
   mismatches<-Biostrings::mismatchTable(global_Align)
   replacements_basepairs<-as.vector(sapply(replacements, FUN<-function(x){return(c(x*3-2, x*3-1, x*3))}))
@@ -662,7 +673,7 @@ base_distribution<-function(input_sequence, ab1file, replacements, trace_cutoff=
   pattern_pos<-unique(pattern_pos)
   
   if(reverse==T) {
-    subject_pos<-nchar(sanger_seq@primarySeq)-mismatches_candidates[,"SubjectStart"]+1
+    subject_pos<-length(sanger_seq@primarySeq)-subject_pos+1
   }
   tracematrix_subject<-sangerseqR::traceMatrix(sanger_seq)[sangerseqR::peakPosMatrix(sanger_seq)[subject_pos],]
   sums_row<-which(rowSums(tracematrix_subject)>=trace_cutoff)
@@ -671,13 +682,13 @@ base_distribution<-function(input_sequence, ab1file, replacements, trace_cutoff=
     # plotting as pie chart
     sliceit <- dplyr::slice (tracematrix_subject,element)
     slices <- as.numeric(sliceit)
+    lbls <- c("Adenine", "Cytosine", "Guanine", "Thymine")
     if(reverse==T) {
       lbls <- c("Thymine", "Guanine", "Cytosine", "Adenine")
     }
-    lbls <- c("Adenine", "Cytosine", "Guanine", "Thymine")
     pct <- round(slices/sum(slices)*100)
     lbls <- paste(lbls, pct) # add percents to labels
     lbls <- paste(lbls,"%",sep="") # ad % to labels
-    pie(slices,labels = lbls, col=brewer.pal(4,"Spectral"),main = paste("Peak intensity distribution for Postion", pattern_pos[element], "(Template) -", subject_pos[element], "(Sequencing)", sep=" ")) 
+    pie(slices,labels = lbls, col=brewer.pal(4,"Spectral"),main = paste("Peak intensity distribution for \nPosition", pattern_pos[element], "(Template) -", subject_pos[element], "(Sequencing)", sep=" ")) 
     }
 }

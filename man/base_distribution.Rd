@@ -21,10 +21,15 @@ Plots on the active/default graphics device.
 }
 \description{
 This function creates a graphical evalution of the sequencing results to determine the quality of the created library.
-How it works: 
-The functions aligns the given input_sequence to the sequenced sequence (it also tries to align the reverse complement). Afterwards it searches for mismatches between the sequences.
-Mismatches can be sucessfully mutated nucleotides. For the positions with a mismatch a pie chart showing the distribution of signals for each nucleotide is created.
-You can controll the quality of the created library by comparing the pie chart to your expections about the modidication of the sequence.
+}
+\details{
+The functions aligns the obtained sequencing results to the target gene sequence. 
+It also tries to align the reverse complement of the obtained sequence. 
+Afterwards it checks for mismatches between the sequences.
+Mismatches are likely to be sucessfully mutated nucleotides. 
+Positions regarded as mismatches are displayed as pie charts. 
+The shown distributions are based on the signal intensities of the four nucleobases at the mismatch positions.
+You can compare the pie charts with expected pattern of randomization, therefore validating the quality of the created library.
 }
 \examples{
 \dontrun{
