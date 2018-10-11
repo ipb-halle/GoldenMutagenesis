@@ -48,7 +48,7 @@ Leucine66 to Valine (point mutation)
 ## R Workflow
 
 ``` r
-suppressWarnings(suppressMessages(library("GoldenMutagenesis")))
+library("GoldenMutagenesis")
 ```
 
 ``` r

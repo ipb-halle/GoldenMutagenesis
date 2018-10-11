@@ -55,7 +55,7 @@ The target sequence and the envisioned mutations are used as input
 again.
 
 ``` r
-suppressWarnings(suppressMessages(library("GoldenMutagenesis")))
+library("GoldenMutagenesis")
 ```
 
 ``` r
@@ -83,7 +83,7 @@ abfile<-"sequences/Yfex_0activesite_for_EF01147142.ab1")
 base_distribution(input_sequence=input_sequence, ab1file=abfile, replacements=mutations)
 ```
 
-![](QQC_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-12-2.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-12-3.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-12-4.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-12-5.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-12-6.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-12-7.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-12-8.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-12-9.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-12-10.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-12-11.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-12-12.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-12-13.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-12-14.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-12-15.png)<!-- -->
+![](QQC_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-4-2.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-4-3.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-4-4.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-4-5.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-4-6.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-4-7.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-4-8.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-4-9.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-4-10.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-4-11.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-4-12.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-4-13.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-4-14.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-4-15.png)<!-- -->
 
 #### Reverse Sequencing
 
@@ -94,4 +94,4 @@ base_distribution(input_sequence=input_sequence, ab1file=abfile, replacements=mu
 
     ## [1] "Reverse sequence detected!"
 
-![](QQC_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-14-2.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-14-3.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-14-4.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-14-5.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-14-6.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-14-7.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-14-8.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-14-9.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-14-10.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-14-11.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-14-12.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-14-13.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-14-14.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-14-15.png)<!-- -->
+![](QQC_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-6-2.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-6-3.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-6-4.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-6-5.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-6-6.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-6-7.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-6-8.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-6-9.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-6-10.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-6-11.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-6-12.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-6-13.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-6-14.png)<!-- -->![](QQC_files/figure-gfm/unnamed-chunk-6-15.png)<!-- -->

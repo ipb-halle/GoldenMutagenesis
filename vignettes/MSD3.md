@@ -49,7 +49,7 @@ NDT
 ## R Workflow
 
 ``` r
-suppressWarnings(suppressMessages(library("GoldenMutagenesis")))
+library("GoldenMutagenesis")
 ```
 
 ``` r
