@@ -23,7 +23,7 @@ NULL
 #' From Multiple Site Directed Mutagenesis or
 #' Single Point Mutation
 #' @name primers
-#' @seealso [Point_Mutagenesis_BbsI_setup] and [MSD_BsaI_setup_lv2]
+#' @seealso [Point_Mutagenesis_BbsI_result] and [MSD_BsaI_result_lv2]
 #' @docType data
 NULL
 #' Basic setup for Point Mutagenesis

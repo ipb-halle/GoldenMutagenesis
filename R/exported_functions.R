@@ -103,7 +103,7 @@ domesticate<-function(input_sequence, restriction_enzyme="GGTCTC", cuf="e_coli_3
   restriction_enzyme_s2c_reverse<-comp(restriction_enzyme_s2c)
   restriction_enzyme_s2c_reverse<-rev(restriction_enzyme_s2c_reverse)
   restriction_enzyme_reverse<-str_to_upper(paste(restriction_enzyme_s2c_reverse, collapse = ""))
-  prot_sequence<-seqinr::translate(sequence)
+  prot_sequence<-translate(sequence)
   matches <- do.call(rbind, str_locate_all(input_sequence, c(restriction_enzyme, restriction_enzyme_reverse))) # Returns positions of every match in a string
   if(nrow(matches) == 0) {
     print("No domestication needed.")

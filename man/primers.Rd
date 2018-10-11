@@ -12,5 +12,5 @@ From Multiple Site Directed Mutagenesis or
 Single Point Mutation
 }
 \seealso{
-[Point_Mutagenesis_BbsI_setup] and [MSD_BsaI_setup_lv2]
+[Point_Mutagenesis_BbsI_result] and [MSD_BsaI_result_lv2]
 }
