@@ -1,16 +1,16 @@
 ---
-title: "Multiple Site Saturation Mutagenesis"
+title: "Multiple Site Saturation Mutagenesis Example 3"
 author: "Chris Ulpinnis & Pascal Püllmann"
 date: "`r Sys.Date()`"
 output:
+  word_document: default
   md_document:
     variant: gfm
-  word_document: default
   pdf_document: default
   html_document: default
 vignette: >
   %\VignetteEngine{knitr}
-  %\VignetteIndexEntry{Multiple Site Saturation Mutagenesis Example1 - Active Site}
+  %\VignetteIndexEntry{Multiple Site Saturation Mutagenesis Example3 - Active Site - Different Patterns}
   %\VignetteEncoding{UTF-8}
 
 ---
@@ -22,7 +22,7 @@ knitr::opts_chunk$set(tidy.opts=list(width.cutoff=60),tidy=TRUE)
 
 # Multiple Site Saturation Mutagenesis -- Active site
 
-You can find the lastest version of this file at https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/MSD.md
+You can find the lastest version of this file at https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/MSD3.md
 
 
 ## Experimental Workflow
@@ -50,13 +50,11 @@ BsaI
 Recognition site: **_GGTCTC_**
 
 ### Envisioned Mutations
-Aspartic Acid - 137\
-Aspartic Acid - 143\
-Asparagine - 147\
-Arginine - 232\
-Serine - 234\
-\
-Substitute for NDT
+Aspartic Acid - 137 - NDT\
+Aspartic Acid - 143 - NNN\
+Asparagine - 147 - DBK\
+Arginine - 232 - NDT\
+Serine - 234 - NDT\
 
 ## R Workflow
 
@@ -91,7 +89,7 @@ The function has the following parameters:\
 **codon**: The codon which should be used in the mutagenesis [default: NDT]\
 **suffix**: Spacer nucleotides matching the cleavage pattern of the enzyme [default: A]\
 **vector**: Four basepair overhangs complementary to the created overhangs in the acceptor vector  [default: c("AATG", "AAGC")]\
-**replacements**: The desired substitutions as a vector with positions OR a list containing vetors with position (char) and type of MSD mutation (char) (see MSD3.rd for an example)\
+**replacements**: The desired substitutions\
 **binding_min_length**: The minimal threshold value of the template binding sequence in amino acid residues [default: 4]\
 **primer_length**: Maximal length of the binding sequence [default: 9]\
 **target_temp**: Melting temperature of the binding sequence in °C [default: 60]\
@@ -103,7 +101,8 @@ The primers for multiple site saturation mutagenesis have an additional slot cal
 
 ````{r}
 #If domestication is necessary follow the workflow of the Point Mutagenesis vignette
-mutations<-c(137,143,147,232,234)
+#We will use a structure similar to the Point Mutagenesis workflow to insert different kinds of Multiple Site Saturations here.
+mutations<-list(c(137,"NDT"), c(143,"NNN"), c( 147, "DBK"),c(232, "NDT"), c(234, "NDT"))
 primers<-msd_mutate(input_sequence, prefix="TT" ,restriction_enzyme=recognition_site_bsai, suffix="A", vector=c("AATG", "AAGC"), replacements=mutations, replacement_range=5, binding_min_length=4 ,primer_length=9, target_temp=60, fragment_min_size=60 )
 primers
 ````
