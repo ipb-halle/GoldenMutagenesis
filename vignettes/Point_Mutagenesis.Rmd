@@ -3,16 +3,17 @@ title: "Point Mutagenesis"
 author: "Chris Ulpinnis & Pascal Püllmann"
 date: "`r Sys.Date()`"
 output:
-  word_document: default
-  pdf_document: default
+  github_document: 
+    html_preview: false
   md_document:
     variant: gfm
+  pdf_document: default
+  word_document: default
   html_document: default
 vignette: >
   %\VignetteEngine{knitr}
   %\VignetteIndexEntry{Point Mutagenesis}
   %\VignetteEncoding{UTF-8}
-
 ---
 # Point Mutagenesis
 

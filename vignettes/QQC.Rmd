@@ -3,6 +3,8 @@ title: "Quick Quality Control"
 author: "Chris Ulpinnis & Pascal Püllmann"
 date: "`r Sys.Date()`"
 output:
+  github_document: 
+        html_preview: false
   md_document:
     variant: gfm
   pdf_document: default

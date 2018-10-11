@@ -3,6 +3,8 @@ title: "Multiple Site Saturation Mutagenesis"
 author: "Chris Ulpinnis & Pascal Püllmann"
 date: "`r Sys.Date()`"
 output:
+  github_document: 
+    html_preview: false
   md_document:
     variant: gfm
   word_document: default

@@ -1,11 +1,14 @@
-Multiple Site Saturation Mutagenesis – Active site
-==================================================
+Multiple Site Saturation Mutagenesis Example 3
+================
+Chris Ulpinnis & Pascal Püllmann
+2018-10-11
+
+# Multiple Site Saturation Mutagenesis – Active site
 
 You can find the lastest version of this file at
-<a href="https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/MSD.md" class="uri">https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/MSD.md</a>
+<https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/MSD3.md>
 
-Experimental Workflow
----------------------
+## Experimental Workflow
 
 ### Target sequence
 
@@ -40,130 +43,20 @@ Aspartic Acid - 137 - NDT
 Aspartic Acid - 143 - NNN  
 Asparagine - 147 - DBK  
 Arginine - 232 - NDT  
-Serine - 234 - NDT  
+Serine - 234 -
+NDT  
 
-R Workflow
-----------
+## R Workflow
 
 ``` r
-library("GoldenMutagenesis")
+suppressWarnings(suppressMessages(library("GoldenMutagenesis")))
 ```
 
-    ## Loading required package: seqinr
-
-    ## Loading required package: stringr
-
-    ## Loading required package: dplyr
-
-    ## 
-    ## Attaching package: 'dplyr'
-
-    ## The following object is masked from 'package:seqinr':
-    ## 
-    ##     count
-
-    ## The following objects are masked from 'package:stats':
-    ## 
-    ##     filter, lag
-
-    ## The following objects are masked from 'package:base':
-    ## 
-    ##     intersect, setdiff, setequal, union
-
-    ## Loading required package: sangerseqR
-
-    ## Loading required package: Biostrings
-
-    ## Loading required package: BiocGenerics
-
-    ## Loading required package: parallel
-
-    ## 
-    ## Attaching package: 'BiocGenerics'
-
-    ## The following objects are masked from 'package:parallel':
-    ## 
-    ##     clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,
-    ##     clusterExport, clusterMap, parApply, parCapply, parLapply,
-    ##     parLapplyLB, parRapply, parSapply, parSapplyLB
-
-    ## The following objects are masked from 'package:dplyr':
-    ## 
-    ##     combine, intersect, setdiff, union
-
-    ## The following objects are masked from 'package:stats':
-    ## 
-    ##     IQR, mad, sd, var, xtabs
-
-    ## The following objects are masked from 'package:base':
-    ## 
-    ##     anyDuplicated, append, as.data.frame, basename, cbind,
-    ##     colMeans, colnames, colSums, dirname, do.call, duplicated,
-    ##     eval, evalq, Filter, Find, get, grep, grepl, intersect,
-    ##     is.unsorted, lapply, lengths, Map, mapply, match, mget, order,
-    ##     paste, pmax, pmax.int, pmin, pmin.int, Position, rank, rbind,
-    ##     Reduce, rowMeans, rownames, rowSums, sapply, setdiff, sort,
-    ##     table, tapply, union, unique, unsplit, which, which.max,
-    ##     which.min
-
-    ## Loading required package: S4Vectors
-
-    ## Loading required package: stats4
-
-    ## 
-    ## Attaching package: 'S4Vectors'
-
-    ## The following objects are masked from 'package:dplyr':
-    ## 
-    ##     first, rename
-
-    ## The following object is masked from 'package:base':
-    ## 
-    ##     expand.grid
-
-    ## Loading required package: IRanges
-
-    ## 
-    ## Attaching package: 'IRanges'
-
-    ## The following objects are masked from 'package:dplyr':
-    ## 
-    ##     collapse, desc, slice
-
-    ## Loading required package: XVector
-
-    ## 
-    ## Attaching package: 'Biostrings'
-
-    ## The following object is masked from 'package:seqinr':
-    ## 
-    ##     translate
-
-    ## The following object is masked from 'package:base':
-    ## 
-    ##     strsplit
-
-    ## 
-    ## Attaching package: 'sangerseqR'
-
-    ## The following object is masked from 'package:seqinr':
-    ## 
-    ##     read.abif
-
-    ## Loading required package: RColorBrewer
-
-    ## 
-    ## Attaching package: 'GoldenMutagenesis'
-
-    ## The following object is masked from 'package:dplyr':
-    ## 
-    ##     mutate
-
 ``` r
-input_sequence<-"ATGTCTCAGGTTCAGAGTGGCATTTTGCCAGAACATTGCCGCGCGGCGATTTGGATCGAAGCCAACGTGAAAGGGGAAGTTGACGCCCTGCGTGCGGCCAGTAAAACATTTGCCGACAAACTGGCAACTTTTGAAGCGAAATTCCCGGACGCGCATCTTGGTGCGGTGGTTGCCTTTGGTAACAACACCTGGCGCGCTCTGAGCGGCGGCGTTGGGGCAGAAGAGCTGAAAGATTTTCCGGGCTACGGTAAAGGCCTTGCGCCGACGACCCAGTTCGATGTGTTGATCCACATTCTTTCTCTGCGTCACGACGTAAACTTCTCTGTCGCCCAGGCGGCGATGGAAGCCTTTGGTGACTGCATTGAAGTGAAAGAAGAGATCCACGGCTTCCGTTGGGTTGAAGAGCGTGACCTGAGCGGCTTTGTTGACGGTACGGAAAACCCGGCGGGTGAAGAGACGCGTCGCGAAGTGGCGGTTATCAAAGACGGCGTGGATGCGGGCGGCAGCTATGTGTTTGTCCAGCGTTGGGAACACAACCTGAAGCAGCTCAACCGGATGAGCGTTCACGATCAGGAGATGGTGATCGGGCGCACCAAAGAGGCCAACGAAGAGATCGACGGCGACGAACGTCCGGAAACCTCTCACCTCACCCGCGTTGATCTGAAAGAAGATGGCAAAGGGCTGAAGATTGTTCGCCAGAGCCTGCCGTACGGCACTGCCAGTGGCACTCACGGTCTGTACTTCTGCGCCTACTGCGCGCGTCTGCATAACATTGAGCAGCAACTGCTGAGCATGTTTGGCGATACCGATGGTAAGCGTGATGCGATGTTGCGTTTCACCAAACCGGTAACCGGCGGCTATTATTTCGCACCGTCGCTGGACAAGTTGATGGCGCTGTAA"
-recognition_site_bbsi<-"GAAGAC"
-recognition_site_bsai<-"GGTCTC"
-cuf<-"e_coli_316407.csv"
+input_sequence <- "ATGTCTCAGGTTCAGAGTGGCATTTTGCCAGAACATTGCCGCGCGGCGATTTGGATCGAAGCCAACGTGAAAGGGGAAGTTGACGCCCTGCGTGCGGCCAGTAAAACATTTGCCGACAAACTGGCAACTTTTGAAGCGAAATTCCCGGACGCGCATCTTGGTGCGGTGGTTGCCTTTGGTAACAACACCTGGCGCGCTCTGAGCGGCGGCGTTGGGGCAGAAGAGCTGAAAGATTTTCCGGGCTACGGTAAAGGCCTTGCGCCGACGACCCAGTTCGATGTGTTGATCCACATTCTTTCTCTGCGTCACGACGTAAACTTCTCTGTCGCCCAGGCGGCGATGGAAGCCTTTGGTGACTGCATTGAAGTGAAAGAAGAGATCCACGGCTTCCGTTGGGTTGAAGAGCGTGACCTGAGCGGCTTTGTTGACGGTACGGAAAACCCGGCGGGTGAAGAGACGCGTCGCGAAGTGGCGGTTATCAAAGACGGCGTGGATGCGGGCGGCAGCTATGTGTTTGTCCAGCGTTGGGAACACAACCTGAAGCAGCTCAACCGGATGAGCGTTCACGATCAGGAGATGGTGATCGGGCGCACCAAAGAGGCCAACGAAGAGATCGACGGCGACGAACGTCCGGAAACCTCTCACCTCACCCGCGTTGATCTGAAAGAAGATGGCAAAGGGCTGAAGATTGTTCGCCAGAGCCTGCCGTACGGCACTGCCAGTGGCACTCACGGTCTGTACTTCTGCGCCTACTGCGCGCGTCTGCATAACATTGAGCAGCAACTGCTGAGCATGTTTGGCGATACCGATGGTAAGCGTGATGCGATGTTGCGTTTCACCAAACCGGTAACCGGCGGCTATTATTTCGCACCGTCGCTGGACAAGTTGATGGCGCTGTAA"
+recognition_site_bbsi <- "GAAGAC"
+recognition_site_bsai <- "GGTCTC"
+cuf <- "e_coli_316407.csv"
 ```
 
 The domesticate function checks for internal cleavage sites. If
@@ -172,7 +65,8 @@ destroy the recognition sites. The functions returns a list containing
 the position of the choosen amino acid residue for silent mutation.
 
 ``` r
-mutations_bbsi<-domesticate(input_sequence, recognition_site_bbsi, cuf=cuf)
+mutations_bbsi <- domesticate(input_sequence, recognition_site_bbsi, 
+    cuf = cuf)
 ```
 
     ## [1] "No domestication needed."
@@ -184,7 +78,8 @@ mutations_bbsi
     ## list()
 
 ``` r
-mutations_bsai<-domesticate(input_sequence, recognition_site_bsai, cuf=cuf)
+mutations_bsai <- domesticate(input_sequence, recognition_site_bsai, 
+    cuf = cuf)
 ```
 
     ## [1] "No domestication needed."
@@ -203,8 +98,9 @@ site \[default: TT\]
 **restriction\_enzym**: Recognition site sequence of the respective
 restriction enzyme \[default: GGTCTC\]  
 **codon**: The codon which should be used in the mutagenesis \[default:
-NDT\] **suffix**: Spacer nucleotides matching the cleavage pattern of
-the enzyme \[default: A\]  
+NDT\]  
+**suffix**: Spacer nucleotides matching the cleavage pattern of the
+enzyme \[default: A\]  
 **vector**: Four basepair overhangs complementary to the created
 overhangs in the acceptor vector \[default: c(“AATG”, “AAGC”)\]  
 **replacements**: The desired substitutions  
@@ -226,14 +122,67 @@ slot called “NDT”. This slot contains a non-binding region in which
 (the) NDT site(s) is/are located.
 
 ``` r
-#If domestication is necessary follow the workflow of the Point Mutagenesis vignette
-#We will use a structure similar to the Point Mutagenesis workflow to insert different kinds of Multiple Site Saturations here.
-mutations<-list(c(137,"NDT"), c(143,"NNN"), c( 147, "DBK"),c(232, "NDT"), c(234, "NDT"))
-primers<-msd_mutate(input_sequence, prefix="TT" ,restriction_enzyme=recognition_site_bsai, suffix="A", vector=c("AATG", "AAGC"), replacements=mutations, replacement_range=5, binding_min_length=4 ,primer_length=9, target_temp=60, fragment_min_size=60 )
+# If domestication is necessary follow the workflow of the
+# Point Mutagenesis vignette We will use a structure similar
+# to the Point Mutagenesis workflow to insert different kinds
+# of Multiple Site Saturations here.
+mutations <- list(c(137, "NDT"), c(143, "NNN"), c(147, "DBK"), 
+    c(232, "NDT"), c(234, "NDT"))
+primers <- msd_mutate(input_sequence, prefix = "TT", restriction_enzyme = recognition_site_bsai, 
+    suffix = "A", vector = c("AATG", "AAGC"), replacements = mutations, 
+    replacement_range = 5, binding_min_length = 4, primer_length = 9, 
+    target_temp = 60, fragment_min_size = 60)
 primers
 ```
 
-    ## An object of class "Primerset"
+    ## An object of class "Extended_Primerset"
+    ## Slot "fragments":
+    ## [[1]]
+    ## An object of class "Fragment"
+    ## Slot "start":
+    ## [1] 2
+    ## 
+    ## Slot "stop":
+    ## [1] 142
+    ## 
+    ## Slot "start_mutation":
+    ## logical(0)
+    ## 
+    ## Slot "stop_mutation":
+    ## [1] 137
+    ## 
+    ## 
+    ## [[2]]
+    ## An object of class "Fragment"
+    ## Slot "start":
+    ## [1] 143
+    ## 
+    ## Slot "stop":
+    ## [1] 231
+    ## 
+    ## Slot "start_mutation":
+    ## [1] 143 147
+    ## 
+    ## Slot "stop_mutation":
+    ## logical(0)
+    ## 
+    ## 
+    ## [[3]]
+    ## An object of class "Fragment"
+    ## Slot "start":
+    ## [1] 232
+    ## 
+    ## Slot "stop":
+    ## [1] 300
+    ## 
+    ## Slot "start_mutation":
+    ## [1] 232 234
+    ## 
+    ## Slot "stop_mutation":
+    ## logical(0)
+    ## 
+    ## 
+    ## 
     ## Slot "oldsequence":
     ## [1] "ATGTCTCAGGTTCAGAGTGGCATTTTGCCAGAACATTGCCGCGCGGCGATTTGGATCGAAGCCAACGTGAAAGGGGAAGTTGACGCCCTGCGTGCGGCCAGTAAAACATTTGCCGACAAACTGGCAACTTTTGAAGCGAAATTCCCGGACGCGCATCTTGGTGCGGTGGTTGCCTTTGGTAACAACACCTGGCGCGCTCTGAGCGGCGGCGTTGGGGCAGAAGAGCTGAAAGATTTTCCGGGCTACGGTAAAGGCCTTGCGCCGACGACCCAGTTCGATGTGTTGATCCACATTCTTTCTCTGCGTCACGACGTAAACTTCTCTGTCGCCCAGGCGGCGATGGAAGCCTTTGGTGACTGCATTGAAGTGAAAGAAGAGATCCACGGCTTCCGTTGGGTTGAAGAGCGTGACCTGAGCGGCTTTGTTGACGGTACGGAAAACCCGGCGGGTGAAGAGACGCGTCGCGAAGTGGCGGTTATCAAAGACGGCGTGGATGCGGGCGGCAGCTATGTGTTTGTCCAGCGTTGGGAACACAACCTGAAGCAGCTCAACCGGATGAGCGTTCACGATCAGGAGATGGTGATCGGGCGCACCAAAGAGGCCAACGAAGAGATCGACGGCGACGAACGTCCGGAAACCTCTCACCTCACCCGCGTTGATCTGAAAGAAGATGGCAAAGGGCTGAAGATTGTTCGCCAGAGCCTGCCGTACGGCACTGCCAGTGGCACTCACGGTCTGTACTTCTGCGCCTACTGCGCGCGTCTGCATAACATTGAGCAGCAACTGCTGAGCATGTTTGGCGATACCGATGGTAAGCGTGATGCGATGTTGCGTTTCACCAAACCGGTAACCGGCGGCTATTATTTCGCACCGTCGCTGGACAAGTTGATGGCGCTGTAA"
     ## 
@@ -267,7 +216,7 @@ primers
     ## 
     ## 
     ## [[1]][[2]]
-    ## An object of class "Primer MSD"
+    ## An object of class "Primer_MSD"
     ## Slot "NDT":
     ## [1] "AGCCGCTCAGAHN"
     ## 
@@ -299,7 +248,7 @@ primers
     ## 
     ## [[2]]
     ## [[2]][[1]]
-    ## An object of class "Primer MSD"
+    ## An object of class "Primer_MSD"
     ## Slot "NDT":
     ## [1] "TNNNGGTACGGAADBK"
     ## 
@@ -358,7 +307,7 @@ primers
     ## 
     ## [[3]]
     ## [[3]][[1]]
-    ## An object of class "Primer MSD"
+    ## An object of class "Primer_MSD"
     ## Slot "NDT":
     ## [1] "NDTCAGNDT"
     ## 
@@ -423,14 +372,63 @@ The primers are generated for direct cloning into the Level 2 vector.
 The function primer\_add\_level modifies the primers for individual
 cloning into Level 0 vectors and subsequent assembly in Level 2.  
 The parameters **prefix, restriction\_enzyme, suffix and vector** can be
-set similar to the mutate-function.
+set similar to the
+mutate-function.
 
 ``` r
-primers_lvl0<-primer_add_level(primers,  prefix="TT", restriction_enzyme=recognition_site_bbsi, suffix="AA", vector=c("CTCA", "CTCG"))
+primers_lvl0 <- primer_add_level(primers, prefix = "TT", restriction_enzyme = recognition_site_bbsi, 
+    suffix = "AA", vector = c("CTCA", "CTCG"))
 primers_lvl0
 ```
 
-    ## An object of class "Primerset"
+    ## An object of class "Extended_Primerset"
+    ## Slot "fragments":
+    ## [[1]]
+    ## An object of class "Fragment"
+    ## Slot "start":
+    ## [1] 2
+    ## 
+    ## Slot "stop":
+    ## [1] 142
+    ## 
+    ## Slot "start_mutation":
+    ## logical(0)
+    ## 
+    ## Slot "stop_mutation":
+    ## [1] 137
+    ## 
+    ## 
+    ## [[2]]
+    ## An object of class "Fragment"
+    ## Slot "start":
+    ## [1] 143
+    ## 
+    ## Slot "stop":
+    ## [1] 231
+    ## 
+    ## Slot "start_mutation":
+    ## [1] 143 147
+    ## 
+    ## Slot "stop_mutation":
+    ## logical(0)
+    ## 
+    ## 
+    ## [[3]]
+    ## An object of class "Fragment"
+    ## Slot "start":
+    ## [1] 232
+    ## 
+    ## Slot "stop":
+    ## [1] 300
+    ## 
+    ## Slot "start_mutation":
+    ## [1] 232 234
+    ## 
+    ## Slot "stop_mutation":
+    ## logical(0)
+    ## 
+    ## 
+    ## 
     ## Slot "oldsequence":
     ## [1] "ATGTCTCAGGTTCAGAGTGGCATTTTGCCAGAACATTGCCGCGCGGCGATTTGGATCGAAGCCAACGTGAAAGGGGAAGTTGACGCCCTGCGTGCGGCCAGTAAAACATTTGCCGACAAACTGGCAACTTTTGAAGCGAAATTCCCGGACGCGCATCTTGGTGCGGTGGTTGCCTTTGGTAACAACACCTGGCGCGCTCTGAGCGGCGGCGTTGGGGCAGAAGAGCTGAAAGATTTTCCGGGCTACGGTAAAGGCCTTGCGCCGACGACCCAGTTCGATGTGTTGATCCACATTCTTTCTCTGCGTCACGACGTAAACTTCTCTGTCGCCCAGGCGGCGATGGAAGCCTTTGGTGACTGCATTGAAGTGAAAGAAGAGATCCACGGCTTCCGTTGGGTTGAAGAGCGTGACCTGAGCGGCTTTGTTGACGGTACGGAAAACCCGGCGGGTGAAGAGACGCGTCGCGAAGTGGCGGTTATCAAAGACGGCGTGGATGCGGGCGGCAGCTATGTGTTTGTCCAGCGTTGGGAACACAACCTGAAGCAGCTCAACCGGATGAGCGTTCACGATCAGGAGATGGTGATCGGGCGCACCAAAGAGGCCAACGAAGAGATCGACGGCGACGAACGTCCGGAAACCTCTCACCTCACCCGCGTTGATCTGAAAGAAGATGGCAAAGGGCTGAAGATTGTTCGCCAGAGCCTGCCGTACGGCACTGCCAGTGGCACTCACGGTCTGTACTTCTGCGCCTACTGCGCGCGTCTGCATAACATTGAGCAGCAACTGCTGAGCATGTTTGGCGATACCGATGGTAAGCGTGATGCGATGTTGCGTTTCACCAAACCGGTAACCGGCGGCTATTATTTCGCACCGTCGCTGGACAAGTTGATGGCGCTGTAA"
     ## 
@@ -464,7 +462,7 @@ primers_lvl0
     ## 
     ## 
     ## [[1]][[2]]
-    ## An object of class "Primer MSD"
+    ## An object of class "Primer_MSD"
     ## Slot "NDT":
     ## [1] "AGCCGCTCAGAHN"
     ## 
@@ -496,7 +494,7 @@ primers_lvl0
     ## 
     ## [[2]]
     ## [[2]][[1]]
-    ## An object of class "Primer MSD"
+    ## An object of class "Primer_MSD"
     ## Slot "NDT":
     ## [1] "TNNNGGTACGGAADBK"
     ## 
@@ -555,7 +553,7 @@ primers_lvl0
     ## 
     ## [[3]]
     ## [[3]][[1]]
-    ## An object of class "Primer MSD"
+    ## An object of class "Primer_MSD"
     ## Slot "NDT":
     ## [1] "NDTCAGNDT"
     ## 
@@ -624,6 +622,7 @@ print_primer(primers_lvl0)
 ```
 
     ## Fragment 1
+    ## Start 2, Stop 142, Length 141
     ## Forward
     ## TTGAAGACAACTCAAATGTCTCAGGTTCAGAGTGGCATTTTGCC
     ## Temperature of binding site:  60.36446  °C 
@@ -634,6 +633,7 @@ print_primer(primers_lvl0)
     ## Temperature difference:  0.5794564  K 
     ## 
     ## Fragment 2
+    ## Start 143, Stop 231, Length 89
     ## Forward
     ## TTGAAGACAACTCATTGTTNNNGGTACGGAADBKCCGGCGGGTGAAGAGACGC
     ## Temperature of binding site:  59.2169  °C 
@@ -644,6 +644,7 @@ print_primer(primers_lvl0)
     ## Temperature difference:  0.1708527  K 
     ## 
     ## Fragment 3
+    ## Start 232, Stop 300, Length 69
     ## Forward
     ## TTGAAGACAACTCATGTTNDTCAGNDTCTGCCGTACGGCACTGCCAG
     ## Temperature of binding site:  60.52991  °C 
@@ -662,7 +663,7 @@ print_primer(primers_lvl0)
 The textual output can be printed into a file.
 
 ``` r
-sink("primers.txt", append=FALSE, split=FALSE)
+sink("primers.txt", append = FALSE, split = FALSE)
 print_primer(primers_lvl0)
 sink()
 ```
