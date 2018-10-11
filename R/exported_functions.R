@@ -13,11 +13,11 @@ list_cu_table<-function(){
 #' 
 #' An example is shown in the vignette at \url{https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/Point_Mutagenesis.md}
 #' 
-#' @param primer An object of class Primer, Primer MSD or Primerset
-#'
+#' @param primer An object of class Primer, Primer_MSD or Primerset
 #' @return Textual output
 #' @export
-#'
+#' @docType methods
+#' @rdname print_primer-methods
 #' @examples
 #' #Load results of the Point Mutation vignette and print it
 #' data(Point_Mutagenesis_BbsI_result)
@@ -25,7 +25,8 @@ list_cu_table<-function(){
 setGeneric("print_primer" , function(primer) {
   standardGeneric("print_primer")
 })
-
+#' @rdname print_primer-methods
+#' @aliases print_primer,Primer-method 
 setMethod("print_primer", signature(primer="Primer"),
           function(primer){
             cat(primer@prefix, primer@restriction_enzyme, primer@suffix, primer@vector, primer@overhang, primer@binding_sequence, "\n" , sep="")
@@ -33,24 +34,48 @@ setMethod("print_primer", signature(primer="Primer"),
             cat("Temperature difference: ", primer@difference, " K", "\n")
           }
 )
-setMethod("print_primer", signature(primer="Primer MSD"),
+#' @rdname print_primer-methods
+setMethod("print_primer", signature(primer="Primer_MSD"),
           function(primer){
             cat(primer@prefix, primer@restriction_enzyme, primer@suffix, primer@vector, primer@overhang, primer@NDT, primer@binding_sequence, "\n", sep="")
             cat("Temperature of binding site: ", primer@temperature, " \u00b0C" , "\n")
             cat("Temperature difference: ", primer@difference, " K", "\n")
           }
 )
+#' @rdname print_primer-methods
+#' @aliases print_primer,Primerset-method 
 setMethod("print_primer", signature(primer="Primerset"),
           function(primer){
-            for(i in 1:length(primer@primers)){
+            primerset<-primer
+            for(i in 1:length(primerset@primers)){
               cat("Fragment ", i, "\n", "Forward\n", sep="")
-              print_primer(primer@primers[[i]][[1]])
+              print_primer(primerset@primers[[i]][[1]])
               cat("Reverse\n")
-              print_primer(primer@primers[[i]][[2]])
+              print_primer(primerset@primers[[i]][[2]])
               cat("\n")
             }
-            cat("Input Sequence:\n", primer@oldsequence,"\n" )
-            cat("\nModified Sequence:\n", primer@newsequence, "\n")
+            cat("Input Sequence:\n", primerset@oldsequence,"\n" )
+            cat("\nModified Sequence:\n", primerset@newsequence, "\n")
+          }
+)
+#' @rdname print_primer-methods
+#' @aliases print_primer,Extended_Primerset-method 
+setMethod("print_primer", signature(primer="Extended_Primerset"),
+          function(primer){
+            primerset<-primer
+            for(i in 1:length(primerset@fragments)){
+              cat("Fragment ", i, "\n", sep="")
+              cat("Start ", primerset@fragments[[i]]@start, ", ", sep="")
+              cat("Stop ",  primerset@fragments[[i]]@stop, ", ", sep="")
+              cat("Length ",(primerset@fragments[[i]]@stop - primerset@fragments[[i]]@start)+1, "\n", sep="")
+              cat("Forward\n")
+              print_primer(primerset@primers[[i]][[1]])
+              cat("Reverse\n")
+              print_primer(primerset@primers[[i]][[2]])
+              cat("\n")
+            }
+            cat("Input Sequence:\n", primerset@oldsequence,"\n" )
+            cat("\nModified Sequence:\n", primerset@newsequence, "\n")
           }
 )
 
@@ -65,7 +90,8 @@ setMethod("print_primer", signature(primer="Primerset"),
 #'
 #' @return A list with replacments: Each element has a vector with the codon number at the first slot and the amino acid of this position at the second slot.
 #' @export
-#'
+#' @import seqinr
+#' @importFrom seqinr translate
 #' @examples
 #' #Load the setup of the Point Mutation vignette and run the domestication
 #' data(Point_Mutagenesis_BbsI_setup)
@@ -96,7 +122,7 @@ domesticate<-function(input_sequence, restriction_enzyme="GGTCTC", cuf="e_coli_3
       alt_codons[[j]]<-cuf_vector[str_to_upper(codons)]
     }
     max_in_list<-which.max(unlist(lapply(alt_codons, function(x) x[which.max(x)])))  
-    replacements[[i]]<-c(as.numeric((start-1)+max_in_list),translate(s2c(str_to_upper(names(alt_codons[[max_in_list]][which.max(alt_codons[[max_in_list]])])))))
+    replacements[[i]]<-c(as.numeric((start-1)+max_in_list),seqinr::translate(s2c(str_to_upper(names(alt_codons[[max_in_list]][which.max(alt_codons[[max_in_list]])])))))
   }
   return(replacements)
 }
@@ -136,7 +162,7 @@ mutate<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", suffi
   restriction_enzyme_s2c_reverse<-comp(restriction_enzyme_s2c)
   restriction_enzyme_s2c_reverse<-rev(restriction_enzyme_s2c_reverse)
   restriction_enzyme_reverse<-str_to_upper(paste(restriction_enzyme_s2c_reverse, collapse = ""))
-  prot_sequence<-translate(sequence)
+  prot_sequence<-seqinr::translate(sequence)
   primers<-vector("list", length(replacements)+1)
   #First primer @ transcription start
   forward<-pc(prefix=prefix, restriction_enzyme = restriction_enzyme, suffix=suffix, vector=vector[1], overhang="")
@@ -202,7 +228,7 @@ mutate<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", suffi
 #' @param restriction_enzyme Recognition site sequence of the respective restriction enzyme [default: GGTCTC]
 #' @param suffix Spacer nucleotides matching the cleavage pattern of the enzyme [default: A]
 #' @param vector Four basepair overhangs complementary to the created overhangs in the acceptor vector  [default: c("AATG", "AAGC")]
-#' @param replacements The desired substitutions
+#' @param replacements The desired substitutions as a vector with positions OR a list containing vetors with position (char) and type of MSD mutation (char)
 #' @param replacement_range The minimal threshold value of the template binding sequence in amino acid residues [default: 4]
 #' @param binding_min_length Maximal length of the binding sequence [default: 9]
 #' @param primer_length Melting temperature of the binding sequence in \code{print('\u00B0')}C [default: 60]
@@ -223,11 +249,23 @@ mutate<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", suffi
 #' binding_min_length=4 , primer_length=9, target_temp=60,
 #' fragment_min_size=60 )
 msd_mutate<-function(input_sequence, codon="NDT" ,prefix="TT" ,restriction_enzyme="GGTCTC", suffix="A", vector=c("AATG", "AAGC"), replacements, replacement_range=5, binding_min_length=4 ,primer_length=9, target_temp=60, fragment_min_size=60 ) {#change to primer_length_max? and min?
+  codon<-str_to_upper(codon)
   possible_codons<-c("NNN", "NNK", "NNS", "NDT", "DBK", "NRT")
   if(!(codon %in% possible_codons)) {
     stop(paste(codon, "is not a valid codon. Please select one of the following:", paste(possible_codons, collapse = " ") ,sep=" "))
   }
-  replacements<-sort(replacements)
+  if(class(replacements)=="list"){
+    replacements<-order_replacements(replacements)
+    codons<-sapply(replacements, function(x){str_to_upper(as.character(x[2]))})
+    if(all(is.element(codons, possible_codons))==F){
+      stop(paste(codons, "contains invalid codons. Please select one of the following:", paste(possible_codons, collapse = " ") ,sep=" "))
+    }
+    replacements<-sapply(replacements, function(x){(as.numeric(x[1]))})
+  }
+  else{
+    replacements<-sort(replacements)
+    codons<-rep(codon, length(replacements))
+  }
   sequence<-s2c(input_sequence)
   codon_seq<-sequence_check(input_sequence)
   restriction_enzyme_s2c<-s2c(restriction_enzyme)
@@ -235,7 +273,7 @@ msd_mutate<-function(input_sequence, codon="NDT" ,prefix="TT" ,restriction_enzym
   restriction_enzyme_s2c_reverse<-rev(restriction_enzyme_s2c_reverse)
   restriction_enzyme_reverse<-str_to_upper(paste(restriction_enzyme_s2c_reverse, collapse = ""))
   min_fragment<-3*primer_length
-  prot_sequence<-translate(sequence)
+  prot_sequence<-seqinr::translate(sequence)
   primers<-vector("list")
   if(str_sub(vector[1], 2) == "ATG"){
     fragment_start<-2
@@ -480,7 +518,8 @@ msd_mutate<-function(input_sequence, codon="NDT" ,prefix="TT" ,restriction_enzym
     }
     else {
       temp_primer<-pc_msd(prefix=prefix ,restriction_enzyme=restriction_enzyme, suffix=suffix_f, vector=vector_f, overhang=overhang_f)
-      codon_seq[cur_fragment@start_mutation]<-"NDT"
+      codon_seq[cur_fragment@start_mutation]<-codons[1:length(cur_fragment@start_mutation)]
+      codons<-codons[-(1:length(cur_fragment@start_mutation))]
       temp_primer@NDT<-paste(paste(codon_seq[cur_fragment@start:max(cur_fragment@start_mutation)], collapse = ""), sep="")
       temp_primer@binding_sequence<-paste(paste(codon_seq[(max(cur_fragment@start_mutation)+1):((max(cur_fragment@start_mutation)+1)+primer_length-1)], collapse=""), sep="")
       temp_primer<-sequence_length_temperature(temp_primer, primer_min=binding_min_length, target_temp=target_temp)
@@ -498,7 +537,8 @@ msd_mutate<-function(input_sequence, codon="NDT" ,prefix="TT" ,restriction_enzym
     }
     else{
       temp_primer<-pc_msd(prefix=prefix ,restriction_enzyme=restriction_enzyme, suffix=suffix_r, overhang=overhang_r, vector=vector_r)
-      codon_seq[cur_fragment@stop_mutation]<-"NDT"
+      codon_seq[cur_fragment@stop_mutation]<-codons[1:length(cur_fragment@stop_mutation)]
+      codons<-codons[-(1:length(cur_fragment@stop_mutation))]
       temp_primer@NDT<-paste(paste(codon_seq[(min(cur_fragment@stop_mutation)):stop_r], collapse=""), sep="")
       temp_primer@NDT<-paste(temp_primer@NDT, str_sub(codon_seq[cur_fragment@stop-1], end=2), sep="")
       temp_primer@NDT<-paste(comp(rev(s2c(temp_primer@NDT)), ambiguous = T,forceToLower = F), collapse = "")
@@ -514,8 +554,8 @@ msd_mutate<-function(input_sequence, codon="NDT" ,prefix="TT" ,restriction_enzym
   #Replace them based on ? -> Primer without mutation/length of the primer in total?
   #It is easier to modify the exisiting primer 
   #If it is not possible to correct all overlaps -> return message with postion for silent mutation
-  primers<-check_primers(primers, fragments, binding_min_length, target_temp)
-  return(ps(oldsequence=input_sequence, primers=primers, newsequence=paste(codon_seq, collapse = "")))
+  primers<-check_primer_dupplicates(primers, fragments, binding_min_length, target_temp)
+  return(eps(oldsequence=input_sequence, primers=primers, newsequence=paste(codon_seq, collapse = ""), fragments=fragments))
 }
 
 #' Add a level to exisiting Primerset
@@ -564,15 +604,18 @@ primer_add_level<-function(primerset, prefix="TT" ,restriction_enzyme="GAAGAC", 
 #' Create a graphical evaluation of sequencing results
 #' 
 #' This function creates a graphical evalution of the sequencing results to determine the quality of the created library.
-#' How it works: 
-#' The functions aligns the given input_sequence to the sequenced sequence (it also tries to align the reverse complement). Afterwards it searches for mismatches between the sequences.
-#' Mismatches can be sucessfully mutated nucleotides. For the positions with a mismatch a pie chart showing the distribution of signals for each nucleotide is created.
-#' You can controll the quality of the created library by comparing the pie chart to your expections about the modidication of the sequence.
+#'
+#'The functions aligns the obtained sequencing results to the target gene sequence. 
+#'It also tries to align the reverse complement of the obtained sequence. 
+#'Afterwards it checks for mismatches between the sequences.
+#'Mismatches are likely to be sucessfully mutated nucleotides. 
+#'Positions regarded as mismatches are displayed as pie charts. 
+#'The shown distributions are based on the signal intensities of the four nucleobases at the mismatch positions.
+#'You can compare the pie charts with expected pattern of randomization, therefore validating the quality of the created library.
 #' @importFrom dplyr slice
 #' @importFrom graphics pie
-#' @import sangerseqR
-#' @import seqinr
-#' @import Biostrings
+#' @importFrom sangerseqR readsangerseq peakPosMatrix
+#' @importFrom Biostrings pairwiseAlignment mismatchTable reverseComplement
 #' @import RColorBrewer
 #' @param input_sequence The sequence which was modified. This is an object of type character containing the sequence. 
 #' @param ab1file The path to the ab1file which was provided by the sequencer/sequencing service
@@ -589,15 +632,16 @@ primer_add_level<-function(primerset, prefix="TT" ,restriction_enzyme="GAAGAC", 
 #' base_distribution(input_sequence=input_sequence, ab1file=abfile, replacements=mutations)
 #' }
 base_distribution<-function(input_sequence, ab1file, replacements, trace_cutoff=80){
-  sanger_seq<-readsangerseq(ab1file) #reading in the data
-  global_Align<-pairwiseAlignment(input_sequence, sanger_seq@primarySeq)
-  global_Align_rev<-pairwiseAlignment(input_sequence, reverseComplement(sanger_seq@primarySeq))
+  sanger_seq<-sangerseqR::readsangerseq(ab1file) #reading in the data
+  global_Align<-Biostrings::pairwiseAlignment(input_sequence, sanger_seq@primarySeq)
+  global_Align_rev<-Biostrings::pairwiseAlignment(input_sequence, Biostrings::reverseComplement(sanger_seq@primarySeq))
   reverse=F
   if(global_Align_rev@score > global_Align@score) {
     reverse=T
     global_Align<-global_Align_rev
+    print("Reverse sequence detected!")
   }
-  mismatches<-mismatchTable(global_Align)
+  mismatches<-Biostrings::mismatchTable(global_Align)
   replacements_basepairs<-as.vector(sapply(replacements, FUN<-function(x){return(c(x*3-2, x*3-1, x*3))}))
   candidates<-unlist(sapply(replacements_basepairs, FUN = function(x){which(mismatches[,"PatternStart"]==x)}, simplify = array))
   mismatches_candidates<-mismatches[candidates, ]
@@ -629,22 +673,22 @@ base_distribution<-function(input_sequence, ab1file, replacements, trace_cutoff=
   pattern_pos<-unique(pattern_pos)
   
   if(reverse==T) {
-    subject_pos<-nchar(sanger_seq@primarySeq)-mismatches_candidates[,"SubjectStart"]+1
+    subject_pos<-length(sanger_seq@primarySeq)-subject_pos+1
   }
-  tracematrix_subject<-traceMatrix(sanger_seq)[peakPosMatrix(sanger_seq)[subject_pos],]
+  tracematrix_subject<-sangerseqR::traceMatrix(sanger_seq)[sangerseqR::peakPosMatrix(sanger_seq)[subject_pos],]
   sums_row<-which(rowSums(tracematrix_subject)>=trace_cutoff)
   tracematrix_subject<-as.data.frame(tracematrix_subject[sums_row,])
   for(element in sums_row) {
     # plotting as pie chart
     sliceit <- dplyr::slice (tracematrix_subject,element)
     slices <- as.numeric(sliceit)
+    lbls <- c("Adenine", "Cytosine", "Guanine", "Thymine")
     if(reverse==T) {
       lbls <- c("Thymine", "Guanine", "Cytosine", "Adenine")
     }
-    lbls <- c("Adenine", "Cytosine", "Guanine", "Thymine")
     pct <- round(slices/sum(slices)*100)
     lbls <- paste(lbls, pct) # add percents to labels
     lbls <- paste(lbls,"%",sep="") # ad % to labels
-    pie(slices,labels = lbls, col=brewer.pal(4,"Spectral"),main = paste("Peak intensity distribution for Postion", pattern_pos[element], "(Template) -", subject_pos[element], "(Sequencing)", sep=" ")) 
+    pie(slices,labels = lbls, col=brewer.pal(4,"Spectral"),main = paste("Peak intensity distribution for \nPosition", pattern_pos[element], "(Template) -", subject_pos[element], "(Sequencing)", sep=" ")) 
     }
 }

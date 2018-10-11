@@ -1,4 +1,7 @@
 ---
+title: "README"
+author: "Chris Ulpinnis & Pascal Püllmann"
+date: "`r Sys.Date()`"
 output: github_document
 ---
 
@@ -32,3 +35,17 @@ To start with this library we recommend to have a look on our vignettes!
 [Point Mutagenesis](https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/Point_Mutagenesis.md)    \
 [Multiple Site Directed Mutagenesis - Example1](https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/MSD.md)    \
 [Multiple Site Directed Mutagenesis - Example2](https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/MSD2.md)    \
+[Multiple Site Directed Mutagenesis - Example3](https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/MSD3.md)    \
+[Quick Quality Control](https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/QQC.md)    \
+
+
+Interactive Example
+-------
+
+## You can try out our interactive user notebooks for Mutagenesis: 
+### Multiple Site Directed
+ 
+[![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/ipb-halle/GoldenMutagenesis/binder?filepath=notebooks%2FMSD_USER.ipynb)\
+
+### Single Point
+[![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/ipb-halle/GoldenMutagenesis/binder?filepath=notebooks%2FSPM_USER.ipynb)

@@ -3,11 +3,16 @@ title: "Multiple Site Saturation Mutagenesis"
 author: "Chris Ulpinnis & Pascal Püllmann"
 date: "`r Sys.Date()`"
 output:
-  word_document: default
   md_document:
-    variant: markdown_github
+    variant: gfm
+  word_document: default
   pdf_document: default
   html_document: default
+vignette: >
+  %\VignetteEngine{knitr}
+  %\VignetteIndexEntry{Multiple Site Saturation Mutagenesis Example1 - Active Site}
+  %\VignetteEncoding{UTF-8}
+
 ---
 
 ```{r setup, include=FALSE}
@@ -57,7 +62,7 @@ Substitute for NDT
 
 
 ````{r}
-library("GoldenMutagenesis")
+suppressWarnings(suppressMessages(library("GoldenMutagenesis")))
 ````
 ````{r}
 input_sequence<-"ATGTCTCAGGTTCAGAGTGGCATTTTGCCAGAACATTGCCGCGCGGCGATTTGGATCGAAGCCAACGTGAAAGGGGAAGTTGACGCCCTGCGTGCGGCCAGTAAAACATTTGCCGACAAACTGGCAACTTTTGAAGCGAAATTCCCGGACGCGCATCTTGGTGCGGTGGTTGCCTTTGGTAACAACACCTGGCGCGCTCTGAGCGGCGGCGTTGGGGCAGAAGAGCTGAAAGATTTTCCGGGCTACGGTAAAGGCCTTGCGCCGACGACCCAGTTCGATGTGTTGATCCACATTCTTTCTCTGCGTCACGACGTAAACTTCTCTGTCGCCCAGGCGGCGATGGAAGCCTTTGGTGACTGCATTGAAGTGAAAGAAGAGATCCACGGCTTCCGTTGGGTTGAAGAGCGTGACCTGAGCGGCTTTGTTGACGGTACGGAAAACCCGGCGGGTGAAGAGACGCGTCGCGAAGTGGCGGTTATCAAAGACGGCGTGGATGCGGGCGGCAGCTATGTGTTTGTCCAGCGTTGGGAACACAACCTGAAGCAGCTCAACCGGATGAGCGTTCACGATCAGGAGATGGTGATCGGGCGCACCAAAGAGGCCAACGAAGAGATCGACGGCGACGAACGTCCGGAAACCTCTCACCTCACCCGCGTTGATCTGAAAGAAGATGGCAAAGGGCTGAAGATTGTTCGCCAGAGCCTGCCGTACGGCACTGCCAGTGGCACTCACGGTCTGTACTTCTGCGCCTACTGCGCGCGTCTGCATAACATTGAGCAGCAACTGCTGAGCATGTTTGGCGATACCGATGGTAAGCGTGATGCGATGTTGCGTTTCACCAAACCGGTAACCGGCGGCTATTATTTCGCACCGTCGCTGGACAAGTTGATGGCGCTGTAA"
@@ -83,10 +88,10 @@ The mutate_msd function designs the necessary set of primers for the desired mut
 The function has the following parameters:\
 **prefix**: Additional nucleobases in 5' position of the recognition site [default: TT]\
 **restriction_enzym**: Recognition site sequence of the respective restriction enzyme [default: GGTCTC]\
-**codon**: The codon which should be used in the mutagenesis [default: NDT]
+**codon**: The codon which should be used in the mutagenesis [default: NDT]\
 **suffix**: Spacer nucleotides matching the cleavage pattern of the enzyme [default: A]\
 **vector**: Four basepair overhangs complementary to the created overhangs in the acceptor vector  [default: c("AATG", "AAGC")]\
-**replacements**: The desired substitutions\
+**replacements**: The desired substitutions as a vector with positions OR a list containing vetors with position (char) and type of MSD mutation (char) (see MSD3.rd for an example)\
 **binding_min_length**: The minimal threshold value of the template binding sequence in amino acid residues [default: 4]\
 **primer_length**: Maximal length of the binding sequence [default: 9]\
 **target_temp**: Melting temperature of the binding sequence in °C [default: 60]\
