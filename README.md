@@ -50,7 +50,7 @@ Control](https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/QQ
 
 ### Multiple Site Directed
 
-[![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/ipb-halle/GoldenMutagenesis/binder?filepath=notebooks%2FMSD_USER.ipynb)  
+[![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/ipb-halle/GoldenMutagenesis/binder?filepath=notebooks%2FMSD_USER.ipynb)
 
 ### Single Point
 
