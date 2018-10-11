@@ -7,6 +7,13 @@ cache: packages
 r_packages:
 - stringr
 - seqinr
+- graphics
+- RColorBrewer
+- dplyr
+
+bioc_packages: 
+- Biostrings
+- sangerseqR
 
 ## Inspired by 
 ## http://jtleek.com/protocols/travis_bioc_devel/#Configuring_R_CMD_check
