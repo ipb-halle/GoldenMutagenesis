@@ -1,12 +1,12 @@
-Multiple Site Saturation Mutagenesis
+Multiple Site Saturation Mutagenesis Example 2
 ================
 Chris Ulpinnis & Pascal Püllmann
 2018-10-11
 
-# Multiple Site Saturation Mutagenesis – Active site
+# Multiple Site Saturation Mutagenesis
 
 You can find the lastest version of this file at
-<https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/MSD.md>
+<https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/MSD2.md>
 
 ## Experimental Workflow
 
@@ -21,7 +21,7 @@ pAGM22082\_cRed
 
 ### Genomic sequence YfeX
 
-ATGTCTCAGGTTCAGAGTGGCATTTTGCCAGAACATTGCCGCGCGGCGATTTGGATCGAAGCCAACGTGAAAGGGGAAGTTGACGCCCTGCGTGCGGCCAGTAAAACATTTGCCGACAAACTGGCAACTTTTGAAGCGAAATTCCCGGACGCGCATCTTGGTGCGGTGGTTGCCTTTGGTAACAACACCTGGCGCGCTCTGAGCGGCGGCGTTGGGGCAGAAGAGCTGAAAGATTTTCCGGGCTACGGTAAAGGCCTTGCGCCGACGACCCAGTTCGATGTGTTGATCCACATTCTTTCTCTGCGTCACGACGTAAACTTCTCTGTCGCCCAGGCGGCGATGGAAGCCTTTGGTGACTGCATTGAAGTGAAAGAAGAGATCCACGGCTTCCGTTGGGTTGAAGAGCGT**GAC**CTGAGCGGCTTTGTT**GAC**GGTACGGAA**AAC**CCGGCGGGTGAAGAGACGCGTCGCGAAGTGGCGGTTATCAAAGACGGCGTGGATGCGGGCGGCAGCTATGTGTTTGTCCAGCGTTGGGAACACAACCTGAAGCAGCTCAACCGGATGAGCGTTCACGATCAGGAGATGGTGATCGGGCGCACCAAAGAGGCCAACGAAGAGATCGACGGCGACGAACGTCCGGAAACCTCTCACCTCACCCGCGTTGATCTGAAAGAAGATGGCAAAGGGCTGAAGATTGTT**CGC**CAG**AGC**CTGCCGTACGGCACTGCCAGTGGCACTCACGGTCTGTACTTCTGCGCCTACTGCGCGCGTCTGCATAACATTGAGCAGCAACTGCTGAGCATGTTTGGCGATACCGATGGTAAGCGTGATGCGATGTTGCGTTTCACCAAACCGGTAACCGGCGGCTATTATTTCGCACCGTCGCTGGACAAGTTGATGGCGCTGTAA
+ATGTCTCAGGTTCAGAGTGGCATTTTGCCAGAACATTGCCGCGCGGCGATTTGGATCGAAGCCAACGTGAAAGGGGAAGTTGACGCCCTGCGTGCGGCCAGTAAAACATTTGCCGACAAACTGGCAACTTTTGAAGCGAAATTCCCGGAC**GCG**CATCTTGGTGCGGTGGTTGCCTTTGGTAACAACACCTGGCGCGCTCTGAGCGGCGGCGTTGGGGCAGAAGAGCTGAAAGATTTTCCGGGCTACGGTAAAGGCCTTGCGCCGACGACCCAGTTCGATGTGTTGATCCACATTCTTTCT**CTG**CGTCACGACGTAAACTTCTCTGTCGCCCAGGCGGCGATGGAAGCCTTTGGTGACTGCATTGAAGTGAAAGAAGAGATCCACGGCTTCCGTTGGGTTGAAGAGCGTGACCTGAGCGGCTTTGTTGACGGTACGGAAAACCCGGCGGGT**GAA**GAGACGCGTCGCGAAGTGGCGGTTATCAAAGACGGCGTGGATGCGGGCGGCAGCTATGTGTTTGTCCAGCGTTGGGAACACAACCTGAAGCAGCTCAACCGGATGAGCGTTCACGATCAGGAGATGGTGATCGGGCGCACCAAAGAGGCC**AAC**GAAGAGATCGACGGCGACGAACGTCCGGAAACCTCTCACCTCACCCGCGTTGATCTGAAAGAAGATGGCAAAGGGCTGAAGATTGTTCGCCAGAGCCTGCCGTACGGCACTGCCAGTGGCACTCACGGTCTGTACTTCTGCGCCTAC**TGC**GCGCGTCTGCATAACATTGAGCAGCAACTGCTGAGCATGTTTGGCGATACCGATGGTAAGCGTGATGCGATGTTGCGTTTCACCAAACCGGTAACCGGCGGCTATTATTTCGCACCGTCGCTGGACAAGTTGATGGCGCTGTAA
 
 ### Restriction Enzyme
 
@@ -39,11 +39,11 @@ Recognition site: ***GGTCTC***
 
 ### Envisioned Mutations
 
-Aspartic Acid - 137  
-Aspartic Acid - 143  
-Asparagine - 147  
-Arginine - 232  
-Serine - 234  
+Alanine - 51  
+Leucine - 101  
+Glutamic Acid - 151  
+Asparagine - 202  
+Cysteine - 252  
   
 Substitute for
 NDT
@@ -128,7 +128,7 @@ slot called “NDT”. This slot contains a non-binding region in which
 ``` r
 # If domestication is necessary follow the workflow of the
 # Point Mutagenesis vignette
-mutations <- c(137, 143, 147, 232, 234)
+mutations <- c(51, 101, 151, 202, 252)
 primers <- msd_mutate(input_sequence, prefix = "TT", restriction_enzyme = recognition_site_bsai, 
     suffix = "A", vector = c("AATG", "AAGC"), replacements = mutations, 
     replacement_range = 5, binding_min_length = 4, primer_length = 9, 
@@ -144,40 +144,85 @@ primers
     ## [1] 2
     ## 
     ## Slot "stop":
-    ## [1] 142
+    ## [1] 53
     ## 
     ## Slot "start_mutation":
     ## logical(0)
     ## 
     ## Slot "stop_mutation":
-    ## [1] 137
+    ## [1] 51
     ## 
     ## 
     ## [[2]]
     ## An object of class "Fragment"
     ## Slot "start":
-    ## [1] 143
+    ## [1] 54
     ## 
     ## Slot "stop":
-    ## [1] 231
+    ## [1] 103
     ## 
     ## Slot "start_mutation":
-    ## [1] 143 147
+    ## logical(0)
     ## 
     ## Slot "stop_mutation":
-    ## logical(0)
+    ## [1] 101
     ## 
     ## 
     ## [[3]]
     ## An object of class "Fragment"
     ## Slot "start":
-    ## [1] 232
+    ## [1] 104
+    ## 
+    ## Slot "stop":
+    ## [1] 153
+    ## 
+    ## Slot "start_mutation":
+    ## logical(0)
+    ## 
+    ## Slot "stop_mutation":
+    ## [1] 151
+    ## 
+    ## 
+    ## [[4]]
+    ## An object of class "Fragment"
+    ## Slot "start":
+    ## [1] 154
+    ## 
+    ## Slot "stop":
+    ## [1] 204
+    ## 
+    ## Slot "start_mutation":
+    ## logical(0)
+    ## 
+    ## Slot "stop_mutation":
+    ## [1] 202
+    ## 
+    ## 
+    ## [[5]]
+    ## An object of class "Fragment"
+    ## Slot "start":
+    ## [1] 205
+    ## 
+    ## Slot "stop":
+    ## [1] 254
+    ## 
+    ## Slot "start_mutation":
+    ## logical(0)
+    ## 
+    ## Slot "stop_mutation":
+    ## [1] 252
+    ## 
+    ## 
+    ## [[6]]
+    ## An object of class "Fragment"
+    ## Slot "start":
+    ## [1] 255
     ## 
     ## Slot "stop":
     ## [1] 300
     ## 
     ## Slot "start_mutation":
-    ## [1] 232 234
+    ## logical(0)
     ## 
     ## Slot "stop_mutation":
     ## logical(0)
@@ -219,7 +264,7 @@ primers
     ## [[1]][[2]]
     ## An object of class "Primer_MSD"
     ## Slot "NDT":
-    ## [1] "AGCCGCTCAGAHN"
+    ## [1] "TGAHN"
     ## 
     ## Slot "prefix":
     ## [1] "TT"
@@ -234,51 +279,21 @@ primers
     ## [1] ""
     ## 
     ## Slot "overhang":
-    ## [1] "ACAA"
+    ## [1] "AAGA"
     ## 
     ## Slot "binding_sequence":
-    ## [1] "ACGCTCTTCAACCCAACGGAAGC"
+    ## [1] "GTCCGGGAATTTCGCTTCAAAAGTTGC"
     ## 
     ## Slot "temperature":
-    ## [1] 59.785
+    ## [1] 60.56425
     ## 
     ## Slot "difference":
-    ## [1] 0.5794564
+    ## [1] 0.1997931
     ## 
     ## 
     ## 
     ## [[2]]
     ## [[2]][[1]]
-    ## An object of class "Primer_MSD"
-    ## Slot "NDT":
-    ## [1] "TNDTGGTACGGAANDT"
-    ## 
-    ## Slot "prefix":
-    ## [1] "TT"
-    ## 
-    ## Slot "restriction_enzyme":
-    ## [1] "GGTCTC"
-    ## 
-    ## Slot "suffix":
-    ## [1] "A"
-    ## 
-    ## Slot "vector":
-    ## [1] ""
-    ## 
-    ## Slot "overhang":
-    ## [1] "TTGT"
-    ## 
-    ## Slot "binding_sequence":
-    ## [1] "CCGGCGGGTGAAGAGACGC"
-    ## 
-    ## Slot "temperature":
-    ## [1] 59.2169
-    ## 
-    ## Slot "difference":
-    ## [1] 0.7831005
-    ## 
-    ## 
-    ## [[2]][[2]]
     ## An object of class "Primer"
     ## Slot "prefix":
     ## [1] "TT"
@@ -287,31 +302,58 @@ primers
     ## [1] "GGTCTC"
     ## 
     ## Slot "suffix":
+    ## [1] "A"
+    ## 
+    ## Slot "vector":
+    ## [1] ""
+    ## 
+    ## Slot "overhang":
+    ## [1] "TCTT"
+    ## 
+    ## Slot "binding_sequence":
+    ## [1] "GGTGCGGTGGTTGCCTTTGGTAACA"
+    ## 
+    ## Slot "temperature":
+    ## [1] 60.1791
+    ## 
+    ## Slot "difference":
+    ## [1] 0.1790953
+    ## 
+    ## 
+    ## [[2]][[2]]
+    ## An object of class "Primer_MSD"
+    ## Slot "NDT":
+    ## [1] "CGAHN"
+    ## 
+    ## Slot "prefix":
+    ## [1] "TT"
+    ## 
+    ## Slot "restriction_enzyme":
+    ## [1] "GGTCTC"
+    ## 
+    ## Slot "suffix":
     ## [1] "T"
     ## 
     ## Slot "vector":
     ## [1] ""
     ## 
     ## Slot "overhang":
-    ## [1] "AACA"
+    ## [1] "GTGA"
     ## 
     ## Slot "binding_sequence":
-    ## [1] "ATCTTCAGCCCTTTGCCATCTTCTTT"
+    ## [1] "AGAAAGAATGTGGATCAACACATCGAACTG"
     ## 
     ## Slot "temperature":
-    ## [1] 59.04605
+    ## [1] 60.11394
     ## 
     ## Slot "difference":
-    ## [1] 0.1708527
+    ## [1] 0.06515983
     ## 
     ## 
     ## 
     ## [[3]]
     ## [[3]][[1]]
-    ## An object of class "Primer_MSD"
-    ## Slot "NDT":
-    ## [1] "NDTCAGNDT"
-    ## 
+    ## An object of class "Primer"
     ## Slot "prefix":
     ## [1] "TT"
     ## 
@@ -325,19 +367,196 @@ primers
     ## [1] ""
     ## 
     ## Slot "overhang":
-    ## [1] "TGTT"
+    ## [1] "TCAC"
     ## 
     ## Slot "binding_sequence":
-    ## [1] "CTGCCGTACGGCACTGCCAG"
+    ## [1] "GACGTAAACTTCTCTGTCGCCCAGG"
     ## 
     ## Slot "temperature":
-    ## [1] 60.52991
+    ## [1] 60.33165
     ## 
     ## Slot "difference":
-    ## [1] 0.5299114
+    ## [1] 0.3316526
     ## 
     ## 
     ## [[3]][[2]]
+    ## An object of class "Primer_MSD"
+    ## Slot "NDT":
+    ## [1] "TCAHN"
+    ## 
+    ## Slot "prefix":
+    ## [1] "TT"
+    ## 
+    ## Slot "restriction_enzyme":
+    ## [1] "GGTCTC"
+    ## 
+    ## Slot "suffix":
+    ## [1] "T"
+    ## 
+    ## Slot "vector":
+    ## [1] ""
+    ## 
+    ## Slot "overhang":
+    ## [1] "CGTC"
+    ## 
+    ## Slot "binding_sequence":
+    ## [1] "ACCCGCCGGGTTTTCCGTACCG"
+    ## 
+    ## Slot "temperature":
+    ## [1] 60.85613
+    ## 
+    ## Slot "difference":
+    ## [1] 0.5244756
+    ## 
+    ## 
+    ## 
+    ## [[4]]
+    ## [[4]][[1]]
+    ## An object of class "Primer"
+    ## Slot "prefix":
+    ## [1] "TT"
+    ## 
+    ## Slot "restriction_enzyme":
+    ## [1] "GGTCTC"
+    ## 
+    ## Slot "suffix":
+    ## [1] "A"
+    ## 
+    ## Slot "vector":
+    ## [1] ""
+    ## 
+    ## Slot "overhang":
+    ## [1] "GACG"
+    ## 
+    ## Slot "binding_sequence":
+    ## [1] "CGTCGCGAAGTGGCGGTTATCA"
+    ## 
+    ## Slot "temperature":
+    ## [1] 60.61078
+    ## 
+    ## Slot "difference":
+    ## [1] 0.6107759
+    ## 
+    ## 
+    ## [[4]][[2]]
+    ## An object of class "Primer_MSD"
+    ## Slot "NDT":
+    ## [1] "TCAHN"
+    ## 
+    ## Slot "prefix":
+    ## [1] "TT"
+    ## 
+    ## Slot "restriction_enzyme":
+    ## [1] "GGTCTC"
+    ## 
+    ## Slot "suffix":
+    ## [1] "T"
+    ## 
+    ## Slot "vector":
+    ## [1] ""
+    ## 
+    ## Slot "overhang":
+    ## [1] "CTCT"
+    ## 
+    ## Slot "binding_sequence":
+    ## [1] "GGCCTCTTTGGTGCGCCCGA"
+    ## 
+    ## Slot "temperature":
+    ## [1] 60.47119
+    ## 
+    ## Slot "difference":
+    ## [1] 0.1395836
+    ## 
+    ## 
+    ## 
+    ## [[5]]
+    ## [[5]][[1]]
+    ## An object of class "Primer"
+    ## Slot "prefix":
+    ## [1] "TT"
+    ## 
+    ## Slot "restriction_enzyme":
+    ## [1] "GGTCTC"
+    ## 
+    ## Slot "suffix":
+    ## [1] "A"
+    ## 
+    ## Slot "vector":
+    ## [1] ""
+    ## 
+    ## Slot "overhang":
+    ## [1] "AGAG"
+    ## 
+    ## Slot "binding_sequence":
+    ## [1] "ATCGACGGCGACGAACGTCC"
+    ## 
+    ## Slot "temperature":
+    ## [1] 58.83656
+    ## 
+    ## Slot "difference":
+    ## [1] 1.163437
+    ## 
+    ## 
+    ## [[5]][[2]]
+    ## An object of class "Primer_MSD"
+    ## Slot "NDT":
+    ## [1] "GCAHN"
+    ## 
+    ## Slot "prefix":
+    ## [1] "TT"
+    ## 
+    ## Slot "restriction_enzyme":
+    ## [1] "GGTCTC"
+    ## 
+    ## Slot "suffix":
+    ## [1] "T"
+    ## 
+    ## Slot "vector":
+    ## [1] ""
+    ## 
+    ## Slot "overhang":
+    ## [1] "ACGC"
+    ## 
+    ## Slot "binding_sequence":
+    ## [1] "GTAGGCGCAGAAGTACAGACCGT"
+    ## 
+    ## Slot "temperature":
+    ## [1] 59.13423
+    ## 
+    ## Slot "difference":
+    ## [1] 0.2976635
+    ## 
+    ## 
+    ## 
+    ## [[6]]
+    ## [[6]][[1]]
+    ## An object of class "Primer"
+    ## Slot "prefix":
+    ## [1] "TT"
+    ## 
+    ## Slot "restriction_enzyme":
+    ## [1] "GGTCTC"
+    ## 
+    ## Slot "suffix":
+    ## [1] "A"
+    ## 
+    ## Slot "vector":
+    ## [1] ""
+    ## 
+    ## Slot "overhang":
+    ## [1] "GCGT"
+    ## 
+    ## Slot "binding_sequence":
+    ## [1] "CTGCATAACATTGAGCAGCAACTGC"
+    ## 
+    ## Slot "temperature":
+    ## [1] 60.28916
+    ## 
+    ## Slot "difference":
+    ## [1] 0.2891579
+    ## 
+    ## 
+    ## [[6]][[2]]
     ## An object of class "Primer"
     ## Slot "prefix":
     ## [1] "TT"
@@ -361,13 +580,13 @@ primers
     ## [1] 60.90327
     ## 
     ## Slot "difference":
-    ## [1] 0.3733614
+    ## [1] 0.6141149
     ## 
     ## 
     ## 
     ## 
     ## Slot "newsequence":
-    ## [1] "ATGTCTCAGGTTCAGAGTGGCATTTTGCCAGAACATTGCCGCGCGGCGATTTGGATCGAAGCCAACGTGAAAGGGGAAGTTGACGCCCTGCGTGCGGCCAGTAAAACATTTGCCGACAAACTGGCAACTTTTGAAGCGAAATTCCCGGACGCGCATCTTGGTGCGGTGGTTGCCTTTGGTAACAACACCTGGCGCGCTCTGAGCGGCGGCGTTGGGGCAGAAGAGCTGAAAGATTTTCCGGGCTACGGTAAAGGCCTTGCGCCGACGACCCAGTTCGATGTGTTGATCCACATTCTTTCTCTGCGTCACGACGTAAACTTCTCTGTCGCCCAGGCGGCGATGGAAGCCTTTGGTGACTGCATTGAAGTGAAAGAAGAGATCCACGGCTTCCGTTGGGTTGAAGAGCGTNDTCTGAGCGGCTTTGTTNDTGGTACGGAANDTCCGGCGGGTGAAGAGACGCGTCGCGAAGTGGCGGTTATCAAAGACGGCGTGGATGCGGGCGGCAGCTATGTGTTTGTCCAGCGTTGGGAACACAACCTGAAGCAGCTCAACCGGATGAGCGTTCACGATCAGGAGATGGTGATCGGGCGCACCAAAGAGGCCAACGAAGAGATCGACGGCGACGAACGTCCGGAAACCTCTCACCTCACCCGCGTTGATCTGAAAGAAGATGGCAAAGGGCTGAAGATTGTTNDTCAGNDTCTGCCGTACGGCACTGCCAGTGGCACTCACGGTCTGTACTTCTGCGCCTACTGCGCGCGTCTGCATAACATTGAGCAGCAACTGCTGAGCATGTTTGGCGATACCGATGGTAAGCGTGATGCGATGTTGCGTTTCACCAAACCGGTAACCGGCGGCTATTATTTCGCACCGTCGCTGGACAAGTTGATGGCGCTGTAA"
+    ## [1] "ATGTCTCAGGTTCAGAGTGGCATTTTGCCAGAACATTGCCGCGCGGCGATTTGGATCGAAGCCAACGTGAAAGGGGAAGTTGACGCCCTGCGTGCGGCCAGTAAAACATTTGCCGACAAACTGGCAACTTTTGAAGCGAAATTCCCGGACNDTCATCTTGGTGCGGTGGTTGCCTTTGGTAACAACACCTGGCGCGCTCTGAGCGGCGGCGTTGGGGCAGAAGAGCTGAAAGATTTTCCGGGCTACGGTAAAGGCCTTGCGCCGACGACCCAGTTCGATGTGTTGATCCACATTCTTTCTNDTCGTCACGACGTAAACTTCTCTGTCGCCCAGGCGGCGATGGAAGCCTTTGGTGACTGCATTGAAGTGAAAGAAGAGATCCACGGCTTCCGTTGGGTTGAAGAGCGTGACCTGAGCGGCTTTGTTGACGGTACGGAAAACCCGGCGGGTNDTGAGACGCGTCGCGAAGTGGCGGTTATCAAAGACGGCGTGGATGCGGGCGGCAGCTATGTGTTTGTCCAGCGTTGGGAACACAACCTGAAGCAGCTCAACCGGATGAGCGTTCACGATCAGGAGATGGTGATCGGGCGCACCAAAGAGGCCNDTGAAGAGATCGACGGCGACGAACGTCCGGAAACCTCTCACCTCACCCGCGTTGATCTGAAAGAAGATGGCAAAGGGCTGAAGATTGTTCGCCAGAGCCTGCCGTACGGCACTGCCAGTGGCACTCACGGTCTGTACTTCTGCGCCTACNDTGCGCGTCTGCATAACATTGAGCAGCAACTGCTGAGCATGTTTGGCGATACCGATGGTAAGCGTGATGCGATGTTGCGTTTCACCAAACCGGTAACCGGCGGCTATTATTTCGCACCGTCGCTGGACAAGTTGATGGCGCTGTAA"
 
 The primers are generated for direct cloning into the Level 2 vector.  
 The function primer\_add\_level modifies the primers for individual
@@ -390,40 +609,85 @@ primers_lvl0
     ## [1] 2
     ## 
     ## Slot "stop":
-    ## [1] 142
+    ## [1] 53
     ## 
     ## Slot "start_mutation":
     ## logical(0)
     ## 
     ## Slot "stop_mutation":
-    ## [1] 137
+    ## [1] 51
     ## 
     ## 
     ## [[2]]
     ## An object of class "Fragment"
     ## Slot "start":
-    ## [1] 143
+    ## [1] 54
     ## 
     ## Slot "stop":
-    ## [1] 231
+    ## [1] 103
     ## 
     ## Slot "start_mutation":
-    ## [1] 143 147
+    ## logical(0)
     ## 
     ## Slot "stop_mutation":
-    ## logical(0)
+    ## [1] 101
     ## 
     ## 
     ## [[3]]
     ## An object of class "Fragment"
     ## Slot "start":
-    ## [1] 232
+    ## [1] 104
+    ## 
+    ## Slot "stop":
+    ## [1] 153
+    ## 
+    ## Slot "start_mutation":
+    ## logical(0)
+    ## 
+    ## Slot "stop_mutation":
+    ## [1] 151
+    ## 
+    ## 
+    ## [[4]]
+    ## An object of class "Fragment"
+    ## Slot "start":
+    ## [1] 154
+    ## 
+    ## Slot "stop":
+    ## [1] 204
+    ## 
+    ## Slot "start_mutation":
+    ## logical(0)
+    ## 
+    ## Slot "stop_mutation":
+    ## [1] 202
+    ## 
+    ## 
+    ## [[5]]
+    ## An object of class "Fragment"
+    ## Slot "start":
+    ## [1] 205
+    ## 
+    ## Slot "stop":
+    ## [1] 254
+    ## 
+    ## Slot "start_mutation":
+    ## logical(0)
+    ## 
+    ## Slot "stop_mutation":
+    ## [1] 252
+    ## 
+    ## 
+    ## [[6]]
+    ## An object of class "Fragment"
+    ## Slot "start":
+    ## [1] 255
     ## 
     ## Slot "stop":
     ## [1] 300
     ## 
     ## Slot "start_mutation":
-    ## [1] 232 234
+    ## logical(0)
     ## 
     ## Slot "stop_mutation":
     ## logical(0)
@@ -465,7 +729,7 @@ primers_lvl0
     ## [[1]][[2]]
     ## An object of class "Primer_MSD"
     ## Slot "NDT":
-    ## [1] "AGCCGCTCAGAHN"
+    ## [1] "TGAHN"
     ## 
     ## Slot "prefix":
     ## [1] "TT"
@@ -480,51 +744,21 @@ primers_lvl0
     ## [1] "CTCG"
     ## 
     ## Slot "overhang":
-    ## [1] "ACAA"
+    ## [1] "AAGA"
     ## 
     ## Slot "binding_sequence":
-    ## [1] "ACGCTCTTCAACCCAACGGAAGC"
+    ## [1] "GTCCGGGAATTTCGCTTCAAAAGTTGC"
     ## 
     ## Slot "temperature":
-    ## [1] 59.785
+    ## [1] 60.56425
     ## 
     ## Slot "difference":
-    ## [1] 0.5794564
+    ## [1] 0.1997931
     ## 
     ## 
     ## 
     ## [[2]]
     ## [[2]][[1]]
-    ## An object of class "Primer_MSD"
-    ## Slot "NDT":
-    ## [1] "TNDTGGTACGGAANDT"
-    ## 
-    ## Slot "prefix":
-    ## [1] "TT"
-    ## 
-    ## Slot "restriction_enzyme":
-    ## [1] "GAAGAC"
-    ## 
-    ## Slot "suffix":
-    ## [1] "AA"
-    ## 
-    ## Slot "vector":
-    ## [1] "CTCA"
-    ## 
-    ## Slot "overhang":
-    ## [1] "TTGT"
-    ## 
-    ## Slot "binding_sequence":
-    ## [1] "CCGGCGGGTGAAGAGACGC"
-    ## 
-    ## Slot "temperature":
-    ## [1] 59.2169
-    ## 
-    ## Slot "difference":
-    ## [1] 0.7831005
-    ## 
-    ## 
-    ## [[2]][[2]]
     ## An object of class "Primer"
     ## Slot "prefix":
     ## [1] "TT"
@@ -536,28 +770,55 @@ primers_lvl0
     ## [1] "AA"
     ## 
     ## Slot "vector":
+    ## [1] "CTCA"
+    ## 
+    ## Slot "overhang":
+    ## [1] "TCTT"
+    ## 
+    ## Slot "binding_sequence":
+    ## [1] "GGTGCGGTGGTTGCCTTTGGTAACA"
+    ## 
+    ## Slot "temperature":
+    ## [1] 60.1791
+    ## 
+    ## Slot "difference":
+    ## [1] 0.1790953
+    ## 
+    ## 
+    ## [[2]][[2]]
+    ## An object of class "Primer_MSD"
+    ## Slot "NDT":
+    ## [1] "CGAHN"
+    ## 
+    ## Slot "prefix":
+    ## [1] "TT"
+    ## 
+    ## Slot "restriction_enzyme":
+    ## [1] "GAAGAC"
+    ## 
+    ## Slot "suffix":
+    ## [1] "AA"
+    ## 
+    ## Slot "vector":
     ## [1] "CTCG"
     ## 
     ## Slot "overhang":
-    ## [1] "AACA"
+    ## [1] "GTGA"
     ## 
     ## Slot "binding_sequence":
-    ## [1] "ATCTTCAGCCCTTTGCCATCTTCTTT"
+    ## [1] "AGAAAGAATGTGGATCAACACATCGAACTG"
     ## 
     ## Slot "temperature":
-    ## [1] 59.04605
+    ## [1] 60.11394
     ## 
     ## Slot "difference":
-    ## [1] 0.1708527
+    ## [1] 0.06515983
     ## 
     ## 
     ## 
     ## [[3]]
     ## [[3]][[1]]
-    ## An object of class "Primer_MSD"
-    ## Slot "NDT":
-    ## [1] "NDTCAGNDT"
-    ## 
+    ## An object of class "Primer"
     ## Slot "prefix":
     ## [1] "TT"
     ## 
@@ -571,19 +832,196 @@ primers_lvl0
     ## [1] "CTCA"
     ## 
     ## Slot "overhang":
-    ## [1] "TGTT"
+    ## [1] "TCAC"
     ## 
     ## Slot "binding_sequence":
-    ## [1] "CTGCCGTACGGCACTGCCAG"
+    ## [1] "GACGTAAACTTCTCTGTCGCCCAGG"
     ## 
     ## Slot "temperature":
-    ## [1] 60.52991
+    ## [1] 60.33165
     ## 
     ## Slot "difference":
-    ## [1] 0.5299114
+    ## [1] 0.3316526
     ## 
     ## 
     ## [[3]][[2]]
+    ## An object of class "Primer_MSD"
+    ## Slot "NDT":
+    ## [1] "TCAHN"
+    ## 
+    ## Slot "prefix":
+    ## [1] "TT"
+    ## 
+    ## Slot "restriction_enzyme":
+    ## [1] "GAAGAC"
+    ## 
+    ## Slot "suffix":
+    ## [1] "AA"
+    ## 
+    ## Slot "vector":
+    ## [1] "CTCG"
+    ## 
+    ## Slot "overhang":
+    ## [1] "CGTC"
+    ## 
+    ## Slot "binding_sequence":
+    ## [1] "ACCCGCCGGGTTTTCCGTACCG"
+    ## 
+    ## Slot "temperature":
+    ## [1] 60.85613
+    ## 
+    ## Slot "difference":
+    ## [1] 0.5244756
+    ## 
+    ## 
+    ## 
+    ## [[4]]
+    ## [[4]][[1]]
+    ## An object of class "Primer"
+    ## Slot "prefix":
+    ## [1] "TT"
+    ## 
+    ## Slot "restriction_enzyme":
+    ## [1] "GAAGAC"
+    ## 
+    ## Slot "suffix":
+    ## [1] "AA"
+    ## 
+    ## Slot "vector":
+    ## [1] "CTCA"
+    ## 
+    ## Slot "overhang":
+    ## [1] "GACG"
+    ## 
+    ## Slot "binding_sequence":
+    ## [1] "CGTCGCGAAGTGGCGGTTATCA"
+    ## 
+    ## Slot "temperature":
+    ## [1] 60.61078
+    ## 
+    ## Slot "difference":
+    ## [1] 0.6107759
+    ## 
+    ## 
+    ## [[4]][[2]]
+    ## An object of class "Primer_MSD"
+    ## Slot "NDT":
+    ## [1] "TCAHN"
+    ## 
+    ## Slot "prefix":
+    ## [1] "TT"
+    ## 
+    ## Slot "restriction_enzyme":
+    ## [1] "GAAGAC"
+    ## 
+    ## Slot "suffix":
+    ## [1] "AA"
+    ## 
+    ## Slot "vector":
+    ## [1] "CTCG"
+    ## 
+    ## Slot "overhang":
+    ## [1] "CTCT"
+    ## 
+    ## Slot "binding_sequence":
+    ## [1] "GGCCTCTTTGGTGCGCCCGA"
+    ## 
+    ## Slot "temperature":
+    ## [1] 60.47119
+    ## 
+    ## Slot "difference":
+    ## [1] 0.1395836
+    ## 
+    ## 
+    ## 
+    ## [[5]]
+    ## [[5]][[1]]
+    ## An object of class "Primer"
+    ## Slot "prefix":
+    ## [1] "TT"
+    ## 
+    ## Slot "restriction_enzyme":
+    ## [1] "GAAGAC"
+    ## 
+    ## Slot "suffix":
+    ## [1] "AA"
+    ## 
+    ## Slot "vector":
+    ## [1] "CTCA"
+    ## 
+    ## Slot "overhang":
+    ## [1] "AGAG"
+    ## 
+    ## Slot "binding_sequence":
+    ## [1] "ATCGACGGCGACGAACGTCC"
+    ## 
+    ## Slot "temperature":
+    ## [1] 58.83656
+    ## 
+    ## Slot "difference":
+    ## [1] 1.163437
+    ## 
+    ## 
+    ## [[5]][[2]]
+    ## An object of class "Primer_MSD"
+    ## Slot "NDT":
+    ## [1] "GCAHN"
+    ## 
+    ## Slot "prefix":
+    ## [1] "TT"
+    ## 
+    ## Slot "restriction_enzyme":
+    ## [1] "GAAGAC"
+    ## 
+    ## Slot "suffix":
+    ## [1] "AA"
+    ## 
+    ## Slot "vector":
+    ## [1] "CTCG"
+    ## 
+    ## Slot "overhang":
+    ## [1] "ACGC"
+    ## 
+    ## Slot "binding_sequence":
+    ## [1] "GTAGGCGCAGAAGTACAGACCGT"
+    ## 
+    ## Slot "temperature":
+    ## [1] 59.13423
+    ## 
+    ## Slot "difference":
+    ## [1] 0.2976635
+    ## 
+    ## 
+    ## 
+    ## [[6]]
+    ## [[6]][[1]]
+    ## An object of class "Primer"
+    ## Slot "prefix":
+    ## [1] "TT"
+    ## 
+    ## Slot "restriction_enzyme":
+    ## [1] "GAAGAC"
+    ## 
+    ## Slot "suffix":
+    ## [1] "AA"
+    ## 
+    ## Slot "vector":
+    ## [1] "CTCA"
+    ## 
+    ## Slot "overhang":
+    ## [1] "GCGT"
+    ## 
+    ## Slot "binding_sequence":
+    ## [1] "CTGCATAACATTGAGCAGCAACTGC"
+    ## 
+    ## Slot "temperature":
+    ## [1] 60.28916
+    ## 
+    ## Slot "difference":
+    ## [1] 0.2891579
+    ## 
+    ## 
+    ## [[6]][[2]]
     ## An object of class "Primer"
     ## Slot "prefix":
     ## [1] "TT"
@@ -607,13 +1045,13 @@ primers_lvl0
     ## [1] 60.90327
     ## 
     ## Slot "difference":
-    ## [1] 0.3733614
+    ## [1] 0.6141149
     ## 
     ## 
     ## 
     ## 
     ## Slot "newsequence":
-    ## [1] "ATGTCTCAGGTTCAGAGTGGCATTTTGCCAGAACATTGCCGCGCGGCGATTTGGATCGAAGCCAACGTGAAAGGGGAAGTTGACGCCCTGCGTGCGGCCAGTAAAACATTTGCCGACAAACTGGCAACTTTTGAAGCGAAATTCCCGGACGCGCATCTTGGTGCGGTGGTTGCCTTTGGTAACAACACCTGGCGCGCTCTGAGCGGCGGCGTTGGGGCAGAAGAGCTGAAAGATTTTCCGGGCTACGGTAAAGGCCTTGCGCCGACGACCCAGTTCGATGTGTTGATCCACATTCTTTCTCTGCGTCACGACGTAAACTTCTCTGTCGCCCAGGCGGCGATGGAAGCCTTTGGTGACTGCATTGAAGTGAAAGAAGAGATCCACGGCTTCCGTTGGGTTGAAGAGCGTNDTCTGAGCGGCTTTGTTNDTGGTACGGAANDTCCGGCGGGTGAAGAGACGCGTCGCGAAGTGGCGGTTATCAAAGACGGCGTGGATGCGGGCGGCAGCTATGTGTTTGTCCAGCGTTGGGAACACAACCTGAAGCAGCTCAACCGGATGAGCGTTCACGATCAGGAGATGGTGATCGGGCGCACCAAAGAGGCCAACGAAGAGATCGACGGCGACGAACGTCCGGAAACCTCTCACCTCACCCGCGTTGATCTGAAAGAAGATGGCAAAGGGCTGAAGATTGTTNDTCAGNDTCTGCCGTACGGCACTGCCAGTGGCACTCACGGTCTGTACTTCTGCGCCTACTGCGCGCGTCTGCATAACATTGAGCAGCAACTGCTGAGCATGTTTGGCGATACCGATGGTAAGCGTGATGCGATGTTGCGTTTCACCAAACCGGTAACCGGCGGCTATTATTTCGCACCGTCGCTGGACAAGTTGATGGCGCTGTAA"
+    ## [1] "ATGTCTCAGGTTCAGAGTGGCATTTTGCCAGAACATTGCCGCGCGGCGATTTGGATCGAAGCCAACGTGAAAGGGGAAGTTGACGCCCTGCGTGCGGCCAGTAAAACATTTGCCGACAAACTGGCAACTTTTGAAGCGAAATTCCCGGACNDTCATCTTGGTGCGGTGGTTGCCTTTGGTAACAACACCTGGCGCGCTCTGAGCGGCGGCGTTGGGGCAGAAGAGCTGAAAGATTTTCCGGGCTACGGTAAAGGCCTTGCGCCGACGACCCAGTTCGATGTGTTGATCCACATTCTTTCTNDTCGTCACGACGTAAACTTCTCTGTCGCCCAGGCGGCGATGGAAGCCTTTGGTGACTGCATTGAAGTGAAAGAAGAGATCCACGGCTTCCGTTGGGTTGAAGAGCGTGACCTGAGCGGCTTTGTTGACGGTACGGAAAACCCGGCGGGTNDTGAGACGCGTCGCGAAGTGGCGGTTATCAAAGACGGCGTGGATGCGGGCGGCAGCTATGTGTTTGTCCAGCGTTGGGAACACAACCTGAAGCAGCTCAACCGGATGAGCGTTCACGATCAGGAGATGGTGATCGGGCGCACCAAAGAGGCCNDTGAAGAGATCGACGGCGACGAACGTCCGGAAACCTCTCACCTCACCCGCGTTGATCTGAAAGAAGATGGCAAAGGGCTGAAGATTGTTCGCCAGAGCCTGCCGTACGGCACTGCCAGTGGCACTCACGGTCTGTACTTCTGCGCCTACNDTGCGCGTCTGCATAACATTGAGCAGCAACTGCTGAGCATGTTTGGCGATACCGATGGTAAGCGTGATGCGATGTTGCGTTTCACCAAACCGGTAACCGGCGGCTATTATTTCGCACCGTCGCTGGACAAGTTGATGGCGCTGTAA"
 
 Objects of the classes “Primer”, “Primer MSD” and “Primerset” can have a
 slim textual output by using the function print\_primer.
@@ -623,43 +1061,76 @@ print_primer(primers_lvl0)
 ```
 
     ## Fragment 1
-    ## Start 2, Stop 142, Length 141
+    ## Start 2, Stop 53, Length 52
     ## Forward
     ## TTGAAGACAACTCAAATGTCTCAGGTTCAGAGTGGCATTTTGCC
     ## Temperature of binding site:  60.36446  °C 
     ## Temperature difference:  0.3644563  K 
     ## Reverse
-    ## TTGAAGACAACTCGACAAAGCCGCTCAGAHNACGCTCTTCAACCCAACGGAAGC
-    ## Temperature of binding site:  59.785  °C 
-    ## Temperature difference:  0.5794564  K 
+    ## TTGAAGACAACTCGAAGATGAHNGTCCGGGAATTTCGCTTCAAAAGTTGC
+    ## Temperature of binding site:  60.56425  °C 
+    ## Temperature difference:  0.1997931  K 
     ## 
     ## Fragment 2
-    ## Start 143, Stop 231, Length 89
+    ## Start 54, Stop 103, Length 50
     ## Forward
-    ## TTGAAGACAACTCATTGTTNDTGGTACGGAANDTCCGGCGGGTGAAGAGACGC
-    ## Temperature of binding site:  59.2169  °C 
-    ## Temperature difference:  0.7831005  K 
+    ## TTGAAGACAACTCATCTTGGTGCGGTGGTTGCCTTTGGTAACA
+    ## Temperature of binding site:  60.1791  °C 
+    ## Temperature difference:  0.1790953  K 
     ## Reverse
-    ## TTGAAGACAACTCGAACAATCTTCAGCCCTTTGCCATCTTCTTT
-    ## Temperature of binding site:  59.04605  °C 
-    ## Temperature difference:  0.1708527  K 
+    ## TTGAAGACAACTCGGTGACGAHNAGAAAGAATGTGGATCAACACATCGAACTG
+    ## Temperature of binding site:  60.11394  °C 
+    ## Temperature difference:  0.06515983  K 
     ## 
     ## Fragment 3
-    ## Start 232, Stop 300, Length 69
+    ## Start 104, Stop 153, Length 50
     ## Forward
-    ## TTGAAGACAACTCATGTTNDTCAGNDTCTGCCGTACGGCACTGCCAG
-    ## Temperature of binding site:  60.52991  °C 
-    ## Temperature difference:  0.5299114  K 
+    ## TTGAAGACAACTCATCACGACGTAAACTTCTCTGTCGCCCAGG
+    ## Temperature of binding site:  60.33165  °C 
+    ## Temperature difference:  0.3316526  K 
+    ## Reverse
+    ## TTGAAGACAACTCGCGTCTCAHNACCCGCCGGGTTTTCCGTACCG
+    ## Temperature of binding site:  60.85613  °C 
+    ## Temperature difference:  0.5244756  K 
+    ## 
+    ## Fragment 4
+    ## Start 154, Stop 204, Length 51
+    ## Forward
+    ## TTGAAGACAACTCAGACGCGTCGCGAAGTGGCGGTTATCA
+    ## Temperature of binding site:  60.61078  °C 
+    ## Temperature difference:  0.6107759  K 
+    ## Reverse
+    ## TTGAAGACAACTCGCTCTTCAHNGGCCTCTTTGGTGCGCCCGA
+    ## Temperature of binding site:  60.47119  °C 
+    ## Temperature difference:  0.1395836  K 
+    ## 
+    ## Fragment 5
+    ## Start 205, Stop 254, Length 50
+    ## Forward
+    ## TTGAAGACAACTCAAGAGATCGACGGCGACGAACGTCC
+    ## Temperature of binding site:  58.83656  °C 
+    ## Temperature difference:  1.163437  K 
+    ## Reverse
+    ## TTGAAGACAACTCGACGCGCAHNGTAGGCGCAGAAGTACAGACCGT
+    ## Temperature of binding site:  59.13423  °C 
+    ## Temperature difference:  0.2976635  K 
+    ## 
+    ## Fragment 6
+    ## Start 255, Stop 300, Length 46
+    ## Forward
+    ## TTGAAGACAACTCAGCGTCTGCATAACATTGAGCAGCAACTGC
+    ## Temperature of binding site:  60.28916  °C 
+    ## Temperature difference:  0.2891579  K 
     ## Reverse
     ## TTGAAGACAACTCGAAGCTTACAGCGCCATCAACTTGTCCAGC
     ## Temperature of binding site:  60.90327  °C 
-    ## Temperature difference:  0.3733614  K 
+    ## Temperature difference:  0.6141149  K 
     ## 
     ## Input Sequence:
     ##  ATGTCTCAGGTTCAGAGTGGCATTTTGCCAGAACATTGCCGCGCGGCGATTTGGATCGAAGCCAACGTGAAAGGGGAAGTTGACGCCCTGCGTGCGGCCAGTAAAACATTTGCCGACAAACTGGCAACTTTTGAAGCGAAATTCCCGGACGCGCATCTTGGTGCGGTGGTTGCCTTTGGTAACAACACCTGGCGCGCTCTGAGCGGCGGCGTTGGGGCAGAAGAGCTGAAAGATTTTCCGGGCTACGGTAAAGGCCTTGCGCCGACGACCCAGTTCGATGTGTTGATCCACATTCTTTCTCTGCGTCACGACGTAAACTTCTCTGTCGCCCAGGCGGCGATGGAAGCCTTTGGTGACTGCATTGAAGTGAAAGAAGAGATCCACGGCTTCCGTTGGGTTGAAGAGCGTGACCTGAGCGGCTTTGTTGACGGTACGGAAAACCCGGCGGGTGAAGAGACGCGTCGCGAAGTGGCGGTTATCAAAGACGGCGTGGATGCGGGCGGCAGCTATGTGTTTGTCCAGCGTTGGGAACACAACCTGAAGCAGCTCAACCGGATGAGCGTTCACGATCAGGAGATGGTGATCGGGCGCACCAAAGAGGCCAACGAAGAGATCGACGGCGACGAACGTCCGGAAACCTCTCACCTCACCCGCGTTGATCTGAAAGAAGATGGCAAAGGGCTGAAGATTGTTCGCCAGAGCCTGCCGTACGGCACTGCCAGTGGCACTCACGGTCTGTACTTCTGCGCCTACTGCGCGCGTCTGCATAACATTGAGCAGCAACTGCTGAGCATGTTTGGCGATACCGATGGTAAGCGTGATGCGATGTTGCGTTTCACCAAACCGGTAACCGGCGGCTATTATTTCGCACCGTCGCTGGACAAGTTGATGGCGCTGTAA 
     ## 
     ## Modified Sequence:
-    ##  ATGTCTCAGGTTCAGAGTGGCATTTTGCCAGAACATTGCCGCGCGGCGATTTGGATCGAAGCCAACGTGAAAGGGGAAGTTGACGCCCTGCGTGCGGCCAGTAAAACATTTGCCGACAAACTGGCAACTTTTGAAGCGAAATTCCCGGACGCGCATCTTGGTGCGGTGGTTGCCTTTGGTAACAACACCTGGCGCGCTCTGAGCGGCGGCGTTGGGGCAGAAGAGCTGAAAGATTTTCCGGGCTACGGTAAAGGCCTTGCGCCGACGACCCAGTTCGATGTGTTGATCCACATTCTTTCTCTGCGTCACGACGTAAACTTCTCTGTCGCCCAGGCGGCGATGGAAGCCTTTGGTGACTGCATTGAAGTGAAAGAAGAGATCCACGGCTTCCGTTGGGTTGAAGAGCGTNDTCTGAGCGGCTTTGTTNDTGGTACGGAANDTCCGGCGGGTGAAGAGACGCGTCGCGAAGTGGCGGTTATCAAAGACGGCGTGGATGCGGGCGGCAGCTATGTGTTTGTCCAGCGTTGGGAACACAACCTGAAGCAGCTCAACCGGATGAGCGTTCACGATCAGGAGATGGTGATCGGGCGCACCAAAGAGGCCAACGAAGAGATCGACGGCGACGAACGTCCGGAAACCTCTCACCTCACCCGCGTTGATCTGAAAGAAGATGGCAAAGGGCTGAAGATTGTTNDTCAGNDTCTGCCGTACGGCACTGCCAGTGGCACTCACGGTCTGTACTTCTGCGCCTACTGCGCGCGTCTGCATAACATTGAGCAGCAACTGCTGAGCATGTTTGGCGATACCGATGGTAAGCGTGATGCGATGTTGCGTTTCACCAAACCGGTAACCGGCGGCTATTATTTCGCACCGTCGCTGGACAAGTTGATGGCGCTGTAA
+    ##  ATGTCTCAGGTTCAGAGTGGCATTTTGCCAGAACATTGCCGCGCGGCGATTTGGATCGAAGCCAACGTGAAAGGGGAAGTTGACGCCCTGCGTGCGGCCAGTAAAACATTTGCCGACAAACTGGCAACTTTTGAAGCGAAATTCCCGGACNDTCATCTTGGTGCGGTGGTTGCCTTTGGTAACAACACCTGGCGCGCTCTGAGCGGCGGCGTTGGGGCAGAAGAGCTGAAAGATTTTCCGGGCTACGGTAAAGGCCTTGCGCCGACGACCCAGTTCGATGTGTTGATCCACATTCTTTCTNDTCGTCACGACGTAAACTTCTCTGTCGCCCAGGCGGCGATGGAAGCCTTTGGTGACTGCATTGAAGTGAAAGAAGAGATCCACGGCTTCCGTTGGGTTGAAGAGCGTGACCTGAGCGGCTTTGTTGACGGTACGGAAAACCCGGCGGGTNDTGAGACGCGTCGCGAAGTGGCGGTTATCAAAGACGGCGTGGATGCGGGCGGCAGCTATGTGTTTGTCCAGCGTTGGGAACACAACCTGAAGCAGCTCAACCGGATGAGCGTTCACGATCAGGAGATGGTGATCGGGCGCACCAAAGAGGCCNDTGAAGAGATCGACGGCGACGAACGTCCGGAAACCTCTCACCTCACCCGCGTTGATCTGAAAGAAGATGGCAAAGGGCTGAAGATTGTTCGCCAGAGCCTGCCGTACGGCACTGCCAGTGGCACTCACGGTCTGTACTTCTGCGCCTACNDTGCGCGTCTGCATAACATTGAGCAGCAACTGCTGAGCATGTTTGGCGATACCGATGGTAAGCGTGATGCGATGTTGCGTTTCACCAAACCGGTAACCGGCGGCTATTATTTCGCACCGTCGCTGGACAAGTTGATGGCGCTGTAA
 
 The textual output can be printed into a file.
 
