@@ -1,0 +1,18 @@
+# R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
+
+language: R
+sudo: false
+cache: packages
+
+r_packages:
+- stringr
+- seqinr
+
+## Inspired by 
+## http://jtleek.com/protocols/travis_bioc_devel/#Configuring_R_CMD_check
+## https://raw.githubusercontent.com/craigcitro/r-travis/master/scripts/travis-tool.sh
+
+script:
+- R CMD build .
+- R CMD check $(ls -1t *.tar.gz | head -n 1)
+
