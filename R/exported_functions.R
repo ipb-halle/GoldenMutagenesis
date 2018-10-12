@@ -99,7 +99,8 @@ setMethod("print_primer", signature(primer="Extended_Primerset"),
 domesticate<-function(input_sequence, restriction_enzyme="GGTCTC", cuf="e_coli_316407.csv"){
   cuf_vector<-get_cu_table(cuf, list=F)
   restriction_enzyme<-str_to_upper(restriction_enzyme)
-  sequence<-s2c(str_to_upper(input_sequence))
+  input_sequence<-str_to_upper(input_sequence)
+  sequence<-s2c(input_sequence)
   restriction_enzyme_s2c<-s2c(restriction_enzyme)
   restriction_enzyme_s2c_reverse<-comp(restriction_enzyme_s2c)
   restriction_enzyme_s2c_reverse<-rev(restriction_enzyme_s2c_reverse)
