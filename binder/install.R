@@ -11,4 +11,4 @@ install.packages("devtools")
 source("https://bioconductor.org/biocLite.R")
 biocLite(c("Biostrings", "sangerseqR"))
 
-devtools::install_github("ipb-halle/GoldenMutagenesis", ref="prerelease-dev")
+devtools::install_github("ipb-halle/GoldenMutagenesis", ref="binder")
