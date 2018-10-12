@@ -1,7 +1,7 @@
 README
 ================
 Chris Ulpinnis & Pascal Püllmann
-2018-10-12
+2018-10-12\
 [![Travis-CI Build Status](https://travis-ci.org/ipb-halle/GoldenMutagenesis.svg?branch=master)](https://travis-ci.org/ipb-halle/GoldenMutagenesis)
 # GoldenMutagenesis
 
