@@ -5,6 +5,8 @@ Chris Ulpinnis & Pascal Püllmann
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
+[![Travis-CI Build Status](https://travis-ci.org/ipb-halle/GoldenMutagenesis.svg?branch=master)](https://travis-ci.org/ipb-halle/GoldenMutagenesis)
+
 # GoldenMutagenesis
 
 The Golden Gate cloning technique has been proven to be a highly
@@ -50,7 +52,7 @@ Control](https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/QQ
 
 ### Multiple Site Directed
 
-[![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/ipb-halle/GoldenMutagenesis/binder?filepath=notebooks%2FMSD_USER.ipynb)  
+[![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/ipb-halle/GoldenMutagenesis/binder?filepath=notebooks%2FMSD_USER.ipynb)
 
 ### Single Point
 
