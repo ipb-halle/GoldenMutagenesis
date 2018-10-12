@@ -98,7 +98,8 @@ setMethod("print_primer", signature(primer="Extended_Primerset"),
 #' domesticate(input_sequence, restriction_enzyme=recognition_site_bbsi, cuf=cuf)
 domesticate<-function(input_sequence, restriction_enzyme="GGTCTC", cuf="e_coli_316407.csv"){
   cuf_vector<-get_cu_table(cuf, list=F)
-  sequence<-s2c(input_sequence)
+  restriction_enzyme<-str_to_upper(restriction_enzyme)
+  sequence<-s2c(str_to_upper(input_sequence))
   restriction_enzyme_s2c<-s2c(restriction_enzyme)
   restriction_enzyme_s2c_reverse<-comp(restriction_enzyme_s2c)
   restriction_enzyme_s2c_reverse<-rev(restriction_enzyme_s2c_reverse)
@@ -155,7 +156,10 @@ domesticate<-function(input_sequence, restriction_enzyme="GGTCTC", cuf="e_coli_3
 #' 
 mutate<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", suffix="A", vector=c("AATG", "AAGC"), replacements, binding_min_length=4 ,primer_length=9, target_temp=60, cuf="e_coli_316407.csv") {#change to primer_length_max? and min?
   cuf_list<-get_cu_table(cuf)
+  prefix<-str_to_upper(prefix)
+  vector<-str_to_upper(vector)
   replacements<-order_replacements(replacements)
+  input_sequence<-str_to_upper(input_sequence)
   sequence<-s2c(input_sequence)
   codon_seq<-sequence_check(input_sequence)
   restriction_enzyme_s2c<-s2c(restriction_enzyme)
@@ -250,6 +254,10 @@ mutate<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", suffi
 #' fragment_min_size=60 )
 msd_mutate<-function(input_sequence, codon="NDT" ,prefix="TT" ,restriction_enzyme="GGTCTC", suffix="A", vector=c("AATG", "AAGC"), replacements, replacement_range=5, binding_min_length=4 ,primer_length=9, target_temp=60, fragment_min_size=60 ) {#change to primer_length_max? and min?
   codon<-str_to_upper(codon)
+  prefix<-str_to_upper(prefix)
+  suffix<-str_to_upper(suffix)
+  vector<-str_to_upper(vector)
+  input_sequence<-str_to_upper(input_sequence)
   possible_codons<-c("NNN", "NNK", "NNS", "NDT", "DBK", "NRT")
   if(!(codon %in% possible_codons)) {
     stop(paste(codon, "is not a valid codon. Please select one of the following:", paste(possible_codons, collapse = " ") ,sep=" "))
@@ -580,6 +588,10 @@ msd_mutate<-function(input_sequence, codon="NDT" ,prefix="TT" ,restriction_enzym
 #' restriction_enzyme="GAAGAC", suffix="AA", vector=c("CTCA", "CTCG"))
 #' 
 primer_add_level<-function(primerset, prefix="TT" ,restriction_enzyme="GAAGAC", suffix="AA", vector=c("CTCA", "CTCG")){
+  prefix<-str_to_upper(prefix)
+  restriction_enzyme<-str_to_upper(restriction_enzyme)
+  suffix<-str_to_upper(suffix)
+  vector<-str_to_upper(vector)
   for(i in 1:length(primerset@primers)) {
     if(primerset@primers[[i]][[1]]@overhang=="" && primerset@primers[[i]][[1]]@vector!=""){
       primerset@primers[[i]][[1]]@overhang<-primerset@primers[[i]][[1]]@vector
