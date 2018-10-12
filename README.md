@@ -53,3 +53,7 @@ Control](https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/QQ
 ### Single Point
 
 [![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/ipb-halle/GoldenMutagenesis/binder?filepath=notebooks%2FSPM_USER.ipynb)
+
+### Domestication only
+
+[![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/ipb-halle/GoldenMutagenesis/binder?filepath=notebooks%2FDomesticate_only_USER.ipynb)
