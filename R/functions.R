@@ -205,7 +205,7 @@ sequence_check<-function(input_sequence){
   
   stop<-which(str_detect(codon_seq, "(TAA)|(TGA)|(TAG)"))
   if(length(stop) == 0) {
-    stop("No stop codon in the provided sequence.Stopping here. Please check the provided sequence!")
+    stop("No stop codon in the provided sequence. Stopping here. Please check the provided sequence!")
   }
   
   if(max(stop) != length(codon_seq)) {
