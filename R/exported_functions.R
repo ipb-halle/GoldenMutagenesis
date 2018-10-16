@@ -159,6 +159,8 @@ mutate<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", suffi
   cuf_list<-get_cu_table(cuf)
   prefix<-str_to_upper(prefix)
   vector<-str_to_upper(vector)
+  restriction_enzyme<-str_to_upper(restriction_enzyme)
+  suffix<-str_to_upper(suffix)
   replacements<-order_replacements(replacements)
   input_sequence<-str_to_upper(input_sequence)
   sequence<-s2c(input_sequence)
@@ -258,6 +260,7 @@ msd_mutate<-function(input_sequence, codon="NDT" ,prefix="TT" ,restriction_enzym
   prefix<-str_to_upper(prefix)
   suffix<-str_to_upper(suffix)
   vector<-str_to_upper(vector)
+  restriction_enzyme<-str_to_upper(restriction_enzyme)
   input_sequence<-str_to_upper(input_sequence)
   possible_codons<-c("NNN", "NNK", "NNS", "NDT", "DBK", "NRT")
   if(!(codon %in% possible_codons)) {
