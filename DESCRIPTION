@@ -13,5 +13,6 @@ Imports: methods, utils, stats, Biostrings, graphics, RColorBrewer, sangerseqR, 
 LazyData: false
 RoxygenNote: 6.1.0
 Suggests: knitr,
-    rmarkdown
+    rmarkdown, 
+    testthat
 VignetteBuilder: knitr
