@@ -1,10 +1,12 @@
 context("Single Point Mutagenesis")
 
 
-load("../../data/Point_Mutagenesis_BbsI_setup.RData")
+#load("../../data/Point_Mutagenesis_BbsI_setup.RData")
+load(file.path(system.file("data", package="GoldenMutagenesis"), "Point_Mutagenesis_BbsI_setup.RData"))
 
 primer_test<-mutate(input_sequence, prefix="TT", restriction_enzyme = recognition_site_bbsi, suffix = "AA", vector=c("CTCA", "CTCG"), replacements = mutations, binding_min_length=4 ,primer_length=9, target_temp=60, cuf=cuf)
-load("../../data/Point_Mutagenesis_BbsI_result.RData")
+#load("../../data/Point_Mutagenesis_BbsI_result.RData")
+load(file.path(system.file("data", package="GoldenMutagenesis"), "Point_Mutagenesis_BbsI_result.RData"))
 
 test_that("Known primers are calculated correctly (SPM)", {
   expect_that(primer_test, is_identical_to(primers))
