@@ -7,7 +7,7 @@
 msd_mutate(input_sequence, codon = "NDT", prefix = "TT",
   restriction_enzyme = "GGTCTC", suffix = "A", vector = c("AATG",
   "AAGC"), replacements, replacement_range = 5, binding_min_length = 4,
-  primer_length = 9, target_temp = 60, fragment_min_size = 60)
+  primer_length = 9, target_temp = 60, fragment_min_size = 100)
 }
 \arguments{
 \item{input_sequence}{The sequence which should be modified. This is an object of type character containing the sequence.}

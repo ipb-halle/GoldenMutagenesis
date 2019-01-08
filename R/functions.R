@@ -245,7 +245,7 @@ check_primer_dupplicates<-function(primers, fragments, binding_min_length=4, tar
     #check if primer_rv is an NDT primer
     if(class(primer_rv)=="Primer_MSD") {
       msd_mut<-sapply(c("NNN", "NNK", "NNS", "NDT", "DBK", "NRT"), FUN = function(x){paste(stringr::str_to_upper(rev(seqinr::comp(seqinr::s2c(x), , ambiguous=T))), sep="", collapse="")}, USE.NAMES = F)
-      if(str_sub(primer_rv@NDT, 1, 3) %in% msd_mut) {
+      if(str_sub(primer_rv@extra, 1, 3) %in% msd_mut) {
         if(i == length(primer_num)) {
           stop(paste("We can not fix overlaps in the primers. Please consider a silent mutation at position", fragments[[ceiling((primer_rv_num+1)/2)]]@start))
         }
@@ -254,9 +254,9 @@ check_primer_dupplicates<-function(primers, fragments, binding_min_length=4, tar
         }
       }
       else{
-        shift_base<-str_sub(primer_rv@NDT, 1, 1)
+        shift_base<-str_sub(primer_rv@extra, 1, 1)
         primer_rv@overhang<-paste(primer_rv@overhang,shift_base, sep="")
-        primer_rv@NDT<-str_sub(primer_rv@NDT, 2)
+        primer_rv@extra<-str_sub(primer_rv@extra, 2)
         primer_rv@overhang<-str_sub(primer_rv@overhang, 2)
       }
     } else {
@@ -279,7 +279,7 @@ check_primer_dupplicates<-function(primers, fragments, binding_min_length=4, tar
     }
     if(class(primer_fd)=="Primer_MSD") {
       primer_fd@overhang<-paste(comp(shift_base, forceToLower = F), primer_fd@overhang, sep="")
-      primer_fd@NDT<-paste(str_sub(primer_fd@overhang, 5), primer_fd@NDT ,sep="")
+      primer_fd@extra<-paste(str_sub(primer_fd@overhang, 5), primer_fd@extra ,sep="")
       primer_fd@overhang<-str_sub(primer_fd@overhang, 1, 4)
       primers[[ceiling(primer_fd_num/2)]][[1]]<-primer_fd
       primers[[ceiling(primer_rv_num/2)]][[2]]<-primer_rv

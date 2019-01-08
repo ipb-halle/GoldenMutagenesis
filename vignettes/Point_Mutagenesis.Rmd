@@ -80,7 +80,7 @@ mutations_bsai
 
 ````
 
-The mutate function designs the necessary set of primers for the desired mutations.\ 
+The mutate_spm function designs the necessary set of primers for the desired mutations.\ 
 \
 The function has the following parameters:\
 **prefix**: Additional nucleobases in 5' position of the recognition site [default: TT]\
@@ -97,7 +97,7 @@ It will return an object of the class primer_set.
 
 ````{r}
 mutations<-c(list(c(66, "V")), mutations_bbsi)
-primers<-mutate(input_sequence, prefix="TT", restriction_enzyme = recognition_site_bbsi, suffix = "AA", vector=c("CTCA", "CTCG"), replacements = mutations, binding_min_length=4 ,primer_length=9, target_temp=60, cuf=cuf)
+primers<-mutate_spm(input_sequence, prefix="TT", restriction_enzyme = recognition_site_bbsi, suffix = "AA", vector=c("CTCA", "CTCG"), replacements = mutations, binding_min_length=4 ,primer_length=9, target_temp=60, cuf=cuf)
 primers
 ````
 Objects of the classes "primer", "primer_msd" and "primer_set" can have a slim textual output by using the function print_primer.

@@ -4,7 +4,6 @@
 \name{print_primer}
 \alias{print_primer}
 \alias{print_primer,Primer-method}
-\alias{print_primer,Primer_MSD-method}
 \alias{print_primer,Primerset-method}
 \alias{print_primer,Extended_Primerset-method}
 \title{A function to generate a slim ouput text for primers}
@@ -12,8 +11,6 @@
 print_primer(primer)
 
 \S4method{print_primer}{Primer}(primer)
-
-\S4method{print_primer}{Primer_MSD}(primer)
 
 \S4method{print_primer}{Primerset}(primer)
 
