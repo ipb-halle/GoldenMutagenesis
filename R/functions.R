@@ -157,34 +157,47 @@ calculate_tm_nnb<-function(oligo_sequence, primer_concentration=50, salt_concent
 }
 
 
-setGeneric("sequence_length_temperature" , function(primer, temp_func=calculate_tm_nnb, primer_min=3, target_temp=60) {
+setGeneric("sequence_length_temperature" , function(primer, temp_func=calculate_tm_nnb, primer_min=3, target_temp=60,  gc_filter=F) {
   standardGeneric("sequence_length_temperature")
 })
 
 setMethod("sequence_length_temperature", signature(primer="Primer"),
-          function(primer, temp_func=calculate_tm_nnb, primer_min=3, target_temp=60){
+          function(primer, temp_func=calculate_tm_nnb, primer_min=3, target_temp=60, gc_filter=F){
             primer_seq_s2c<-s2c(primer@binding_sequence)
             temperatures<-list()
             names_i<-vector()
+            sequences_i<-vector()
             for(i in (primer_min*3):length(primer_seq_s2c)){
               temperatures<-c(temperatures, temp_func(paste(primer_seq_s2c[1:i],collapse=""), offset=0))
               names_i<-c(names_i, i)
+              sequences_i<-c(sequences_i, paste(primer_seq_s2c[1:i],collapse=""))
             }
-            names(temperatures)<-names_i
+            names(temperatures)<-sequences_i
             diff<-unlist(lapply(temperatures, function(x){abs(x-target_temp)}))
-            candidate<-as.numeric(names(diff[diff==min(diff)]))
-            primer@binding_sequence<-paste(primer_seq_s2c[1:min(candidate)],collapse="")
-            primer@temperature<-temperatures[[as.character(min(candidate))]]
-            primer@difference<-as.numeric(diff[as.character(min(candidate))])
+            #check for at least two A or T
+            candidates_with_AT<-which(str_count(str_sub(names(diff), start=-5), "A|T")>=2 & str_count(str_sub(names(diff), start=-5), "A|T")<4)
+            if(length(candidates_with_AT) == 0 || gc_filter==F) {
+              candidate_binding_sequence<-names(diff[diff==min(diff)])
+              if(gc_filter==T) {
+                warning("The end (last five bases) of the binding sequence is not optimal. The primers are maybe inefficient.")
+              }
+            }
+            else{
+              diff_AT<-diff[candidates_with_AT]
+              candidate_binding_sequence<-names(diff_AT[diff_AT==min(diff_AT)])
+            }
+            primer@binding_sequence<-candidate_binding_sequence
+            primer@temperature<-as.numeric(temperatures[candidate_binding_sequence])
+            primer@difference<-as.numeric(diff[candidate_binding_sequence])
             return(primer)
           }
 )
 
-setMethod("sequence_length_temperature", signature(primer="Primer_MSD"),
-          function(primer, temp_func=calculate_tm_nnb, primer_min=3, target_temp=60){
-            callNextMethod()
-          }
-)
+#setMethod("sequence_length_temperature", signature(primer="Primer_MSD"),
+#          function(primer, temp_func=calculate_tm_nnb, primer_min=3, target_temp=60){
+#            callNextMethod()
+#          }
+#)
 
 
 sequence_check<-function(input_sequence){
@@ -217,15 +230,28 @@ sequence_check<-function(input_sequence){
   return(codon_seq)
 }
 
-check_primer_dupplicates<-function(primers, fragments, binding_min_length=4, target_temp=60) {
+check_primer_overhangs<-function(primers, fragments, binding_min_length=4, target_temp=60, check_repetitive=T) {
   overhangs<-sapply(primers, function(x){return(c(x[[1]]@overhang, x[[2]]@overhang))})
   duplicates<-table(overhangs)
   duplicates<-duplicates[names(duplicates)!="" & duplicates > 1]
-  if(length(duplicates)==0) {
+  if(check_repetitive == T) {
+    #Repetitive overhangs
+    rep<-table(overhangs)
+    rep<-rep[names(rep)!=""]
+    rep_temp<-names(rep)
+    rep<-str_count(names(rep), ("(^(A|T){4}$)|(^(G|C){4}$)"))
+    names(rep)<-rep_temp
+    rep<-rep[rep > 0]
+    rm(rep_temp)
+    bad_overhangs<-union(names(duplicates), names(rep))
+  } else {
+    bad_overhangs<-duplicates
+    }
+  if(length(bad_overhangs)==0) {
     return(primers)
   }
-  duplicate<-duplicates[1]
-  primer_num<-which(overhangs==names(duplicate))
+  bad_overhang<-bad_overhangs[1]
+  primer_num<-which(overhangs==bad_overhang)
   primer_unlist<-unlist(primers)
   fragment_num<-ceiling(primer_num)/2
   primer_num2<-primer_num %% 2
@@ -304,9 +330,6 @@ check_primer_dupplicates<-function(primers, fragments, binding_min_length=4, tar
   #  return(primers)
   #}
   #else{
-  return(check_primer_dupplicates(primers = primers, fragments = fragments, binding_min_length = binding_min_length, target_temp = target_temp))
+  return(check_primer_overhangs(primers = primers, fragments = fragments, binding_min_length = binding_min_length, target_temp = target_temp))
   #}
 } 
-
-
-
