@@ -9,7 +9,7 @@ list_cu_table<-function(){
   return(list.files(system.file("cuf", package="GoldenMutagenesis")))
 }
 
-#' A function to generate a slim ouput text for primers
+#' A function to generate an output text for primers
 #' 
 #' An example is shown in the vignette at \url{https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/Point_Mutagenesis.md}
 #' 
@@ -129,7 +129,7 @@ domesticate<-function(input_sequence, restriction_enzyme="GGTCTC", cuf="e_coli_3
   return(replacements)
 }
 
-#' Calculate primers for a Point Mutagenesis
+#' Calculate primers for Point Mutagenesis
 #' 
 #' The mutate function designs the necessary set of primers for the desired mutations.
 #' An example is given in the vignette at \url{https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/Point_Mutagenesis.md}

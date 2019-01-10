@@ -2,7 +2,7 @@
 % Please edit documentation in R/exported_functions.R
 \name{mutate_spm}
 \alias{mutate_spm}
-\title{Calculate primers for a Point Mutagenesis}
+\title{Calculate primers for Point Mutagenesis}
 \usage{
 mutate_spm(input_sequence, prefix = "TT",
   restriction_enzyme = "GGTCTC", suffix = "A", vector = c("AATG",

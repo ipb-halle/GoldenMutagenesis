@@ -6,7 +6,7 @@
 \alias{print_primer,Primer-method}
 \alias{print_primer,Primerset-method}
 \alias{print_primer,Extended_Primerset-method}
-\title{A function to generate a slim ouput text for primers}
+\title{A function to generate an output text for primers}
 \usage{
 print_primer(primer)
 
