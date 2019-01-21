@@ -837,7 +837,7 @@ msd_mutate<-function(input_sequence, codon="NDT" ,prefix="TT" ,restriction_enzym
 
 #' Add a level to exisiting Primerset
 #' 
-#' This function replaces the prefix, the suffix and the restriction enzyme of a given Primerset to change the design to another Level.
+#' This function replaces the prefix, the suffix and the restriction enzyme of a given Primerset to change the design to another level.
 #' You can use this function to convert an exisiting Level 2 Primerset to a Level 0 Primerset for example.
 #' Also the overhangs of the first and the last primer will be modified to match the plasmid of the new level.
 #'
@@ -879,6 +879,36 @@ primer_add_level<-function(primerset, prefix="TT" ,restriction_enzyme="GAAGAC", 
     primerset@primers[[i]][[2]]@restriction_enzyme<-restriction_enzyme
     primerset@primers[[i]][[2]]@suffix<-suffix
   }
+  return(primerset)
+}
+
+#' Prepare a Single Point Mutation Primerset to be used in Level 2
+#' 
+#' This function adds definied vector overhangs to Level 0 Primersets to express them in a Level 2 vector.
+#' #'
+#' @param primerset An exisiting Primerset (in Level 0)
+#' @param vector Four basepair overhangs complementary to the created overhangs in the acceptor vector [default: c("A", "AAGC")]
+#'
+#' @return A Primerset prepared for expression in Level 2
+#' @export
+#'
+#' @examples
+#' #Load level 0 results of the SPM vignette
+#' data(Point_Mutagenesis_BbsI_result)
+#' primer_prepare_level(primers)
+#' 
+primer_prepare_level<-function(primerset, vector=c("AATG", "AAGC")){
+  vector<-str_to_upper(vector)
+  if(str_sub("AATG", 2, 4)!="ATG") {
+    warning("Working with unknown sequence for Level 2 vector")
+    primerset@primers[[1]][[1]]@extra<-paste(primerset@primers[[1]][[1]]@extra, vector[1], sep="")
+  }
+  else if(str_sub(primerset@primers[[1]][[1]]@binding_sequence, 1, 3) == "ATG") {
+    primerset@primers[[1]][[1]]@extra<-paste(primerset@primers[[1]][[1]]@extra, str_sub(vector[1], 1, 1), sep="")
+  } else {
+    stop("The binding_sequence of the primer did not start with ATG. Something went wrong. Please send a bug report to us.")
+  }
+  primerset@primers[[length(primerset@primers)]][[2]]@extra<-paste(primerset@primers[[length(primerset@primers)]][[2]]@extra, vector[2], sep="")
   return(primerset)
 }
 

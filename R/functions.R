@@ -60,12 +60,12 @@ get_cu_table<-function(name, list=T) {
 
 
 
-calculate_tm<-function(x, salt=50, primer=50, offset=9){
+calculate_tm<-function(x, salt_concentration=50, primer_concentration=50, offset=0){
   oligo_sequence<-s2c(x)
   oligo_sequence<-oligo_sequence[offset:length(oligo_sequence)]
   #  Tm= 100.5 + (41 * (yG+zC)/(wA+xT+yG+zC)) - (820/(wA+xT+yG+zC)) + 16.6*log10([Na+])
   counts<-count(s2c(x), wordsize=1, by=1, alphabet = c("A", "C", "G", "T"))
-  tm<-100.5 + (41 * as.numeric(counts["G"] + counts["C"])/as.numeric(counts["A"]+counts["T"]+counts["G"]+counts["C"])) - (820/as.numeric(counts["A"]+counts["T"]+counts["G"]+counts["C"])) + 16.6*log10(salt/1000)
+  tm<-100.5 + (41 * as.numeric(counts["G"] + counts["C"])/as.numeric(counts["A"]+counts["T"]+counts["G"]+counts["C"])) - (820/as.numeric(counts["A"]+counts["T"]+counts["G"]+counts["C"])) + 16.6*log10(salt_concentration/1000)
   return(as.numeric(tm))
 }
 

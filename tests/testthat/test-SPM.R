@@ -17,6 +17,14 @@ primer_test_lc<-mutate_spm(input_sequence, prefix=str_to_lower("TT"), restrictio
 test_that("Known primers are calculated correctly (SPM) for lowercase sequences", {
   expect_that(primer_test_lc, is_identical_to(primer_test))
 })
+
+load("SPM_BbsI_result_lv2.RData")
+primer_test_lvl2<-primer_prepare_level(primers)
+
+test_that("Preparing for level2 works", {
+  expect_that(primer_test_lvl2, is_identical_to(primers_test))
+})
+
 rm(primers)
 
 test_that("Domestication is working for known sequences", {
@@ -25,4 +33,11 @@ test_that("Domestication is working for known sequences", {
 
 test_that("Domestication is working for lowercase sequences", {
   expect_that(domesticate(str_to_lower(input_sequence), str_to_lower(recognition_site_bbsi), cuf) ,is_identical_to(list(c(143, "K"))))
-}) 
+})
+
+load("SPM_complex_input.RData")
+test_that("Domestication is working for complex sequences", {
+  expect_that(domesticate(sequence, restriction_enzyme = "GAAGAC"), is_identical_to(list(c(1247, "K"), c(116, "K"), c(1010, "S"))))
+  expect_that(domesticate(sequence, restriction_enzyme = "GGTCTC"), is_identical_to(list(c(131, "L"), c(358, "L"), c(988, "R"), c(716, "D"), c(877, "L"))))
+  expect_that(domesticate(sequence, restriction_enzyme = "CGTCTC"), is_identical_to(list(c(248, "E"))))
+})
