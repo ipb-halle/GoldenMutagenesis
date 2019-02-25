@@ -48,6 +48,12 @@ Control](https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/QQ
 
 ## Interactive Example
 
+## Webtool Beta Version
+**You can try our webtool on binderhub at [![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/ipb-halle/GoldenMutagenesisWeb/master?urlpath=shiny).** \
+The Webtools git repository is available at: https://github.com/ipb-halle/GoldenMutagenesisWeb \
+*Please note that the webtool is still in beta phase. There are still errors and also the user interface is not the final user experience. If you encounter any problems please send an email to me.* 
+
+
 ## You can try out our interactive user notebooks for Mutagenesis:
 
 ### Multiple Site Directed
@@ -57,8 +63,6 @@ Control](https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/QQ
 ### Single Point
 #### Notebook
 [![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/ipb-halle/GoldenMutagenesis/binder?filepath=notebooks%2FSPM_USER.ipynb)
-##### Webinterface alpha
-[![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/culpinnis/gmshinyalpha/master?urlpath=shiny)
 ### Domestication only
 
 [![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/ipb-halle/GoldenMutagenesis/binder?filepath=notebooks%2FDomesticate_only_USER.ipynb)
