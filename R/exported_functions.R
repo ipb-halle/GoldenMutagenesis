@@ -236,7 +236,7 @@ mutate_spm<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", s
           temp_fragment@stop_mutation <- positions_aa[i]
           fragments <- c(fragments, temp_fragment)
           temp_fragment <-
-            fragment(start = fragments[[1]]@start + 1,
+            fragment(start = fragments[[1]]@stop + 1,
                      stop = length(codon_seq))
           fragments <- c(fragments, temp_fragment)
           break
@@ -590,7 +590,7 @@ msd_mutate<-function(input_sequence, codon="NDT" ,prefix="TT" ,restriction_enzym
           temp_fragment@stop_mutation <- c(replacements[i])
           fragments <- c(fragments, temp_fragment)
           temp_fragment <-
-            fragment(start = fragments[[1]]@start + 1,
+            fragment(start = fragments[[1]]@stop + 1,
                      stop = length(codon_seq))
           fragments <- c(fragments, temp_fragment)
           break
@@ -790,7 +790,7 @@ msd_mutate<-function(input_sequence, codon="NDT" ,prefix="TT" ,restriction_enzym
     #forward
     if(length(cur_fragment@start_mutation)==0) {
       temp_primer<-pc_msd(prefix=prefix ,restriction_enzyme=restriction_enzyme, suffix=suffix_f, vector=vector_f, overhang=overhang_f)
-      temp_primer@binding_sequence<-paste(paste(codon_seq[cur_fragment@start:(cur_fragment@start+primer_length-1)], collapse=""), sep="")
+      temp_primer@binding_sequence<-paste(paste(codon_seq[cur_fragment@start:(cur_fragment@start+(primer_length-1))], collapse=""), sep="")
       temp_primer<-sequence_length_temperature(temp_primer, primer_min=binding_min_length, target_temp=target_temp)
     }
     else {
@@ -887,7 +887,7 @@ primer_add_level<-function(primerset, prefix="TT" ,restriction_enzyme="GAAGAC", 
 #' This function adds definied vector overhangs to Level 0 Primersets to express them in a Level 2 vector.
 #' #'
 #' @param primerset An exisiting Primerset (in Level 0)
-#' @param vector Four basepair overhangs complementary to the created overhangs in the acceptor vector [default: c("A", "AAGC")]
+#' @param vector Four basepair overhangs complementary to the created overhangs in the acceptor vector [default: c("AATG", "AAGC")]
 #'
 #' @return A Primerset prepared for expression in Level 2
 #' @export

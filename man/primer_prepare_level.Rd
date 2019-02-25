@@ -9,7 +9,7 @@ primer_prepare_level(primerset, vector = c("AATG", "AAGC"))
 \arguments{
 \item{primerset}{An exisiting Primerset (in Level 0)}
 
-\item{vector}{Four basepair overhangs complementary to the created overhangs in the acceptor vector [default: c("A", "AAGC")]}
+\item{vector}{Four basepair overhangs complementary to the created overhangs in the acceptor vector [default: c("AATG", "AAGC")]}
 }
 \value{
 A Primerset prepared for expression in Level 2
