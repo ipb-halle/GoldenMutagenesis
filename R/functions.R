@@ -60,12 +60,12 @@ get_cu_table<-function(name, list=T) {
 
 
 
-calculate_tm<-function(x, salt=50, primer=50, offset=9){
+calculate_tm<-function(x, salt_concentration=50, primer_concentration=50, offset=0){
   oligo_sequence<-s2c(x)
   oligo_sequence<-oligo_sequence[offset:length(oligo_sequence)]
   #  Tm= 100.5 + (41 * (yG+zC)/(wA+xT+yG+zC)) - (820/(wA+xT+yG+zC)) + 16.6*log10([Na+])
   counts<-count(s2c(x), wordsize=1, by=1, alphabet = c("A", "C", "G", "T"))
-  tm<-100.5 + (41 * as.numeric(counts["G"] + counts["C"])/as.numeric(counts["A"]+counts["T"]+counts["G"]+counts["C"])) - (820/as.numeric(counts["A"]+counts["T"]+counts["G"]+counts["C"])) + 16.6*log10(salt/1000)
+  tm<-100.5 + (41 * as.numeric(counts["G"] + counts["C"])/as.numeric(counts["A"]+counts["T"]+counts["G"]+counts["C"])) - (820/as.numeric(counts["A"]+counts["T"]+counts["G"]+counts["C"])) + 16.6*log10(salt_concentration/1000)
   return(as.numeric(tm))
 }
 
@@ -145,7 +145,25 @@ calculate_DeltaS<-function(x){
   return(s)
 }
 
-calculate_tm_nnb<-function(oligo_sequence, primer_concentration=50, salt_concentration=50, offset=9){
+#' Calculate melting temperature based on next neighbor calculation
+#' 
+#' The implementation is based on the explanations of \url{http://biotools.nubic.northwestern.edu/OligoCalc.html}.
+#' 
+#' More details at \url{https://doi.org/10.1093/nar/gkm234} 
+#'
+#' @param oligo_sequence A string containing an oligo sequence.
+#' @param primer_concentration The concentration of the primer in nanomole [default: 50]
+#' @param salt_concentration The concentration of Na+ in nanomole [default: 50]
+#' @param offset You can skip a prefix of your oligo sequence with this parameter. The first n bases are not considered in the calculation. [default: 0] 
+#' @return An array or a list with values for the codons/amino acids.
+#' @return The melting temperature in \code{print('\u00B0')}C
+#' 
+#' @examples
+#' \dontrun{
+#' GoldenMutagenesis::calculate_tm_nnb("AAAAAATGGTGTGTGATGTGTCCCTCTATC")
+#' }
+#' 
+calculate_tm_nnb<-function(oligo_sequence, primer_concentration=50, salt_concentration=50, offset=0){
   oligo_sequence_s2c<-s2c(oligo_sequence)
   oligo_sequence<-paste(oligo_sequence_s2c[offset:length(oligo_sequence_s2c)], collapse="")
   K<-1/(primer_concentration*1e-9) #Convert from nanomoles to moles
@@ -157,41 +175,91 @@ calculate_tm_nnb<-function(oligo_sequence, primer_concentration=50, salt_concent
 }
 
 
-setGeneric("sequence_length_temperature" , function(primer, temp_func=calculate_tm_nnb, primer_min=3, target_temp=60) {
+setGeneric("sequence_length_temperature" , function(primer, temp_func=calculate_tm_nnb, primer_min=3, target_temp=60,  gc_filter=F) {
   standardGeneric("sequence_length_temperature")
 })
 
 setMethod("sequence_length_temperature", signature(primer="Primer"),
-          function(primer, temp_func=calculate_tm_nnb, primer_min=3, target_temp=60){
+          function(primer, temp_func=calculate_tm_nnb, primer_min=3, target_temp=60, gc_filter=F){
             primer_seq_s2c<-s2c(primer@binding_sequence)
             temperatures<-list()
             names_i<-vector()
+            sequences_i<-vector()
             for(i in (primer_min*3):length(primer_seq_s2c)){
               temperatures<-c(temperatures, temp_func(paste(primer_seq_s2c[1:i],collapse=""), offset=0))
               names_i<-c(names_i, i)
+              sequences_i<-c(sequences_i, paste(primer_seq_s2c[1:i],collapse=""))
             }
-            names(temperatures)<-names_i
+            names(temperatures)<-sequences_i
             diff<-unlist(lapply(temperatures, function(x){abs(x-target_temp)}))
-            candidate<-as.numeric(names(diff[diff==min(diff)]))
-            primer@binding_sequence<-paste(primer_seq_s2c[1:min(candidate)],collapse="")
-            primer@temperature<-temperatures[[as.character(min(candidate))]]
-            primer@difference<-as.numeric(diff[as.character(min(candidate))])
+            #check for at least two A or T
+            candidates_with_AT<-which(str_count(str_sub(names(diff), start=-5), "A|T")>=2 & str_count(str_sub(names(diff), start=-5), "A|T")<4)
+            if(length(candidates_with_AT) == 0 || gc_filter==F) {
+              candidate_binding_sequence<-names(diff[diff==min(diff)])
+              if(gc_filter==T) {
+                warning("The end (last five bases) of the binding sequence is not optimal. The primers are maybe inefficient.")
+              }
+            }
+            else{
+              diff_AT<-diff[candidates_with_AT]
+              candidate_binding_sequence<-names(diff_AT[diff_AT==min(diff_AT)])
+            }
+            primer@binding_sequence<-candidate_binding_sequence
+            primer@temperature<-as.numeric(temperatures[candidate_binding_sequence])
+            primer@difference<-as.numeric(diff[candidate_binding_sequence])
             return(primer)
           }
 )
 
 setMethod("sequence_length_temperature", signature(primer="Primer_MSD"),
-          function(primer, temp_func=calculate_tm_nnb, primer_min=3, target_temp=60){
+          function(primer, temp_func=calculate_tm_nnb, primer_min=3, target_temp=60, gc_filter=F){
             callNextMethod()
           }
 )
 
+setMethod("sequence_length_temperature", signature(primer="Primer_SPM"),
+          function(primer, temp_func=calculate_tm_nnb, primer_min=3, target_temp=60, gc_filter=F){
+            primer_seq_s2c<-s2c(paste(primer@extra, primer@binding_sequence, sep=""))
+            temperatures<-list()
+            names_i<-vector()
+            sequences_i<-vector()
+            for(i in max((primer_min*3), nchar(primer@extra)):length(primer_seq_s2c)){
+              temperatures<-c(temperatures, temp_func(paste(primer_seq_s2c[1:i],collapse=""), offset=0))
+              names_i<-c(names_i, i)
+              sequences_i<-c(sequences_i, paste(primer_seq_s2c[1:i],collapse=""))
+            }
+            names(temperatures)<-sequences_i
+            diff<-unlist(lapply(temperatures, function(x){abs(x-target_temp)}))
+            #check for at least two A or T
+            candidates_with_AT<-which(str_count(str_sub(names(diff), start=-5), "A|T")>=2 & str_count(str_sub(names(diff), start=-5), "A|T")<4)
+            if(length(candidates_with_AT) == 0 || gc_filter==F) {
+              candidate_binding_sequence<-names(diff[diff==min(diff)])
+              if(gc_filter==T) {
+                warning("The end (last five bases) of the binding sequence is not optimal. The primers are maybe inefficient.")
+              }
+            }
+            else{
+              diff_AT<-diff[candidates_with_AT]
+              candidate_binding_sequence<-names(diff_AT[diff_AT==min(diff_AT)])
+            }
+            primer@binding_sequence<-str_sub(candidate_binding_sequence, max(nchar(primer@extra)+1,0))
+            primer@temperature<-as.numeric(temperatures[candidate_binding_sequence])
+            primer@difference<-as.numeric(diff[candidate_binding_sequence])
+            return(primer)
+          }
+)
 
 sequence_check<-function(input_sequence){
   input_sequence<-str_to_upper(input_sequence)
+  input_sequence<-str_trim(input_sequence)
   if(nchar(input_sequence)%%3!=0) {
     stop(paste("The length of the sequence is no factor of 3. Please check your sequence.", "The length of the sequence was:", nchar(input_sequence),  sep=" "))
   }
+  
+  if(str_detect(input_sequence, "^(A|C|G|T)+$") == F) {
+    stop(paste("The sequence contains invalid characters that are not A|C|G|T."))
+  }
+  
   codon_seq<-splitseq(s2c(input_sequence))
   met<-which(str_detect(codon_seq, "ATG"))
   if(length(met) == 0) {
@@ -217,15 +285,29 @@ sequence_check<-function(input_sequence){
   return(codon_seq)
 }
 
-check_primer_dupplicates<-function(primers, fragments, binding_min_length=4, target_temp=60) {
+check_primer_overhangs<-function(primers, fragments, binding_min_length=4, target_temp=60, check_repetitive=T) {
+  #ToDo: Add paramter for temperature calculation method
   overhangs<-sapply(primers, function(x){return(c(x[[1]]@overhang, x[[2]]@overhang))})
   duplicates<-table(overhangs)
   duplicates<-duplicates[names(duplicates)!="" & duplicates > 1]
-  if(length(duplicates)==0) {
+  if(check_repetitive == T) {
+    #Repetitive overhangs
+    rep<-table(overhangs)
+    rep<-rep[names(rep)!=""]
+    rep_temp<-names(rep)
+    rep<-str_count(names(rep), ("(^(A|T){4}$)|(^(G|C){4}$)"))
+    names(rep)<-rep_temp
+    rep<-rep[rep > 0]
+    rm(rep_temp)
+    bad_overhangs<-union(names(duplicates), names(rep))
+  } else {
+    bad_overhangs<-duplicates
+    }
+  if(length(bad_overhangs)==0) {
     return(primers)
   }
-  duplicate<-duplicates[1]
-  primer_num<-which(overhangs==names(duplicate))
+  bad_overhang<-bad_overhangs[1]
+  primer_num<-which(overhangs==bad_overhang)
   primer_unlist<-unlist(primers)
   fragment_num<-ceiling(primer_num)/2
   primer_num2<-primer_num %% 2
@@ -245,7 +327,7 @@ check_primer_dupplicates<-function(primers, fragments, binding_min_length=4, tar
     #check if primer_rv is an NDT primer
     if(class(primer_rv)=="Primer_MSD") {
       msd_mut<-sapply(c("NNN", "NNK", "NNS", "NDT", "DBK", "NRT"), FUN = function(x){paste(stringr::str_to_upper(rev(seqinr::comp(seqinr::s2c(x), , ambiguous=T))), sep="", collapse="")}, USE.NAMES = F)
-      if(str_sub(primer_rv@NDT, 1, 3) %in% msd_mut) {
+      if(str_sub(primer_rv@extra, 1, 3) %in% msd_mut) {
         if(i == length(primer_num)) {
           stop(paste("We can not fix overlaps in the primers. Please consider a silent mutation at position", fragments[[ceiling((primer_rv_num+1)/2)]]@start))
         }
@@ -254,10 +336,12 @@ check_primer_dupplicates<-function(primers, fragments, binding_min_length=4, tar
         }
       }
       else{
-        shift_base<-str_sub(primer_rv@NDT, 1, 1)
+        shift_base<-str_sub(primer_rv@extra, 1, 1)
         primer_rv@overhang<-paste(primer_rv@overhang,shift_base, sep="")
-        primer_rv@NDT<-str_sub(primer_rv@NDT, 2)
+        primer_rv@extra<-str_sub(primer_rv@extra, 2)
         primer_rv@overhang<-str_sub(primer_rv@overhang, 2)
+        primer_rv@temperature<-calculate_tm_nnb(primer_rv@binding_sequence, offset = 0)
+        primer_rv@difference<-abs(primer_rv@temperature - primer_unlist[[primer_rv_num -1 ]]@temperature)
       }
     } else {
       if(nchar(primer_rv@binding_sequence) < 3 * binding_min_length) {
@@ -270,31 +354,41 @@ check_primer_dupplicates<-function(primers, fragments, binding_min_length=4, tar
       }
       else{
         shift_base<-str_sub(primer_rv@binding_sequence, 1, 1)
-        primer_rv@overhang<-paste(primer_rv@overhang,shift_base, sep="")
+        primer_rv@extra<-paste(primer_rv@extra, shift_base, sep="")
         primer_rv@binding_sequence<-str_sub(primer_rv@binding_sequence, 2)
+        shift_base<-str_sub(primer_rv@extra, 1, 1)
+        primer_rv@extra<-str_sub(primer_rv@extra, 2)
+        primer_rv@overhang<-paste(primer_rv@overhang,shift_base, sep="")
         primer_rv@overhang<-str_sub(primer_rv@overhang, 2)
-        primer_rv@temperature<-calculate_tm_nnb(primer_rv@binding_sequence)
+        primer_rv@temperature<-calculate_tm_nnb(primer_rv@binding_sequence, offset = 0)
         primer_rv@difference<-abs(primer_rv@temperature - primer_unlist[[primer_rv_num -1 ]]@temperature)
       }
     }
-    if(class(primer_fd)=="Primer_MSD") {
+    #if(class(primer_fd)=="Primer_MSD") {
       primer_fd@overhang<-paste(comp(shift_base, forceToLower = F), primer_fd@overhang, sep="")
-      primer_fd@NDT<-paste(str_sub(primer_fd@overhang, 5), primer_fd@NDT ,sep="")
+      primer_fd@extra<-paste(str_sub(primer_fd@overhang, 5), primer_fd@extra ,sep="")
+      if(class(primer_fd)=="Primer_SPM") {
+        primer_fd@binding_sequence<-paste(str_sub(primer_fd@extra, -1), primer_fd@binding_sequence ,sep="")
+        primer_fd@extra<-str_sub(primer_fd@extra, 1, -2)
+      }
       primer_fd@overhang<-str_sub(primer_fd@overhang, 1, 4)
+      primer_fd@temperature<-calculate_tm_nnb(primer_fd@binding_sequence, offset = 0)
+      primer_fd@difference<-abs(target_temp - primer_fd@temperature)
       primers[[ceiling(primer_fd_num/2)]][[1]]<-primer_fd
       primers[[ceiling(primer_rv_num/2)]][[2]]<-primer_rv
       break
-    }
-    else{
-      primer_fd@overhang<-paste(comp(shift_base, forceToLower = F), primer_fd@overhang, sep="")
-      primer_fd@binding_sequence<-paste(str_sub(primer_fd@overhang, 5), primer_fd@binding_sequence ,sep="")
-      primer_fd@overhang<-str_sub(primer_fd@overhang, 1, 4)
-      primer_fv@temperature<-calculate_tm_nnb(primer_fv@binding_sequence)
-      primer_fv@difference<-abs(target_temp - primer_fd@temperature)
-      primers[[ceiling(primer_fd_num/2)]][[1]]<-primer_fd
-      primers[[ceiling(primer_rv_num/2)]][[2]]<-primer_rv
-      break
-    }
+    #}
+    #else{
+    #  primer_fd@overhang<-paste(comp(shift_base, forceToLower = F), primer_fd@overhang, sep="")
+    #  primer_fd@binding_sequence<-paste(str_sub(primer_fd@overhang, 5), primer_fd@binding_sequence ,sep="")
+    #  primer_fd@overhang<-str_sub(primer_fd@overhang, 1, 4)
+    #  primer_fd@temperature<-calculate_tm_nnb(primer_fd@binding_sequence)
+    #  primer_fd@difference<-abs(target_temp - primer_fd@temperature)
+    #  primer_rv@difference<-abs(primer_fd@temperature - primer_rv@temperature)
+    #  primers[[ceiling(primer_fd_num/2)]][[1]]<-primer_fd
+    #  primers[[ceiling(primer_rv_num/2)]][[2]]<-primer_rv
+    #  break
+    #}
   }
   
   #overhangs<-sapply(primers, function(x){return(c(x[[1]]@overhang, x[[2]]@overhang))})
@@ -304,9 +398,6 @@ check_primer_dupplicates<-function(primers, fragments, binding_min_length=4, tar
   #  return(primers)
   #}
   #else{
-  return(check_primer_dupplicates(primers = primers, fragments = fragments, binding_min_length = binding_min_length, target_temp = target_temp))
+  return(check_primer_overhangs(primers = primers, fragments = fragments, binding_min_length = binding_min_length, target_temp = target_temp))
   #}
 } 
-
-
-

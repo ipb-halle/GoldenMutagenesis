@@ -1,7 +1,7 @@
 Point Mutagenesis
 ================
 Chris Ulpinnis & Pascal Püllmann
-2018-10-11
+2019-01-21
 
 # Point Mutagenesis
 
@@ -51,6 +51,10 @@ Leucine66 to Valine (point mutation)
 library("GoldenMutagenesis")
 ```
 
+    ## Loading required package: seqinr
+
+    ## Loading required package: stringr
+
 ``` r
 input_sequence<-"ATGGTGAGCAAGGGCGAGGAGGATAACATGGCCATCATCAAGGAGTTCATGCGCTTCAAGGTGCACATGGAGGGCTCCGTGAACGGCCACGAGTTCGAGATCGAGGGCGAGGGCGAGGGCCGCCCCTACGAGGGCACCCAGACCGCCAAGCTGAAGGTGACCAAGGGTGGCCCCCTGCCCTTCGCCTGGGACATCCTGTCCCCTCAGTTCATGTACGGCTCCAAGGCCTACGTGAAGCACCCCGCCGACATCCCCGACTACTTGAAGCTGTCCTTCCCCGAGGGCTTCAAGTGGGAGCGCGTGATGAACTTCGAGGACGGCGGCGTGGTGACCGTGACCCAGGACTCCTCCCTGCAGGACGGCGAGTTCATCTACAAGGTGAAGCTGCGCGGCACCAACTTCCCCTCCGACGGCCCCGTAATGCAGAAGAAGACGATGGGCTGGGAGGCCTCCTCCGAGCGGATGTACCCCGAGGACGGCGCCCTGAAGGGCGAGATCAAGCAGAGGCTGAAGCTGAAGGACGGCGGCCACTACGACGCTGAGGTCAAGACCACCTACAAGGCCAAGAAGCCCGTGCAGCTGCCCGGCGCCTACAACGTCAACATCAAGTTGGACATCACCTCCCACAACGAGGACTACACCATCGTGGAACAGTACGAACGCGCCGAGGGCCGCCACTCCACCGGCGGCATGGACGAGCTGTACAAGGTCGACAAGCTTGCGGCCGCACTCGAGTGA"
 recognition_site_bbsi<-"GAAGAC"
@@ -83,8 +87,8 @@ mutations_bsai
 
     ## list()
 
-The mutate function designs the necessary set of primers for the desired
-mutations.   
+The mutate\_spm function designs the necessary set of primers for the
+desired mutations.   
 The function has the following parameters:  
 **prefix**: Additional nucleobases in 5’ position of the recognition
 site \[default: TT\]  
@@ -108,18 +112,65 @@ It will return an object of the class primer\_set.
 
 ``` r
 mutations<-c(list(c(66, "V")), mutations_bbsi)
-primers<-mutate(input_sequence, prefix="TT", restriction_enzyme = recognition_site_bbsi, suffix = "AA", vector=c("CTCA", "CTCG"), replacements = mutations, binding_min_length=4 ,primer_length=9, target_temp=60, cuf=cuf)
+primers<-mutate_spm(input_sequence, prefix="TT", restriction_enzyme = recognition_site_bbsi, suffix = "AA", vector=c("CTCA", "CTCG"), replacements = mutations, binding_min_length=4 ,primer_length=9, target_temp=60, cuf=cuf)
 primers
 ```
 
-    ## An object of class "Primerset"
+    ## An object of class "Extended_Primerset"
+    ## Slot "fragments":
+    ## [[1]]
+    ## An object of class "Fragment"
+    ## Slot "start":
+    ## [1] 1
+    ## 
+    ## Slot "stop":
+    ## [1] 66
+    ## 
+    ## Slot "start_mutation":
+    ## logical(0)
+    ## 
+    ## Slot "stop_mutation":
+    ## [1] 66
+    ## 
+    ## 
+    ## [[2]]
+    ## An object of class "Fragment"
+    ## Slot "start":
+    ## [1] 67
+    ## 
+    ## Slot "stop":
+    ## [1] 143
+    ## 
+    ## Slot "start_mutation":
+    ## logical(0)
+    ## 
+    ## Slot "stop_mutation":
+    ## [1] 143
+    ## 
+    ## 
+    ## [[3]]
+    ## An object of class "Fragment"
+    ## Slot "start":
+    ## [1] 144
+    ## 
+    ## Slot "stop":
+    ## [1] 246
+    ## 
+    ## Slot "start_mutation":
+    ## logical(0)
+    ## 
+    ## Slot "stop_mutation":
+    ## logical(0)
+    ## 
+    ## 
+    ## 
     ## Slot "oldsequence":
     ## [1] "ATGGTGAGCAAGGGCGAGGAGGATAACATGGCCATCATCAAGGAGTTCATGCGCTTCAAGGTGCACATGGAGGGCTCCGTGAACGGCCACGAGTTCGAGATCGAGGGCGAGGGCGAGGGCCGCCCCTACGAGGGCACCCAGACCGCCAAGCTGAAGGTGACCAAGGGTGGCCCCCTGCCCTTCGCCTGGGACATCCTGTCCCCTCAGTTCATGTACGGCTCCAAGGCCTACGTGAAGCACCCCGCCGACATCCCCGACTACTTGAAGCTGTCCTTCCCCGAGGGCTTCAAGTGGGAGCGCGTGATGAACTTCGAGGACGGCGGCGTGGTGACCGTGACCCAGGACTCCTCCCTGCAGGACGGCGAGTTCATCTACAAGGTGAAGCTGCGCGGCACCAACTTCCCCTCCGACGGCCCCGTAATGCAGAAGAAGACGATGGGCTGGGAGGCCTCCTCCGAGCGGATGTACCCCGAGGACGGCGCCCTGAAGGGCGAGATCAAGCAGAGGCTGAAGCTGAAGGACGGCGGCCACTACGACGCTGAGGTCAAGACCACCTACAAGGCCAAGAAGCCCGTGCAGCTGCCCGGCGCCTACAACGTCAACATCAAGTTGGACATCACCTCCCACAACGAGGACTACACCATCGTGGAACAGTACGAACGCGCCGAGGGCCGCCACTCCACCGGCGGCATGGACGAGCTGTACAAGGTCGACAAGCTTGCGGCCGCACTCGAGTGA"
     ## 
     ## Slot "primers":
     ## [[1]]
     ## [[1]][[1]]
-    ## An object of class "Primer"
+    ## An object of class "Primer_SPM"
     ## Slot "prefix":
     ## [1] "TT"
     ## 
@@ -135,6 +186,9 @@ primers
     ## Slot "overhang":
     ## [1] ""
     ## 
+    ## Slot "extra":
+    ## character(0)
+    ## 
     ## Slot "binding_sequence":
     ## [1] "ATGGTGAGCAAGGGCGAGGAGG"
     ## 
@@ -146,7 +200,7 @@ primers
     ## 
     ## 
     ## [[1]][[2]]
-    ## An object of class "Primer"
+    ## An object of class "Primer_SPM"
     ## Slot "prefix":
     ## [1] "TT"
     ## 
@@ -154,13 +208,16 @@ primers
     ## [1] "GAAGAC"
     ## 
     ## Slot "suffix":
-    ## [1] "AA"
+    ## [1] "TT"
     ## 
     ## Slot "vector":
     ## [1] ""
     ## 
     ## Slot "overhang":
     ## [1] "CACG"
+    ## 
+    ## Slot "extra":
+    ## character(0)
     ## 
     ## Slot "binding_sequence":
     ## [1] "ATGTCCCAGGCGAAGGGCAGGG"
@@ -175,7 +232,7 @@ primers
     ## 
     ## [[2]]
     ## [[2]][[1]]
-    ## An object of class "Primer"
+    ## An object of class "Primer_SPM"
     ## Slot "prefix":
     ## [1] "TT"
     ## 
@@ -191,6 +248,9 @@ primers
     ## Slot "overhang":
     ## [1] "CGTG"
     ## 
+    ## Slot "extra":
+    ## character(0)
+    ## 
     ## Slot "binding_sequence":
     ## [1] "TCCCCTCAGTTCATGTACGGCTCC"
     ## 
@@ -202,7 +262,7 @@ primers
     ## 
     ## 
     ## [[2]][[2]]
-    ## An object of class "Primer"
+    ## An object of class "Primer_SPM"
     ## Slot "prefix":
     ## [1] "TT"
     ## 
@@ -210,13 +270,16 @@ primers
     ## [1] "GAAGAC"
     ## 
     ## Slot "suffix":
-    ## [1] "AA"
+    ## [1] "TT"
     ## 
     ## Slot "vector":
     ## [1] ""
     ## 
     ## Slot "overhang":
     ## [1] "TTTC"
+    ## 
+    ## Slot "extra":
+    ## character(0)
     ## 
     ## Slot "binding_sequence":
     ## [1] "TGCATTACGGGGCCGTCGGA"
@@ -231,7 +294,7 @@ primers
     ## 
     ## [[3]]
     ## [[3]][[1]]
-    ## An object of class "Primer"
+    ## An object of class "Primer_SPM"
     ## Slot "prefix":
     ## [1] "TT"
     ## 
@@ -247,6 +310,9 @@ primers
     ## Slot "overhang":
     ## [1] "GAAA"
     ## 
+    ## Slot "extra":
+    ## character(0)
+    ## 
     ## Slot "binding_sequence":
     ## [1] "AAGACGATGGGCTGGGAGGCC"
     ## 
@@ -258,7 +324,7 @@ primers
     ## 
     ## 
     ## [[3]][[2]]
-    ## An object of class "Primer"
+    ## An object of class "Primer_SPM"
     ## Slot "prefix":
     ## [1] "TT"
     ## 
@@ -266,13 +332,16 @@ primers
     ## [1] "GAAGAC"
     ## 
     ## Slot "suffix":
-    ## [1] "AA"
+    ## [1] "TT"
     ## 
     ## Slot "vector":
     ## [1] "CTCG"
     ## 
     ## Slot "overhang":
     ## [1] ""
+    ## 
+    ## Slot "extra":
+    ## character(0)
     ## 
     ## Slot "binding_sequence":
     ## [1] "TCACTCGAGTGCGGCCGC"
@@ -297,32 +366,35 @@ print_primer(primers)
 ```
 
     ## Fragment 1
+    ## Start 1, Stop 66, Length 66
     ## Forward
     ## TTGAAGACAACTCAATGGTGAGCAAGGGCGAGGAGG
     ## Temperature of binding site:  60.67248  °C 
     ## Temperature difference:  0.6724812  K 
     ## Reverse
-    ## TTGAAGACAACACGATGTCCCAGGCGAAGGGCAGGG
+    ## TTGAAGACTTCACGATGTCCCAGGCGAAGGGCAGGG
     ## Temperature of binding site:  61.41454  °C 
     ## Temperature difference:  0.7420589  K 
     ## 
     ## Fragment 2
+    ## Start 67, Stop 143, Length 77
     ## Forward
     ## TTGAAGACAACGTGTCCCCTCAGTTCATGTACGGCTCC
     ## Temperature of binding site:  59.45263  °C 
     ## Temperature difference:  0.5473745  K 
     ## Reverse
-    ## TTGAAGACAATTTCTGCATTACGGGGCCGTCGGA
+    ## TTGAAGACTTTTTCTGCATTACGGGGCCGTCGGA
     ## Temperature of binding site:  58.9345  °C 
     ## Temperature difference:  0.5181218  K 
     ## 
     ## Fragment 3
+    ## Start 144, Stop 246, Length 103
     ## Forward
     ## TTGAAGACAAGAAAAAGACGATGGGCTGGGAGGCC
     ## Temperature of binding site:  59.2929  °C 
     ## Temperature difference:  0.7071014  K 
     ## Reverse
-    ## TTGAAGACAACTCGTCACTCGAGTGCGGCCGC
+    ## TTGAAGACTTCTCGTCACTCGAGTGCGGCCGC
     ## Temperature of binding site:  59.15354  °C 
     ## Temperature difference:  0.1393632  K 
     ## 

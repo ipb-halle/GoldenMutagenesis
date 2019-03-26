@@ -23,7 +23,7 @@ primer_add_level(primerset, prefix = "TT",
 A Primerset in the new Level (Level 0)
 }
 \description{
-This function replaces the prefix, the suffix and the restriction enzyme of a given Primerset to change the design to another Level.
+This function replaces the prefix, the suffix and the restriction enzyme of a given Primerset to change the design to another level.
 You can use this function to convert an exisiting Level 2 Primerset to a Level 0 Primerset for example.
 Also the overhangs of the first and the last primer will be modified to match the plasmid of the new level.
 }

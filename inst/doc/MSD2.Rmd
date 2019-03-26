@@ -1,5 +1,5 @@
 ---
-title: "Multiple Site Saturation Mutagenesis Example 3"
+title: "Multiple Site Saturation Mutagenesis Example 2"
 author: "Chris Ulpinnis & Pascal Püllmann"
 date: "`r Sys.Date()`"
 output:
@@ -12,7 +12,7 @@ output:
   html_document: default
 vignette: >
   %\VignetteEngine{knitr}
-  %\VignetteIndexEntry{Multiple Site Saturation Mutagenesis Example3 - Active Site - Different Patterns}
+  %\VignetteIndexEntry{Multiple Site Saturation Mutagenesis Example2}
   %\VignetteEncoding{UTF-8}
 ---
 
@@ -21,9 +21,9 @@ knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_chunk$set(tidy.opts=list(width.cutoff=60),tidy=TRUE)
 ```
 
-# Multiple Site Saturation Mutagenesis -- Active site
+# Multiple Site Saturation Mutagenesis
 
-You can find the lastest version of this file at https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/MSD3.md
+You can find the lastest version of this file at https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/MSD2.md
 
 
 ## Experimental Workflow
@@ -37,7 +37,7 @@ seperate gene fragments into pAGM9121 first\ then reassemble into pAGM22082_cRed
 
 ### Genomic sequence YfeX
 
-ATGTCTCAGGTTCAGAGTGGCATTTTGCCAGAACATTGCCGCGCGGCGATTTGGATCGAAGCCAACGTGAAAGGGGAAGTTGACGCCCTGCGTGCGGCCAGTAAAACATTTGCCGACAAACTGGCAACTTTTGAAGCGAAATTCCCGGACGCGCATCTTGGTGCGGTGGTTGCCTTTGGTAACAACACCTGGCGCGCTCTGAGCGGCGGCGTTGGGGCAGAAGAGCTGAAAGATTTTCCGGGCTACGGTAAAGGCCTTGCGCCGACGACCCAGTTCGATGTGTTGATCCACATTCTTTCTCTGCGTCACGACGTAAACTTCTCTGTCGCCCAGGCGGCGATGGAAGCCTTTGGTGACTGCATTGAAGTGAAAGAAGAGATCCACGGCTTCCGTTGGGTTGAAGAGCGT**GAC**CTGAGCGGCTTTGTT**GAC**GGTACGGAA**AAC**CCGGCGGGTGAAGAGACGCGTCGCGAAGTGGCGGTTATCAAAGACGGCGTGGATGCGGGCGGCAGCTATGTGTTTGTCCAGCGTTGGGAACACAACCTGAAGCAGCTCAACCGGATGAGCGTTCACGATCAGGAGATGGTGATCGGGCGCACCAAAGAGGCCAACGAAGAGATCGACGGCGACGAACGTCCGGAAACCTCTCACCTCACCCGCGTTGATCTGAAAGAAGATGGCAAAGGGCTGAAGATTGTT**CGC**CAG**AGC**CTGCCGTACGGCACTGCCAGTGGCACTCACGGTCTGTACTTCTGCGCCTACTGCGCGCGTCTGCATAACATTGAGCAGCAACTGCTGAGCATGTTTGGCGATACCGATGGTAAGCGTGATGCGATGTTGCGTTTCACCAAACCGGTAACCGGCGGCTATTATTTCGCACCGTCGCTGGACAAGTTGATGGCGCTGTAA
+ATGTCTCAGGTTCAGAGTGGCATTTTGCCAGAACATTGCCGCGCGGCGATTTGGATCGAAGCCAACGTGAAAGGGGAAGTTGACGCCCTGCGTGCGGCCAGTAAAACATTTGCCGACAAACTGGCAACTTTTGAAGCGAAATTCCCGGAC**GCG**CATCTTGGTGCGGTGGTTGCCTTTGGTAACAACACCTGGCGCGCTCTGAGCGGCGGCGTTGGGGCAGAAGAGCTGAAAGATTTTCCGGGCTACGGTAAAGGCCTTGCGCCGACGACCCAGTTCGATGTGTTGATCCACATTCTTTCT**CTG**CGTCACGACGTAAACTTCTCTGTCGCCCAGGCGGCGATGGAAGCCTTTGGTGACTGCATTGAAGTGAAAGAAGAGATCCACGGCTTCCGTTGGGTTGAAGAGCGTGACCTGAGCGGCTTTGTTGACGGTACGGAAAACCCGGCGGGT**GAA**GAGACGCGTCGCGAAGTGGCGGTTATCAAAGACGGCGTGGATGCGGGCGGCAGCTATGTGTTTGTCCAGCGTTGGGAACACAACCTGAAGCAGCTCAACCGGATGAGCGTTCACGATCAGGAGATGGTGATCGGGCGCACCAAAGAGGCC**AAC**GAAGAGATCGACGGCGACGAACGTCCGGAAACCTCTCACCTCACCCGCGTTGATCTGAAAGAAGATGGCAAAGGGCTGAAGATTGTTCGCCAGAGCCTGCCGTACGGCACTGCCAGTGGCACTCACGGTCTGTACTTCTGCGCCTAC**TGC**GCGCGTCTGCATAACATTGAGCAGCAACTGCTGAGCATGTTTGGCGATACCGATGGTAAGCGTGATGCGATGTTGCGTTTCACCAAACCGGTAACCGGCGGCTATTATTTCGCACCGTCGCTGGACAAGTTGATGGCGCTGTAA
 
 ### Restriction Enzyme
 #### Level 0
@@ -51,11 +51,13 @@ BsaI
 Recognition site: **_GGTCTC_**
 
 ### Envisioned Mutations
-Aspartic Acid - 137 - NDT\
-Aspartic Acid - 143 - NNN\
-Asparagine - 147 - DBK\
-Arginine - 232 - NDT\
-Serine - 234 - NDT\
+Alanine - 51\
+Leucine - 101\
+Glutamic Acid - 151\
+Asparagine - 202\
+Cysteine - 252\
+\
+Substitute for NDT
 
 ## R Workflow
 
@@ -90,9 +92,9 @@ The function has the following parameters:\
 **codon**: The codon which should be used in the mutagenesis [default: NDT]\
 **suffix**: Spacer nucleotides matching the cleavage pattern of the enzyme [default: A]\
 **vector**: Four basepair overhangs complementary to the created overhangs in the acceptor vector  [default: c("AATG", "AAGC")]\
-**replacements**: The desired substitutions\
+**replacements**: The desired substitutions as a vector with positions OR a list containing vetors with position (char) and type of MSD mutation (char) (see MSD3.rd for an example)\
 **binding_min_length**: The minimal threshold value of the template binding sequence in amino acid residues [default: 4]\
-**binding_max_length**: Maximal length of the binding sequence [default: 9]\
+**primer_length**: Maximal length of the binding sequence [default: 9]\
 **target_temp**: Melting temperature of the binding sequence in °C [default: 60]\
 **replacement_range**: Maximum distance between two randomization sites to be incoporated into a single primer in amino acid residues [default: 5]\
 **fragment_min_size**: Minimal size of a generated gene fragment in base pairs [default 100]\
@@ -102,9 +104,8 @@ The primers for multiple site saturation mutagenesis have an additional slot cal
 
 ````{r}
 #If domestication is necessary follow the workflow of the Point Mutagenesis vignette
-#We will use a structure similar to the Point Mutagenesis workflow to insert different kinds of Multiple Site Saturations here.
-mutations<-list(c(137,"NDT"), c(143,"NNN"), c( 147, "DBK"),c(232, "NDT"), c(234, "NDT"))
-primers<-msd_mutate(input_sequence, prefix="TT" ,restriction_enzyme=recognition_site_bsai, suffix="A", vector=c("AATG", "AAGC"), replacements=mutations, replacement_range=5, binding_min_length=4 ,binding_max_length=9, target_temp=60, fragment_min_size=60 )
+mutations<-c(51,101,151,202,252)
+primers<-msd_mutate(input_sequence, prefix="TT" ,restriction_enzyme=recognition_site_bsai, suffix="A", vector=c("AATG", "AAGC"), replacements=mutations, replacement_range=5, binding_min_length=4 ,primer_length=9, target_temp=60, fragment_min_size=60 )
 primers
 ````
 The primers are generated for direct cloning into the Level 2 vector.\

@@ -1,7 +1,7 @@
 Multiple Site Saturation Mutagenesis Example 2
 ================
 Chris Ulpinnis & Pascal Püllmann
-2018-10-11
+2019-01-21
 
 # Multiple Site Saturation Mutagenesis
 
@@ -53,6 +53,10 @@ NDT
 ``` r
 library("GoldenMutagenesis")
 ```
+
+    ## Loading required package: seqinr
+
+    ## Loading required package: stringr
 
 ``` r
 input_sequence <- "ATGTCTCAGGTTCAGAGTGGCATTTTGCCAGAACATTGCCGCGCGGCGATTTGGATCGAAGCCAACGTGAAAGGGGAAGTTGACGCCCTGCGTGCGGCCAGTAAAACATTTGCCGACAAACTGGCAACTTTTGAAGCGAAATTCCCGGACGCGCATCTTGGTGCGGTGGTTGCCTTTGGTAACAACACCTGGCGCGCTCTGAGCGGCGGCGTTGGGGCAGAAGAGCTGAAAGATTTTCCGGGCTACGGTAAAGGCCTTGCGCCGACGACCCAGTTCGATGTGTTGATCCACATTCTTTCTCTGCGTCACGACGTAAACTTCTCTGTCGCCCAGGCGGCGATGGAAGCCTTTGGTGACTGCATTGAAGTGAAAGAAGAGATCCACGGCTTCCGTTGGGTTGAAGAGCGTGACCTGAGCGGCTTTGTTGACGGTACGGAAAACCCGGCGGGTGAAGAGACGCGTCGCGAAGTGGCGGTTATCAAAGACGGCGTGGATGCGGGCGGCAGCTATGTGTTTGTCCAGCGTTGGGAACACAACCTGAAGCAGCTCAACCGGATGAGCGTTCACGATCAGGAGATGGTGATCGGGCGCACCAAAGAGGCCAACGAAGAGATCGACGGCGACGAACGTCCGGAAACCTCTCACCTCACCCGCGTTGATCTGAAAGAAGATGGCAAAGGGCTGAAGATTGTTCGCCAGAGCCTGCCGTACGGCACTGCCAGTGGCACTCACGGTCTGTACTTCTGCGCCTACTGCGCGCGTCTGCATAACATTGAGCAGCAACTGCTGAGCATGTTTGGCGATACCGATGGTAAGCGTGATGCGATGTTGCGTTTCACCAAACCGGTAACCGGCGGCTATTATTTCGCACCGTCGCTGGACAAGTTGATGGCGCTGTAA"
@@ -235,7 +239,7 @@ primers
     ## Slot "primers":
     ## [[1]]
     ## [[1]][[1]]
-    ## An object of class "Primer"
+    ## An object of class "Primer_MSD"
     ## Slot "prefix":
     ## [1] "TT"
     ## 
@@ -251,6 +255,9 @@ primers
     ## Slot "overhang":
     ## [1] ""
     ## 
+    ## Slot "extra":
+    ## character(0)
+    ## 
     ## Slot "binding_sequence":
     ## [1] "TCTCAGGTTCAGAGTGGCATTTTGCC"
     ## 
@@ -263,9 +270,6 @@ primers
     ## 
     ## [[1]][[2]]
     ## An object of class "Primer_MSD"
-    ## Slot "NDT":
-    ## [1] "TGAHN"
-    ## 
     ## Slot "prefix":
     ## [1] "TT"
     ## 
@@ -281,6 +285,9 @@ primers
     ## Slot "overhang":
     ## [1] "AAGA"
     ## 
+    ## Slot "extra":
+    ## [1] "TGAHN"
+    ## 
     ## Slot "binding_sequence":
     ## [1] "GTCCGGGAATTTCGCTTCAAAAGTTGC"
     ## 
@@ -294,7 +301,7 @@ primers
     ## 
     ## [[2]]
     ## [[2]][[1]]
-    ## An object of class "Primer"
+    ## An object of class "Primer_MSD"
     ## Slot "prefix":
     ## [1] "TT"
     ## 
@@ -310,6 +317,9 @@ primers
     ## Slot "overhang":
     ## [1] "TCTT"
     ## 
+    ## Slot "extra":
+    ## character(0)
+    ## 
     ## Slot "binding_sequence":
     ## [1] "GGTGCGGTGGTTGCCTTTGGTAACA"
     ## 
@@ -322,9 +332,6 @@ primers
     ## 
     ## [[2]][[2]]
     ## An object of class "Primer_MSD"
-    ## Slot "NDT":
-    ## [1] "CGAHN"
-    ## 
     ## Slot "prefix":
     ## [1] "TT"
     ## 
@@ -340,6 +347,9 @@ primers
     ## Slot "overhang":
     ## [1] "GTGA"
     ## 
+    ## Slot "extra":
+    ## [1] "CGAHN"
+    ## 
     ## Slot "binding_sequence":
     ## [1] "AGAAAGAATGTGGATCAACACATCGAACTG"
     ## 
@@ -353,7 +363,7 @@ primers
     ## 
     ## [[3]]
     ## [[3]][[1]]
-    ## An object of class "Primer"
+    ## An object of class "Primer_MSD"
     ## Slot "prefix":
     ## [1] "TT"
     ## 
@@ -369,6 +379,9 @@ primers
     ## Slot "overhang":
     ## [1] "TCAC"
     ## 
+    ## Slot "extra":
+    ## character(0)
+    ## 
     ## Slot "binding_sequence":
     ## [1] "GACGTAAACTTCTCTGTCGCCCAGG"
     ## 
@@ -381,9 +394,6 @@ primers
     ## 
     ## [[3]][[2]]
     ## An object of class "Primer_MSD"
-    ## Slot "NDT":
-    ## [1] "TCAHN"
-    ## 
     ## Slot "prefix":
     ## [1] "TT"
     ## 
@@ -399,6 +409,9 @@ primers
     ## Slot "overhang":
     ## [1] "CGTC"
     ## 
+    ## Slot "extra":
+    ## [1] "TCAHN"
+    ## 
     ## Slot "binding_sequence":
     ## [1] "ACCCGCCGGGTTTTCCGTACCG"
     ## 
@@ -412,7 +425,7 @@ primers
     ## 
     ## [[4]]
     ## [[4]][[1]]
-    ## An object of class "Primer"
+    ## An object of class "Primer_MSD"
     ## Slot "prefix":
     ## [1] "TT"
     ## 
@@ -428,6 +441,9 @@ primers
     ## Slot "overhang":
     ## [1] "GACG"
     ## 
+    ## Slot "extra":
+    ## character(0)
+    ## 
     ## Slot "binding_sequence":
     ## [1] "CGTCGCGAAGTGGCGGTTATCA"
     ## 
@@ -440,9 +456,6 @@ primers
     ## 
     ## [[4]][[2]]
     ## An object of class "Primer_MSD"
-    ## Slot "NDT":
-    ## [1] "TCAHN"
-    ## 
     ## Slot "prefix":
     ## [1] "TT"
     ## 
@@ -458,6 +471,9 @@ primers
     ## Slot "overhang":
     ## [1] "CTCT"
     ## 
+    ## Slot "extra":
+    ## [1] "TCAHN"
+    ## 
     ## Slot "binding_sequence":
     ## [1] "GGCCTCTTTGGTGCGCCCGA"
     ## 
@@ -471,7 +487,7 @@ primers
     ## 
     ## [[5]]
     ## [[5]][[1]]
-    ## An object of class "Primer"
+    ## An object of class "Primer_MSD"
     ## Slot "prefix":
     ## [1] "TT"
     ## 
@@ -487,6 +503,9 @@ primers
     ## Slot "overhang":
     ## [1] "AGAG"
     ## 
+    ## Slot "extra":
+    ## character(0)
+    ## 
     ## Slot "binding_sequence":
     ## [1] "ATCGACGGCGACGAACGTCC"
     ## 
@@ -499,9 +518,6 @@ primers
     ## 
     ## [[5]][[2]]
     ## An object of class "Primer_MSD"
-    ## Slot "NDT":
-    ## [1] "GCAHN"
-    ## 
     ## Slot "prefix":
     ## [1] "TT"
     ## 
@@ -517,6 +533,9 @@ primers
     ## Slot "overhang":
     ## [1] "ACGC"
     ## 
+    ## Slot "extra":
+    ## [1] "GCAHN"
+    ## 
     ## Slot "binding_sequence":
     ## [1] "GTAGGCGCAGAAGTACAGACCGT"
     ## 
@@ -530,7 +549,7 @@ primers
     ## 
     ## [[6]]
     ## [[6]][[1]]
-    ## An object of class "Primer"
+    ## An object of class "Primer_MSD"
     ## Slot "prefix":
     ## [1] "TT"
     ## 
@@ -546,6 +565,9 @@ primers
     ## Slot "overhang":
     ## [1] "GCGT"
     ## 
+    ## Slot "extra":
+    ## character(0)
+    ## 
     ## Slot "binding_sequence":
     ## [1] "CTGCATAACATTGAGCAGCAACTGC"
     ## 
@@ -557,7 +579,7 @@ primers
     ## 
     ## 
     ## [[6]][[2]]
-    ## An object of class "Primer"
+    ## An object of class "Primer_MSD"
     ## Slot "prefix":
     ## [1] "TT"
     ## 
@@ -572,6 +594,9 @@ primers
     ## 
     ## Slot "overhang":
     ## [1] ""
+    ## 
+    ## Slot "extra":
+    ## character(0)
     ## 
     ## Slot "binding_sequence":
     ## [1] "TTACAGCGCCATCAACTTGTCCAGC"
@@ -700,7 +725,7 @@ primers_lvl0
     ## Slot "primers":
     ## [[1]]
     ## [[1]][[1]]
-    ## An object of class "Primer"
+    ## An object of class "Primer_MSD"
     ## Slot "prefix":
     ## [1] "TT"
     ## 
@@ -716,6 +741,9 @@ primers_lvl0
     ## Slot "overhang":
     ## [1] "AATG"
     ## 
+    ## Slot "extra":
+    ## character(0)
+    ## 
     ## Slot "binding_sequence":
     ## [1] "TCTCAGGTTCAGAGTGGCATTTTGCC"
     ## 
@@ -728,9 +756,6 @@ primers_lvl0
     ## 
     ## [[1]][[2]]
     ## An object of class "Primer_MSD"
-    ## Slot "NDT":
-    ## [1] "TGAHN"
-    ## 
     ## Slot "prefix":
     ## [1] "TT"
     ## 
@@ -746,6 +771,9 @@ primers_lvl0
     ## Slot "overhang":
     ## [1] "AAGA"
     ## 
+    ## Slot "extra":
+    ## [1] "TGAHN"
+    ## 
     ## Slot "binding_sequence":
     ## [1] "GTCCGGGAATTTCGCTTCAAAAGTTGC"
     ## 
@@ -759,7 +787,7 @@ primers_lvl0
     ## 
     ## [[2]]
     ## [[2]][[1]]
-    ## An object of class "Primer"
+    ## An object of class "Primer_MSD"
     ## Slot "prefix":
     ## [1] "TT"
     ## 
@@ -775,6 +803,9 @@ primers_lvl0
     ## Slot "overhang":
     ## [1] "TCTT"
     ## 
+    ## Slot "extra":
+    ## character(0)
+    ## 
     ## Slot "binding_sequence":
     ## [1] "GGTGCGGTGGTTGCCTTTGGTAACA"
     ## 
@@ -787,9 +818,6 @@ primers_lvl0
     ## 
     ## [[2]][[2]]
     ## An object of class "Primer_MSD"
-    ## Slot "NDT":
-    ## [1] "CGAHN"
-    ## 
     ## Slot "prefix":
     ## [1] "TT"
     ## 
@@ -805,6 +833,9 @@ primers_lvl0
     ## Slot "overhang":
     ## [1] "GTGA"
     ## 
+    ## Slot "extra":
+    ## [1] "CGAHN"
+    ## 
     ## Slot "binding_sequence":
     ## [1] "AGAAAGAATGTGGATCAACACATCGAACTG"
     ## 
@@ -818,7 +849,7 @@ primers_lvl0
     ## 
     ## [[3]]
     ## [[3]][[1]]
-    ## An object of class "Primer"
+    ## An object of class "Primer_MSD"
     ## Slot "prefix":
     ## [1] "TT"
     ## 
@@ -834,6 +865,9 @@ primers_lvl0
     ## Slot "overhang":
     ## [1] "TCAC"
     ## 
+    ## Slot "extra":
+    ## character(0)
+    ## 
     ## Slot "binding_sequence":
     ## [1] "GACGTAAACTTCTCTGTCGCCCAGG"
     ## 
@@ -846,9 +880,6 @@ primers_lvl0
     ## 
     ## [[3]][[2]]
     ## An object of class "Primer_MSD"
-    ## Slot "NDT":
-    ## [1] "TCAHN"
-    ## 
     ## Slot "prefix":
     ## [1] "TT"
     ## 
@@ -864,6 +895,9 @@ primers_lvl0
     ## Slot "overhang":
     ## [1] "CGTC"
     ## 
+    ## Slot "extra":
+    ## [1] "TCAHN"
+    ## 
     ## Slot "binding_sequence":
     ## [1] "ACCCGCCGGGTTTTCCGTACCG"
     ## 
@@ -877,7 +911,7 @@ primers_lvl0
     ## 
     ## [[4]]
     ## [[4]][[1]]
-    ## An object of class "Primer"
+    ## An object of class "Primer_MSD"
     ## Slot "prefix":
     ## [1] "TT"
     ## 
@@ -893,6 +927,9 @@ primers_lvl0
     ## Slot "overhang":
     ## [1] "GACG"
     ## 
+    ## Slot "extra":
+    ## character(0)
+    ## 
     ## Slot "binding_sequence":
     ## [1] "CGTCGCGAAGTGGCGGTTATCA"
     ## 
@@ -905,9 +942,6 @@ primers_lvl0
     ## 
     ## [[4]][[2]]
     ## An object of class "Primer_MSD"
-    ## Slot "NDT":
-    ## [1] "TCAHN"
-    ## 
     ## Slot "prefix":
     ## [1] "TT"
     ## 
@@ -923,6 +957,9 @@ primers_lvl0
     ## Slot "overhang":
     ## [1] "CTCT"
     ## 
+    ## Slot "extra":
+    ## [1] "TCAHN"
+    ## 
     ## Slot "binding_sequence":
     ## [1] "GGCCTCTTTGGTGCGCCCGA"
     ## 
@@ -936,7 +973,7 @@ primers_lvl0
     ## 
     ## [[5]]
     ## [[5]][[1]]
-    ## An object of class "Primer"
+    ## An object of class "Primer_MSD"
     ## Slot "prefix":
     ## [1] "TT"
     ## 
@@ -952,6 +989,9 @@ primers_lvl0
     ## Slot "overhang":
     ## [1] "AGAG"
     ## 
+    ## Slot "extra":
+    ## character(0)
+    ## 
     ## Slot "binding_sequence":
     ## [1] "ATCGACGGCGACGAACGTCC"
     ## 
@@ -964,9 +1004,6 @@ primers_lvl0
     ## 
     ## [[5]][[2]]
     ## An object of class "Primer_MSD"
-    ## Slot "NDT":
-    ## [1] "GCAHN"
-    ## 
     ## Slot "prefix":
     ## [1] "TT"
     ## 
@@ -982,6 +1019,9 @@ primers_lvl0
     ## Slot "overhang":
     ## [1] "ACGC"
     ## 
+    ## Slot "extra":
+    ## [1] "GCAHN"
+    ## 
     ## Slot "binding_sequence":
     ## [1] "GTAGGCGCAGAAGTACAGACCGT"
     ## 
@@ -995,7 +1035,7 @@ primers_lvl0
     ## 
     ## [[6]]
     ## [[6]][[1]]
-    ## An object of class "Primer"
+    ## An object of class "Primer_MSD"
     ## Slot "prefix":
     ## [1] "TT"
     ## 
@@ -1011,6 +1051,9 @@ primers_lvl0
     ## Slot "overhang":
     ## [1] "GCGT"
     ## 
+    ## Slot "extra":
+    ## character(0)
+    ## 
     ## Slot "binding_sequence":
     ## [1] "CTGCATAACATTGAGCAGCAACTGC"
     ## 
@@ -1022,7 +1065,7 @@ primers_lvl0
     ## 
     ## 
     ## [[6]][[2]]
-    ## An object of class "Primer"
+    ## An object of class "Primer_MSD"
     ## Slot "prefix":
     ## [1] "TT"
     ## 
@@ -1037,6 +1080,9 @@ primers_lvl0
     ## 
     ## Slot "overhang":
     ## [1] "AAGC"
+    ## 
+    ## Slot "extra":
+    ## character(0)
     ## 
     ## Slot "binding_sequence":
     ## [1] "TTACAGCGCCATCAACTTGTCCAGC"

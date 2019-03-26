@@ -92,7 +92,7 @@ The function has the following parameters:\
 **vector**: Four basepair overhangs complementary to the created overhangs in the acceptor vector  [default: c("AATG", "AAGC")]\
 **replacements**: The desired substitutions\
 **binding_min_length**: The minimal threshold value of the template binding sequence in amino acid residues [default: 4]\
-**binding_max_length**: Maximal length of the binding sequence [default: 9]\
+**primer_length**: Maximal length of the binding sequence [default: 9]\
 **target_temp**: Melting temperature of the binding sequence in °C [default: 60]\
 **replacement_range**: Maximum distance between two randomization sites to be incoporated into a single primer in amino acid residues [default: 5]\
 **fragment_min_size**: Minimal size of a generated gene fragment in base pairs [default 100]\
@@ -104,7 +104,7 @@ The primers for multiple site saturation mutagenesis have an additional slot cal
 #If domestication is necessary follow the workflow of the Point Mutagenesis vignette
 #We will use a structure similar to the Point Mutagenesis workflow to insert different kinds of Multiple Site Saturations here.
 mutations<-list(c(137,"NDT"), c(143,"NNN"), c( 147, "DBK"),c(232, "NDT"), c(234, "NDT"))
-primers<-msd_mutate(input_sequence, prefix="TT" ,restriction_enzyme=recognition_site_bsai, suffix="A", vector=c("AATG", "AAGC"), replacements=mutations, replacement_range=5, binding_min_length=4 ,binding_max_length=9, target_temp=60, fragment_min_size=60 )
+primers<-msd_mutate(input_sequence, prefix="TT" ,restriction_enzyme=recognition_site_bsai, suffix="A", vector=c("AATG", "AAGC"), replacements=mutations, replacement_range=5, binding_min_length=4 ,primer_length=9, target_temp=60, fragment_min_size=60 )
 primers
 ````
 The primers are generated for direct cloning into the Level 2 vector.\
