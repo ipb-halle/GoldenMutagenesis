@@ -145,6 +145,24 @@ calculate_DeltaS<-function(x){
   return(s)
 }
 
+#' Calculate melting temperature based on next neighbor calculation
+#' 
+#' The implementation is based on the explanations of \url{http://biotools.nubic.northwestern.edu/OligoCalc.html}.
+#' 
+#' More details at \url{https://doi.org/10.1093/nar/gkm234} 
+#'
+#' @param oligo_sequence A string containing an oligo sequence.
+#' @param primer_concentration The concentration of the primer in nanomole [default: 50]
+#' @param salt_concentration The concentration of Na+ in nanomole [default: 50]
+#' @param offset You can skip a prefix of your oligo sequence with this parameter. The first n bases are not considered in the calculation. [default: 0] 
+#' @return An array or a list with values for the codons/amino acids.
+#' @return The melting temperature in \code{print('\u00B0')}C
+#' 
+#' @examples
+#' \dontrun{
+#' GoldenMutagenesis::calculate_tm_nnb("AAAAAATGGTGTGTGATGTGTCCCTCTATC")
+#' }
+#' 
 calculate_tm_nnb<-function(oligo_sequence, primer_concentration=50, salt_concentration=50, offset=0){
   oligo_sequence_s2c<-s2c(oligo_sequence)
   oligo_sequence<-paste(oligo_sequence_s2c[offset:length(oligo_sequence_s2c)], collapse="")

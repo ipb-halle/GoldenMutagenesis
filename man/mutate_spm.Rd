@@ -2,13 +2,13 @@
 % Please edit documentation in R/exported_functions.R
 \name{mutate_spm}
 \alias{mutate_spm}
-\title{Calculate primers for Point Mutagenesis}
+\title{Calculate Primers for Point Mutagenesis}
 \usage{
 mutate_spm(input_sequence, prefix = "TT",
   restriction_enzyme = "GGTCTC", suffix = "A", vector = c("AATG",
   "AAGC"), replacements, replacement_range = 5, binding_min_length = 4,
-  primer_length = 9, target_temp = 60, cuf = "e_coli_316407.csv",
-  fragment_min_size = 100)
+  binding_max_length = 9, target_temp = 60,
+  cuf = "e_coli_316407.csv", fragment_min_size = 100)
 }
 \arguments{
 \item{input_sequence}{The sequence which should be modified. This is an object of type character containing the sequence.}
@@ -23,13 +23,13 @@ mutate_spm(input_sequence, prefix = "TT",
 
 \item{replacements}{The desired substitutions}
 
-\item{replacement_range}{The minimal threshold value of the template binding sequence in amino acid residues [default: 4]}
+\item{replacement_range}{Maximum distance between two randomization sites to be incoporated into a single primer in amino acid residues [default: 5]}
 
-\item{binding_min_length}{Maximal length of the binding sequence [default: 9]}
+\item{binding_min_length}{The minimal threshold value of the length of the template binding sequence in amino acid residues [default: 4]}
 
-\item{primer_length}{Melting temperature of the binding sequence in \code{print('\u00B0')}C [default: 60]}
+\item{binding_max_length}{Maximal length of the binding sequence in amino acid residues [default: 9]}
 
-\item{target_temp}{Maximum distance between two randomization sites to be incoporated into a single primer in amino acid residues [default: 5]}
+\item{target_temp}{Melting temperature of the binding sequence in \code{print('\u00B0')}C [default: 60]}
 
 \item{cuf}{The Codon Usage Table which is being used to select the codon for an exchanged amino acid. [default: e_coli_316407.csv]}
 
@@ -47,6 +47,6 @@ An example is given in the vignette at \url{https://github.com/ipb-halle/GoldenM
 data(Point_Mutagenesis_BbsI_setup)
 primers<-mutate_spm(input_sequence, prefix="TT", restriction_enzyme = recognition_site_bbsi, 
 suffix = "AA", vector=c("CTCA", "CTCG"), replacements = mutations, binding_min_length=4 ,
-primer_length=9, target_temp=60, cuf=cuf)
+binding_max_length=9, target_temp=60, cuf=cuf)
 
 }

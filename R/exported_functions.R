@@ -129,7 +129,7 @@ domesticate<-function(input_sequence, restriction_enzyme="GGTCTC", cuf="e_coli_3
   return(replacements)
 }
 
-#' Calculate primers for Point Mutagenesis
+#' Calculate Primers for Point Mutagenesis
 #' 
 #' The mutate function designs the necessary set of primers for the desired mutations.
 #' An example is given in the vignette at \url{https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/Point_Mutagenesis.md}
@@ -140,10 +140,10 @@ domesticate<-function(input_sequence, restriction_enzyme="GGTCTC", cuf="e_coli_3
 #' @param suffix Spacer nucleotides matching the cleavage pattern of the enzyme [default: A]
 #' @param vector Four basepair overhangs complementary to the created overhangs in the acceptor vector  [default: c("AATG", "AAGC")]
 #' @param replacements The desired substitutions
-#' @param replacement_range The minimal threshold value of the template binding sequence in amino acid residues [default: 4]
-#' @param binding_min_length Maximal length of the binding sequence [default: 9]
-#' @param primer_length Melting temperature of the binding sequence in \code{print('\u00B0')}C [default: 60]
-#' @param target_temp Maximum distance between two randomization sites to be incoporated into a single primer in amino acid residues [default: 5]
+#' @param replacement_range  Maximum distance between two randomization sites to be incoporated into a single primer in amino acid residues [default: 5]
+#' @param binding_min_length The minimal threshold value of the length of the template binding sequence in amino acid residues [default: 4]
+#' @param binding_max_length Maximal length of the binding sequence in amino acid residues [default: 9]
+#' @param target_temp Melting temperature of the binding sequence in \code{print('\u00B0')}C [default: 60]
 #' @param fragment_min_size Minimal size of a generated gene fragment in base pairs [default 100]
 #' @param cuf The Codon Usage Table which is being used to select the codon for an exchanged amino acid. [default: e_coli_316407.csv]
 #'
@@ -155,9 +155,9 @@ domesticate<-function(input_sequence, restriction_enzyme="GGTCTC", cuf="e_coli_3
 #' data(Point_Mutagenesis_BbsI_setup)
 #' primers<-mutate_spm(input_sequence, prefix="TT", restriction_enzyme = recognition_site_bbsi, 
 #' suffix = "AA", vector=c("CTCA", "CTCG"), replacements = mutations, binding_min_length=4 ,
-#' primer_length=9, target_temp=60, cuf=cuf)
+#' binding_max_length=9, target_temp=60, cuf=cuf)
 #' 
-mutate_spm<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", suffix="A", vector=c("AATG", "AAGC"), replacements,replacement_range=5, binding_min_length=4 ,primer_length=9, target_temp=60, cuf="e_coli_316407.csv", fragment_min_size=100) {#change to primer_length_max? and min?
+mutate_spm<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", suffix="A", vector=c("AATG", "AAGC"), replacements,replacement_range=5, binding_min_length=4 ,binding_max_length=9, target_temp=60, cuf="e_coli_316407.csv", fragment_min_size=100) {#change to binding_max_length_max? and min?
   cuf_list<-get_cu_table(cuf)
   prefix<-str_to_upper(prefix)
   vector<-str_to_upper(vector)
@@ -170,7 +170,7 @@ mutate_spm<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", s
   restriction_enzyme_s2c_reverse<-comp(restriction_enzyme_s2c)
   restriction_enzyme_s2c_reverse<-rev(restriction_enzyme_s2c_reverse)
   restriction_enzyme_reverse<-str_to_upper(paste(restriction_enzyme_s2c_reverse, collapse = ""))
-  min_fragment<-3*primer_length
+  min_fragment<-3*binding_max_length
   prot_sequence<-seqinr::translate(sequence)
   primers<-vector("list")
   
@@ -210,7 +210,7 @@ mutate_spm<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", s
   #then calculate primers 
   fragments<-c()
   i<-1
-  #todo replace formular with primer_length
+  #todo replace formular with binding_max_length
   repeat {
     #################################
     #################################
@@ -373,7 +373,7 @@ mutate_spm<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", s
               stop("Internal error. Please give a bug report!")
             }
           }
-          if(positions_aa[i]-temp_fragment@start < primer_length+2 ) {
+          if(positions_aa[i]-temp_fragment@start < binding_max_length+2 ) {
             temp_fragment@start_mutation<-positions_aa[i]
             temp_fragment@stop<-length(codon_seq)
             fragments <- c(fragments, temp_fragment)
@@ -448,13 +448,13 @@ mutate_spm<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", s
     #forward
     if(length(cur_fragment@start_mutation)==0) {
       temp_primer<-pc_spm(prefix=prefix ,restriction_enzyme=restriction_enzyme, suffix=suffix_f, vector=vector_f, overhang=overhang_f)
-      temp_primer@binding_sequence<-paste(paste(codon_seq[cur_fragment@start:(cur_fragment@start+primer_length-1)], collapse=""), sep="")
+      temp_primer@binding_sequence<-paste(paste(codon_seq[cur_fragment@start:(cur_fragment@start+binding_max_length-1)], collapse=""), sep="")
       temp_primer<-sequence_length_temperature(temp_primer, primer_min=binding_min_length, target_temp=target_temp)
     }
     else {
       temp_primer<-pc_spm(prefix=prefix ,restriction_enzyme=restriction_enzyme, suffix=suffix_f, vector=vector_f, overhang=overhang_f)
       temp_primer@extra<-paste(paste(codon_seq[cur_fragment@start:max(cur_fragment@start_mutation)], collapse = ""), sep="")
-      temp_primer@binding_sequence<-paste(paste(codon_seq[(max(cur_fragment@start_mutation)+1):((max(cur_fragment@start_mutation)+1)+primer_length-1)], collapse=""), sep="")
+      temp_primer@binding_sequence<-paste(paste(codon_seq[(max(cur_fragment@start_mutation)+1):((max(cur_fragment@start_mutation)+1)+binding_max_length-1)], collapse=""), sep="")
       temp_primer<-sequence_length_temperature(temp_primer, primer_min=binding_min_length, target_temp=target_temp)
     }
     primers[[n]][[1]]<-temp_primer
@@ -462,7 +462,7 @@ mutate_spm<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", s
     #reverse
     if(length(cur_fragment@stop_mutation)<=1){
       temp_primer<-pc_spm(prefix=prefix ,restriction_enzyme=restriction_enzyme, suffix=suffix_r, overhang=overhang_r, vector=vector_r)
-      temp_primer@binding_sequence<-paste(paste(codon_seq[(cur_fragment@stop-2-primer_length-1):stop_r], collapse=""), sep="")
+      temp_primer@binding_sequence<-paste(paste(codon_seq[(cur_fragment@stop-2-binding_max_length-1):stop_r], collapse=""), sep="")
       if(n!=length(fragments))
         temp_primer@binding_sequence<-paste(temp_primer@binding_sequence, str_sub(codon_seq[cur_fragment@stop-1], end=2) ,sep="")
       temp_primer@binding_sequence<-paste(str_to_upper(comp(rev(s2c(temp_primer@binding_sequence)))), collapse="")
@@ -473,24 +473,24 @@ mutate_spm<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", s
       temp_primer@extra<-paste(paste(codon_seq[(min(cur_fragment@stop_mutation)):stop_r], collapse=""), sep="")
       temp_primer@extra<-paste(temp_primer@extra, str_sub(codon_seq[cur_fragment@stop-1], end=2), sep="")
       temp_primer@extra<-paste(comp(rev(s2c(temp_primer@extra)), ambiguous = T,forceToLower = F), collapse = "")
-      temp_primer@binding_sequence<-paste(paste(codon_seq[(min(cur_fragment@stop_mutation)-1-primer_length-1):(min(cur_fragment@stop_mutation)-1)], collapse=""), sep="")
+      temp_primer@binding_sequence<-paste(paste(codon_seq[(min(cur_fragment@stop_mutation)-1-binding_max_length-1):(min(cur_fragment@stop_mutation)-1)], collapse=""), sep="")
       temp_primer@binding_sequence<-paste(str_to_upper(comp(rev(s2c(temp_primer@binding_sequence)))), collapse="")
       temp_primer<-sequence_length_temperature(temp_primer, primer_min=binding_min_length, target_temp=primers[[n]][[1]]@temperature)
     }
     primers[[n]][[2]]<-temp_primer
     rm(temp_primer)
   }
-  #check the primers with the checkprimer function:
+  #Check the primers with the checkprimer function:
   #Check for primers with same overlap
   #Replace them based on ? -> Primer without mutation/length of the primer in total?
   #It is easier to modify the exisiting primer 
-  #If it is not possible to correct all overlaps -> return message with postion for silent mutation
+  #If it is not possible to correct all overlaps -> return message with position for silent mutation
   primers<-check_primer_overhangs(primers, fragments, binding_min_length, target_temp)
   return(eps(oldsequence=input_sequence, primers=primers, newsequence=paste(codon_seq, collapse = ""), fragments=fragments))
 }
 
 
-#' Calculate primers for Multiple Site Saturation Mutagenesis
+#' Calculate Primers for Multiple Site Saturation Mutagenesis
 #' 
 #' The mutate_msd function designs the necessary set of primers for the desired mutations.
 #' 
@@ -500,11 +500,11 @@ mutate_spm<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", s
 #' @param restriction_enzyme Recognition site sequence of the respective restriction enzyme [default: GGTCTC]
 #' @param suffix Spacer nucleotides matching the cleavage pattern of the enzyme [default: A]
 #' @param vector Four basepair overhangs complementary to the created overhangs in the acceptor vector  [default: c("AATG", "AAGC")]
-#' @param replacements The desired substitutions as a vector with positions OR a list containing vetors with position (char) and type of MSD mutation (char)
-#' @param replacement_range The minimal threshold value of the template binding sequence in amino acid residues [default: 4]
-#' @param binding_min_length Maximal length of the binding sequence [default: 9]
-#' @param primer_length Melting temperature of the binding sequence in \code{print('\u00B0')}C [default: 60]
-#' @param target_temp Maximum distance between two randomization sites to be incoporated into a single primer in amino acid residues [default: 5]
+#' @param replacements The desired substitutions
+#' @param replacement_range  Maximum distance between two randomization sites to be incoporated into a single primer in amino acid residues [default: 5]
+#' @param binding_min_length The minimal threshold value of the length of the template binding sequence in amino acid residues [default: 4]
+#' @param binding_max_length Maximal length of the binding sequence in amino acid residues [default: 9]
+#' @param target_temp Melting temperature of the binding sequence in \code{print('\u00B0')}C [default: 60]
 #' @param fragment_min_size Minimal size of a generated gene fragment in base pairs [default 100]
 #'
 #' @return An object of class Primerset with the designed Primers.
@@ -518,9 +518,9 @@ mutate_spm<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", s
 #' primers<-msd_mutate(input_sequence, prefix="TT" ,
 #' restriction_enzyme=recognition_site_bsai, suffix="A", 
 #' vector=c("AATG", "AAGC"), replacements=mutations, replacement_range=5,
-#' binding_min_length=4 , primer_length=9, target_temp=60,
+#' binding_min_length=4 , binding_max_length=9, target_temp=60,
 #' fragment_min_size=60 )
-msd_mutate<-function(input_sequence, codon="NDT" ,prefix="TT" ,restriction_enzyme="GGTCTC", suffix="A", vector=c("AATG", "AAGC"), replacements, replacement_range=5, binding_min_length=4 ,primer_length=9, target_temp=60, fragment_min_size=100 ) {#change to primer_length_max? and min?
+msd_mutate<-function(input_sequence, codon="NDT" ,prefix="TT" ,restriction_enzyme="GGTCTC", suffix="A", vector=c("AATG", "AAGC"), replacements, replacement_range=5, binding_min_length=4 ,binding_max_length=9, target_temp=60, fragment_min_size=100 ) {
   codon<-str_to_upper(codon)
   prefix<-str_to_upper(prefix)
   suffix<-str_to_upper(suffix)
@@ -549,7 +549,7 @@ msd_mutate<-function(input_sequence, codon="NDT" ,prefix="TT" ,restriction_enzym
   restriction_enzyme_s2c_reverse<-comp(restriction_enzyme_s2c)
   restriction_enzyme_s2c_reverse<-rev(restriction_enzyme_s2c_reverse)
   restriction_enzyme_reverse<-str_to_upper(paste(restriction_enzyme_s2c_reverse, collapse = ""))
-  min_fragment<-3*primer_length
+  min_fragment<-3*binding_max_length
   prot_sequence<-seqinr::translate(sequence)
   primers<-vector("list")
   if(str_sub(vector[1], 2) == "ATG"){
@@ -564,7 +564,7 @@ msd_mutate<-function(input_sequence, codon="NDT" ,prefix="TT" ,restriction_enzym
   #then calculate primers 
   fragments<-c()
   i<-1
-  #todo replace formular with primer_length
+  #todo replace formular with binding_max_length
   repeat {
     #################################
     #################################
@@ -723,7 +723,7 @@ msd_mutate<-function(input_sequence, codon="NDT" ,prefix="TT" ,restriction_enzym
               stop("Internal error. Please give a bug report!")
             }
           }
-          if(replacements[i]-temp_fragment@start < primer_length+2 ) {
+          if(replacements[i]-temp_fragment@start < binding_max_length+2 ) {
             temp_fragment@start_mutation<-replacements[i]
             temp_fragment@stop<-length(codon_seq)
             fragments <- c(fragments, temp_fragment)
@@ -790,7 +790,7 @@ msd_mutate<-function(input_sequence, codon="NDT" ,prefix="TT" ,restriction_enzym
     #forward
     if(length(cur_fragment@start_mutation)==0) {
       temp_primer<-pc_msd(prefix=prefix ,restriction_enzyme=restriction_enzyme, suffix=suffix_f, vector=vector_f, overhang=overhang_f)
-      temp_primer@binding_sequence<-paste(paste(codon_seq[cur_fragment@start:(cur_fragment@start+(primer_length-1))], collapse=""), sep="")
+      temp_primer@binding_sequence<-paste(paste(codon_seq[cur_fragment@start:(cur_fragment@start+(binding_max_length-1))], collapse=""), sep="")
       temp_primer<-sequence_length_temperature(temp_primer, primer_min=binding_min_length, target_temp=target_temp)
     }
     else {
@@ -798,7 +798,7 @@ msd_mutate<-function(input_sequence, codon="NDT" ,prefix="TT" ,restriction_enzym
       codon_seq[cur_fragment@start_mutation]<-codons[1:length(cur_fragment@start_mutation)]
       codons<-codons[-(1:length(cur_fragment@start_mutation))]
       temp_primer@extra<-paste(paste(codon_seq[cur_fragment@start:max(cur_fragment@start_mutation)], collapse = ""), sep="")
-      temp_primer@binding_sequence<-paste(paste(codon_seq[(max(cur_fragment@start_mutation)+1):((max(cur_fragment@start_mutation)+1)+primer_length-1)], collapse=""), sep="")
+      temp_primer@binding_sequence<-paste(paste(codon_seq[(max(cur_fragment@start_mutation)+1):((max(cur_fragment@start_mutation)+1)+binding_max_length-1)], collapse=""), sep="")
       temp_primer<-sequence_length_temperature(temp_primer, primer_min=binding_min_length, target_temp=target_temp)
     }
     primers[[n]][[1]]<-temp_primer
@@ -806,7 +806,7 @@ msd_mutate<-function(input_sequence, codon="NDT" ,prefix="TT" ,restriction_enzym
     #reverse
     if(length(cur_fragment@stop_mutation)==0){
       temp_primer<-pc_msd(prefix=prefix ,restriction_enzyme=restriction_enzyme, suffix=suffix_r, overhang=overhang_r, vector=vector_r)
-      temp_primer@binding_sequence<-paste(paste(codon_seq[(cur_fragment@stop-2-primer_length-1):stop_r], collapse=""), sep="")
+      temp_primer@binding_sequence<-paste(paste(codon_seq[(cur_fragment@stop-2-binding_max_length-1):stop_r], collapse=""), sep="")
       if(n!=length(fragments))
         temp_primer@binding_sequence<-paste(temp_primer@binding_sequence, str_sub(codon_seq[cur_fragment@stop-1], end=2) ,sep="")
       temp_primer@binding_sequence<-paste(str_to_upper(comp(rev(s2c(temp_primer@binding_sequence)))), collapse="")
@@ -819,18 +819,18 @@ msd_mutate<-function(input_sequence, codon="NDT" ,prefix="TT" ,restriction_enzym
       temp_primer@extra<-paste(paste(codon_seq[(min(cur_fragment@stop_mutation)):stop_r], collapse=""), sep="")
       temp_primer@extra<-paste(temp_primer@extra, str_sub(codon_seq[cur_fragment@stop-1], end=2), sep="")
       temp_primer@extra<-paste(comp(rev(s2c(temp_primer@extra)), ambiguous = T,forceToLower = F), collapse = "")
-      temp_primer@binding_sequence<-paste(paste(codon_seq[(min(cur_fragment@stop_mutation)-1-primer_length-1):(min(cur_fragment@stop_mutation)-1)], collapse=""), sep="")
+      temp_primer@binding_sequence<-paste(paste(codon_seq[(min(cur_fragment@stop_mutation)-1-binding_max_length-1):(min(cur_fragment@stop_mutation)-1)], collapse=""), sep="")
       temp_primer@binding_sequence<-paste(str_to_upper(comp(rev(s2c(temp_primer@binding_sequence)))), collapse="")
       temp_primer<-sequence_length_temperature(temp_primer, primer_min=binding_min_length, target_temp=primers[[n]][[1]]@temperature)
     }
     primers[[n]][[2]]<-temp_primer
     rm(temp_primer)
   }
-  #check the primers with the checkprimer function:
+  #Check the primers with the checkprimer function:
   #Check for primers with same overlap
   #Replace them based on ? -> Primer without mutation/length of the primer in total?
   #It is easier to modify the exisiting primer 
-  #If it is not possible to correct all overlaps -> return message with postion for silent mutation
+  #If it is not possible to correct all overlaps -> return message with position for silent mutation
   primers<-check_primer_overhangs(primers, fragments, binding_min_length, target_temp)
   return(eps(oldsequence=input_sequence, primers=primers, newsequence=paste(codon_seq, collapse = ""), fragments=fragments))
 }

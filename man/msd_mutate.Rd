@@ -2,12 +2,12 @@
 % Please edit documentation in R/exported_functions.R
 \name{msd_mutate}
 \alias{msd_mutate}
-\title{Calculate primers for Multiple Site Saturation Mutagenesis}
+\title{Calculate Primers for Multiple Site Saturation Mutagenesis}
 \usage{
 msd_mutate(input_sequence, codon = "NDT", prefix = "TT",
   restriction_enzyme = "GGTCTC", suffix = "A", vector = c("AATG",
   "AAGC"), replacements, replacement_range = 5, binding_min_length = 4,
-  primer_length = 9, target_temp = 60, fragment_min_size = 100)
+  binding_max_length = 9, target_temp = 60, fragment_min_size = 100)
 }
 \arguments{
 \item{input_sequence}{The sequence which should be modified. This is an object of type character containing the sequence.}
@@ -22,15 +22,15 @@ msd_mutate(input_sequence, codon = "NDT", prefix = "TT",
 
 \item{vector}{Four basepair overhangs complementary to the created overhangs in the acceptor vector  [default: c("AATG", "AAGC")]}
 
-\item{replacements}{The desired substitutions as a vector with positions OR a list containing vetors with position (char) and type of MSD mutation (char)}
+\item{replacements}{The desired substitutions}
 
-\item{replacement_range}{The minimal threshold value of the template binding sequence in amino acid residues [default: 4]}
+\item{replacement_range}{Maximum distance between two randomization sites to be incoporated into a single primer in amino acid residues [default: 5]}
 
-\item{binding_min_length}{Maximal length of the binding sequence [default: 9]}
+\item{binding_min_length}{The minimal threshold value of the length of the template binding sequence in amino acid residues [default: 4]}
 
-\item{primer_length}{Melting temperature of the binding sequence in \code{print('\u00B0')}C [default: 60]}
+\item{binding_max_length}{Maximal length of the binding sequence in amino acid residues [default: 9]}
 
-\item{target_temp}{Maximum distance between two randomization sites to be incoporated into a single primer in amino acid residues [default: 5]}
+\item{target_temp}{Melting temperature of the binding sequence in \code{print('\u00B0')}C [default: 60]}
 
 \item{fragment_min_size}{Minimal size of a generated gene fragment in base pairs [default 100]}
 }
@@ -48,6 +48,6 @@ print(recognition_site_bsai)
 primers<-msd_mutate(input_sequence, prefix="TT" ,
 restriction_enzyme=recognition_site_bsai, suffix="A", 
 vector=c("AATG", "AAGC"), replacements=mutations, replacement_range=5,
-binding_min_length=4 , primer_length=9, target_temp=60,
+binding_min_length=4 , binding_max_length=9, target_temp=60,
 fragment_min_size=60 )
 }
