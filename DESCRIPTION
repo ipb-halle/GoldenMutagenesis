@@ -11,7 +11,7 @@ License: LGPL-3
 Depends: seqinr, stringr
 Imports: methods, utils, stats, Biostrings, graphics, RColorBrewer, sangerseqR, dplyr
 LazyData: false
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
 Suggests: knitr,
     rmarkdown, 
     testthat
