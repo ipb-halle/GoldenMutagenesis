@@ -38,13 +38,13 @@ vignettes\!
 [Point
 Mutagenesis](https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/Point_Mutagenesis.md)  
 [Multiple Site Directed Mutagenesis -
-Example1](https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/MSD.md)  
+Example1](https://ipb-halle.github.io/GoldenMutagenesis/articles/MSD.html)  
 [Multiple Site Directed Mutagenesis -
-Example2](https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/MSD2.md)  
+Example2](https://ipb-halle.github.io/GoldenMutagenesis/articles/MSD2.html)  
 [Multiple Site Directed Mutagenesis -
-Example3](https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/MSD3.md)  
+Example3](https://ipb-halle.github.io/GoldenMutagenesis/articles/MSD3.html)  
 [Quick Quality
-Control](https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/QQC.md)  
+Control](https://ipb-halle.github.io/GoldenMutagenesis/articles/QQC.html)  
 
 ## Interactive Example
 
@@ -61,8 +61,7 @@ The Webtools git repository is available at: https://github.com/ipb-halle/Golden
 [![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/ipb-halle/GoldenMutagenesis/binder?filepath=notebooks%2FMSD_USER.ipynb)
 
 ### Single Point
-#### Notebook
 [![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/ipb-halle/GoldenMutagenesis/binder?filepath=notebooks%2FSPM_USER.ipynb)
-### Domestication only
 
+### Domestication only
 [![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/ipb-halle/GoldenMutagenesis/binder?filepath=notebooks%2FDomesticate_only_USER.ipynb)
