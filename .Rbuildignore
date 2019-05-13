@@ -4,3 +4,4 @@
 ^binder/*$
 ^notebooks/*$
 ^LICENSE$
+^docs/*$

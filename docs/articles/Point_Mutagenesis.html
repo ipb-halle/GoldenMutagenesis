@@ -30,7 +30,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">GoldenMutagenesis</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
       </span>
     </div>
 
@@ -85,7 +85,7 @@
       <h1>Point Mutagenesis</h1>
                         <h4 class="author">Chris Ulpinnis &amp; Pascal Püllmann</h4>
             
-            <h4 class="date">2019-03-31</h4>
+            <h4 class="date">2019-05-13</h4>
       
       
       <div class="hidden name"><code>Point_Mutagenesis.Rmd</code></div>
@@ -132,28 +132,28 @@
 <div id="r-workflow" class="section level2">
 <h2 class="hasAnchor">
 <a href="#r-workflow" class="anchor"></a>R Workflow</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">"GoldenMutagenesis"</span>)</code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">"GoldenMutagenesis"</span>)</a></code></pre></div>
 <pre><code>## Loading required package: seqinr</code></pre>
 <pre><code>## Loading required package: stringr</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">input_sequence&lt;-<span class="st">"ATGGTGAGCAAGGGCGAGGAGGATAACATGGCCATCATCAAGGAGTTCATGCGCTTCAAGGTGCACATGGAGGGCTCCGTGAACGGCCACGAGTTCGAGATCGAGGGCGAGGGCGAGGGCCGCCCCTACGAGGGCACCCAGACCGCCAAGCTGAAGGTGACCAAGGGTGGCCCCCTGCCCTTCGCCTGGGACATCCTGTCCCCTCAGTTCATGTACGGCTCCAAGGCCTACGTGAAGCACCCCGCCGACATCCCCGACTACTTGAAGCTGTCCTTCCCCGAGGGCTTCAAGTGGGAGCGCGTGATGAACTTCGAGGACGGCGGCGTGGTGACCGTGACCCAGGACTCCTCCCTGCAGGACGGCGAGTTCATCTACAAGGTGAAGCTGCGCGGCACCAACTTCCCCTCCGACGGCCCCGTAATGCAGAAGAAGACGATGGGCTGGGAGGCCTCCTCCGAGCGGATGTACCCCGAGGACGGCGCCCTGAAGGGCGAGATCAAGCAGAGGCTGAAGCTGAAGGACGGCGGCCACTACGACGCTGAGGTCAAGACCACCTACAAGGCCAAGAAGCCCGTGCAGCTGCCCGGCGCCTACAACGTCAACATCAAGTTGGACATCACCTCCCACAACGAGGACTACACCATCGTGGAACAGTACGAACGCGCCGAGGGCCGCCACTCCACCGGCGGCATGGACGAGCTGTACAAGGTCGACAAGCTTGCGGCCGCACTCGAGTGA"</span>
-recognition_site_bbsi&lt;-<span class="st">"GAAGAC"</span>
-recognition_site_bsai&lt;-<span class="st">"GGTCTC"</span>
-cuf&lt;-<span class="st">"e_coli_316407.csv"</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">input_sequence&lt;-<span class="st">"ATGGTGAGCAAGGGCGAGGAGGATAACATGGCCATCATCAAGGAGTTCATGCGCTTCAAGGTGCACATGGAGGGCTCCGTGAACGGCCACGAGTTCGAGATCGAGGGCGAGGGCGAGGGCCGCCCCTACGAGGGCACCCAGACCGCCAAGCTGAAGGTGACCAAGGGTGGCCCCCTGCCCTTCGCCTGGGACATCCTGTCCCCTCAGTTCATGTACGGCTCCAAGGCCTACGTGAAGCACCCCGCCGACATCCCCGACTACTTGAAGCTGTCCTTCCCCGAGGGCTTCAAGTGGGAGCGCGTGATGAACTTCGAGGACGGCGGCGTGGTGACCGTGACCCAGGACTCCTCCCTGCAGGACGGCGAGTTCATCTACAAGGTGAAGCTGCGCGGCACCAACTTCCCCTCCGACGGCCCCGTAATGCAGAAGAAGACGATGGGCTGGGAGGCCTCCTCCGAGCGGATGTACCCCGAGGACGGCGCCCTGAAGGGCGAGATCAAGCAGAGGCTGAAGCTGAAGGACGGCGGCCACTACGACGCTGAGGTCAAGACCACCTACAAGGCCAAGAAGCCCGTGCAGCTGCCCGGCGCCTACAACGTCAACATCAAGTTGGACATCACCTCCCACAACGAGGACTACACCATCGTGGAACAGTACGAACGCGCCGAGGGCCGCCACTCCACCGGCGGCATGGACGAGCTGTACAAGGTCGACAAGCTTGCGGCCGCACTCGAGTGA"</span></a>
+<a class="sourceLine" id="cb4-2" title="2">recognition_site_bbsi&lt;-<span class="st">"GAAGAC"</span></a>
+<a class="sourceLine" id="cb4-3" title="3">recognition_site_bsai&lt;-<span class="st">"GGTCTC"</span></a>
+<a class="sourceLine" id="cb4-4" title="4">cuf&lt;-<span class="st">"e_coli_316407.csv"</span></a></code></pre></div>
 <p>The domesticate function checks for internal cleavage sites. If corresponding sites are present silent mutations are introduced to destroy the recognition sites. The functions returns a list containing the position of the choosen amino acid residue for silent mutation.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mutations_bbsi&lt;-<span class="kw"><a href="../reference/domesticate.html">domesticate</a></span>(input_sequence, recognition_site_bbsi, cuf)
-mutations_bbsi</code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1">mutations_bbsi&lt;-<span class="kw"><a href="../reference/domesticate.html">domesticate</a></span>(input_sequence, recognition_site_bbsi, cuf)</a>
+<a class="sourceLine" id="cb5-2" title="2">mutations_bbsi</a></code></pre></div>
 <pre><code>## [[1]]
 ## [1] "143" "K"</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mutations_bsai&lt;-<span class="kw"><a href="../reference/domesticate.html">domesticate</a></span>(input_sequence, recognition_site_bsai, cuf)</code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1">mutations_bsai&lt;-<span class="kw"><a href="../reference/domesticate.html">domesticate</a></span>(input_sequence, recognition_site_bsai, cuf)</a></code></pre></div>
 <pre><code>## [1] "No domestication needed."</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mutations_bsai</code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1">mutations_bsai</a></code></pre></div>
 <pre><code>## list()</code></pre>
 <p>The mutate_spm function designs the necessary set of primers for the desired mutations. <br>
 The function has the following parameters:<br><strong>prefix</strong>: Additional nucleobases in 5’ position of the recognition site [default: TT]<br><strong>restriction_enzyme</strong>: Recognition site sequence of the respective restriction enzyme [default: GGTCTC]<br><strong>suffix</strong>: Spacer nucleotides matching the cleavage pattern of the enzyme [default: A]<br><strong>vector</strong>: Four basepair overhangs complementary to the created overhangs in the acceptor vector [default: c(“AATG”, “AAGC”)]<br><strong>replacements</strong>: The desired substitutions<br><strong>binding_min_length</strong>: The minimal threshold value of the template binding sequence [default: 4]<br><strong>binding_max_length</strong>: Maximal length of the binding sequence [default: 9]<br><strong>target_temp</strong>: Melting temperature of the binding sequence in °C [default: 60]<br><strong>cuf</strong>: The Codon Usage Table which is being used to select the codon for an exchanged amino acid. [default: e_coli_316407.csv]<br><strong>fragment_min_size</strong>: The minimal size of a generated gene fragment in base pairs [default: 100]<br><br>
 It will return an object of the class primer_set.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mutations&lt;-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">66</span>, <span class="st">"V"</span>)), mutations_bbsi)
-primers&lt;-<span class="kw"><a href="../reference/mutate_spm.html">mutate_spm</a></span>(input_sequence, <span class="dt">prefix=</span><span class="st">"TT"</span>, <span class="dt">restriction_enzyme =</span> recognition_site_bbsi, <span class="dt">suffix =</span> <span class="st">"AA"</span>, <span class="dt">vector=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"CTCA"</span>, <span class="st">"CTCG"</span>), <span class="dt">replacements =</span> mutations, <span class="dt">binding_min_length=</span><span class="dv">4</span> ,<span class="dt">binding_max_length =</span> <span class="dv">9</span>, <span class="dt">target_temp=</span><span class="dv">60</span>, <span class="dt">fragment_min_size =</span> <span class="dv">60</span>, <span class="dt">cuf=</span>cuf)
-primers</code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1">mutations&lt;-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">66</span>, <span class="st">"V"</span>)), mutations_bbsi)</a>
+<a class="sourceLine" id="cb11-2" title="2">primers&lt;-<span class="kw"><a href="../reference/mutate_spm.html">mutate_spm</a></span>(input_sequence, <span class="dt">prefix=</span><span class="st">"TT"</span>, <span class="dt">restriction_enzyme =</span> recognition_site_bbsi, <span class="dt">suffix =</span> <span class="st">"AA"</span>, <span class="dt">vector=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"CTCA"</span>, <span class="st">"CTCG"</span>), <span class="dt">replacements =</span> mutations, <span class="dt">binding_min_length=</span><span class="dv">4</span> ,<span class="dt">binding_max_length =</span> <span class="dv">9</span>, <span class="dt">target_temp=</span><span class="dv">60</span>, <span class="dt">fragment_min_size =</span> <span class="dv">60</span>, <span class="dt">cuf=</span>cuf)</a>
+<a class="sourceLine" id="cb11-3" title="3">primers</a></code></pre></div>
 <pre><code>## An object of class "Extended_Primerset"
 ## Slot "fragments":
 ## [[1]]
@@ -396,7 +396,7 @@ primers</code></pre></div>
 ## Slot "newsequence":
 ## [1] "ATGGTGAGCAAGGGCGAGGAGGATAACATGGCCATCATCAAGGAGTTCATGCGCTTCAAGGTGCACATGGAGGGCTCCGTGAACGGCCACGAGTTCGAGATCGAGGGCGAGGGCGAGGGCCGCCCCTACGAGGGCACCCAGACCGCCAAGCTGAAGGTGACCAAGGGTGGCCCCCTGCCCTTCGCCTGGGACATCGTGTCCCCTCAGTTCATGTACGGCTCCAAGGCCTACGTGAAGCACCCCGCCGACATCCCCGACTACTTGAAGCTGTCCTTCCCCGAGGGCTTCAAGTGGGAGCGCGTGATGAACTTCGAGGACGGCGGCGTGGTGACCGTGACCCAGGACTCCTCCCTGCAGGACGGCGAGTTCATCTACAAGGTGAAGCTGCGCGGCACCAACTTCCCCTCCGACGGCCCCGTAATGCAGAAAAAGACGATGGGCTGGGAGGCCTCCTCCGAGCGGATGTACCCCGAGGACGGCGCCCTGAAGGGCGAGATCAAGCAGAGGCTGAAGCTGAAGGACGGCGGCCACTACGACGCTGAGGTCAAGACCACCTACAAGGCCAAGAAGCCCGTGCAGCTGCCCGGCGCCTACAACGTCAACATCAAGTTGGACATCACCTCCCACAACGAGGACTACACCATCGTGGAACAGTACGAACGCGCCGAGGGCCGCCACTCCACCGGCGGCATGGACGAGCTGTACAAGGTCGACAAGCTTGCGGCCGCACTCGAGTGA"</code></pre>
 <p>Objects of the classes “primer”, “primer_msd” and “primer_set” can have a slim textual output by using the function print_primer.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/print_primer-methods.html">print_primer</a></span>(primers)</code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1"><span class="kw"><a href="../reference/print_primer-methods.html">print_primer</a></span>(primers)</a></code></pre></div>
 <pre><code>## Fragment 1
 ## Start 1, Stop 66, Length 66
 ## Forward
@@ -436,9 +436,9 @@ primers</code></pre></div>
 ## Modified Sequence:
 ##  ATGGTGAGCAAGGGCGAGGAGGATAACATGGCCATCATCAAGGAGTTCATGCGCTTCAAGGTGCACATGGAGGGCTCCGTGAACGGCCACGAGTTCGAGATCGAGGGCGAGGGCGAGGGCCGCCCCTACGAGGGCACCCAGACCGCCAAGCTGAAGGTGACCAAGGGTGGCCCCCTGCCCTTCGCCTGGGACATCGTGTCCCCTCAGTTCATGTACGGCTCCAAGGCCTACGTGAAGCACCCCGCCGACATCCCCGACTACTTGAAGCTGTCCTTCCCCGAGGGCTTCAAGTGGGAGCGCGTGATGAACTTCGAGGACGGCGGCGTGGTGACCGTGACCCAGGACTCCTCCCTGCAGGACGGCGAGTTCATCTACAAGGTGAAGCTGCGCGGCACCAACTTCCCCTCCGACGGCCCCGTAATGCAGAAAAAGACGATGGGCTGGGAGGCCTCCTCCGAGCGGATGTACCCCGAGGACGGCGCCCTGAAGGGCGAGATCAAGCAGAGGCTGAAGCTGAAGGACGGCGGCCACTACGACGCTGAGGTCAAGACCACCTACAAGGCCAAGAAGCCCGTGCAGCTGCCCGGCGCCTACAACGTCAACATCAAGTTGGACATCACCTCCCACAACGAGGACTACACCATCGTGGAACAGTACGAACGCGCCGAGGGCCGCCACTCCACCGGCGGCATGGACGAGCTGTACAAGGTCGACAAGCTTGCGGCCGCACTCGAGTGA</code></pre>
 <p>The textual output can be printed into a file.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sink">sink</a></span>(<span class="st">"primers.txt"</span>, <span class="dt">append=</span><span class="ot">FALSE</span>, <span class="dt">split=</span><span class="ot">FALSE</span>)
-<span class="kw"><a href="../reference/print_primer-methods.html">print_primer</a></span>(primers)
-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sink">sink</a></span>()</code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sink">sink</a></span>(<span class="st">"primers.txt"</span>, <span class="dt">append=</span><span class="ot">FALSE</span>, <span class="dt">split=</span><span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb15-2" title="2"><span class="kw"><a href="../reference/print_primer-methods.html">print_primer</a></span>(primers)</a>
+<a class="sourceLine" id="cb15-3" title="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sink">sink</a></span>()</a></code></pre></div>
 </div>
 </div>
   </div>

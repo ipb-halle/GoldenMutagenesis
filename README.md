@@ -49,8 +49,12 @@ Control](https://ipb-halle.github.io/GoldenMutagenesis/articles/QQC.html)
 ## Interactive Example
 
 ## Webtool Beta Version
-**You can try our webtool at http://msbi.ipb-halle.de/GoldenMutagenesisWeb or on binderhub at [![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/ipb-halle/GoldenMutagenesisWeb/master?urlpath=shiny).** \
-The Webtools git repository is available at: https://github.com/ipb-halle/GoldenMutagenesisWeb \
+**You can try our webtool at http://msbi.ipb-halle.de/GoldenMutagenesisWeb or on binderhub at [![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/ipb-halle/GoldenMutagenesisWeb/master?urlpath=shiny).** 
+
+
+The Webtools git repository is available at: https://github.com/ipb-halle/GoldenMutagenesisWeb 
+
+
 *Please note that the webtool is still in beta phase. There are still errors and also the user interface is not the final user experience. If you encounter any problems please send an email to me.* 
 
 

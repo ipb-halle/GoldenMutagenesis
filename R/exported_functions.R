@@ -515,12 +515,12 @@ mutate_spm<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", s
 #' data(MSD_BsaI_setup_lv2)
 #' print(mutations)
 #' print(recognition_site_bsai)
-#' primers<-msd_mutate(input_sequence, prefix="TT" ,
+#' primers<-mutate_msd(input_sequence, prefix="TT" ,
 #' restriction_enzyme=recognition_site_bsai, suffix="A", 
 #' vector=c("AATG", "AAGC"), replacements=mutations, replacement_range=5,
 #' binding_min_length=4 , binding_max_length=9, target_temp=60,
 #' fragment_min_size=60 )
-msd_mutate<-function(input_sequence, codon="NDT" ,prefix="TT" ,restriction_enzyme="GGTCTC", suffix="A", vector=c("AATG", "AAGC"), replacements, replacement_range=5, binding_min_length=4 ,binding_max_length=9, target_temp=60, fragment_min_size=100 ) {
+mutate_msd<-function(input_sequence, codon="NDT" ,prefix="TT" ,restriction_enzyme="GGTCTC", suffix="A", vector=c("AATG", "AAGC"), replacements, replacement_range=5, binding_min_length=4 ,binding_max_length=9, target_temp=60, fragment_min_size=100 ) {
   codon<-str_to_upper(codon)
   prefix<-str_to_upper(prefix)
   suffix<-str_to_upper(suffix)

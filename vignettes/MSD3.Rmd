@@ -104,7 +104,7 @@ The primers for multiple site saturation mutagenesis have an additional slot cal
 #If domestication is necessary follow the workflow of the Point Mutagenesis vignette
 #We will use a structure similar to the Point Mutagenesis workflow to insert different kinds of Multiple Site Saturations here.
 mutations<-list(c(137,"NDT"), c(143,"NNN"), c( 147, "DBK"),c(232, "NDT"), c(234, "NDT"))
-primers<-msd_mutate(input_sequence, prefix="TT" ,restriction_enzyme=recognition_site_bsai, suffix="A", vector=c("AATG", "AAGC"), replacements=mutations, replacement_range=5, binding_min_length=4 ,binding_max_length=9, target_temp=60, fragment_min_size=60 )
+primers<-mutate_msd(input_sequence, prefix="TT" ,restriction_enzyme=recognition_site_bsai, suffix="A", vector=c("AATG", "AAGC"), replacements=mutations, replacement_range=5, binding_min_length=4 ,binding_max_length=9, target_temp=60, fragment_min_size=60 )
 primers
 ````
 The primers are generated for direct cloning into the Level 2 vector.\

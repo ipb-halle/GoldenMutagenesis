@@ -30,7 +30,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">GoldenMutagenesis</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
       </span>
     </div>
 
@@ -85,7 +85,7 @@
       <h1>Quick Quality Control</h1>
                         <h4 class="author">Chris Ulpinnis &amp; Pascal Püllmann</h4>
             
-            <h4 class="date">2019-03-31</h4>
+            <h4 class="date">2019-05-13</h4>
       
       
       <div class="hidden name"><code>QQC.Rmd</code></div>
@@ -150,12 +150,12 @@ Substitute for NDT</p>
 <h3 class="hasAnchor">
 <a href="#sequence-and-mutations" class="anchor"></a>Sequence and Mutations</h3>
 <p>The target sequence and the envisioned mutations are used as input again.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">"GoldenMutagenesis"</span>)</code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">"GoldenMutagenesis"</span>)</a></code></pre></div>
 <pre><code>## Loading required package: seqinr</code></pre>
 <pre><code>## Loading required package: stringr</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">input_sequence&lt;-<span class="st">"ATGTCTCAGGTTCAGAGTGGCATTTTGCCAGAACATTGCCGCGCGGCGATTTGGATCGAAGCCAACGTGAAAGGGGAAGTTGACGCCCTGCGTGCGGCCAGTAAAACATTTGCCGACAAACTGGCAACTTTTGAAGCGAAATTCCCGGACGCGCATCTTGGTGCGGTGGTTGCCTTTGGTAACAACACCTGGCGCGCTCTGAGCGGCGGCGTTGGGGCAGAAGAGCTGAAAGATTTTCCGGGCTACGGTAAAGGCCTTGCGCCGACGACCCAGTTCGATGTGTTGATCCACATTCTTTCTCTGCGTCACGACGTAAACTTCTCTGTCGCCCAGGCGGCGATGGAAGCCTTTGGTGACTGCATTGAAGTGAAAGAAGAGATCCACGGCTTCCGTTGGGTTGAAGAGCGTGACCTGAGCGGCTTTGTTGACGGTACGGAAAACCCGGCGGGTGAAGAGACGCGTCGCGAAGTGGCGGTTATCAAAGACGGCGTGGATGCGGGCGGCAGCTATGTGTTTGTCCAGCGTTGGGAACACAACCTGAAGCAGCTCAACCGGATGAGCGTTCACGATCAGGAGATGGTGATCGGGCGCACCAAAGAGGCCAACGAAGAGATCGACGGCGACGAACGTCCGGAAACCTCTCACCTCACCCGCGTTGATCTGAAAGAAGATGGCAAAGGGCTGAAGATTGTTCGCCAGAGCCTGCCGTACGGCACTGCCAGTGGCACTCACGGTCTGTACTTCTGCGCCTACTGCGCGCGTCTGCATAACATTGAGCAGCAACTGCTGAGCATGTTTGGCGATACCGATGGTAAGCGTGATGCGATGTTGCGTTTCACCAAACCGGTAACCGGCGGCTATTATTTCGCACCGTCGCTGGACAAGTTGATGGCGCTGTAA"</span>
-
-mutations&lt;-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">137</span>,<span class="dv">143</span>,<span class="dv">147</span>,<span class="dv">232</span>,<span class="dv">234</span>)</code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">input_sequence&lt;-<span class="st">"ATGTCTCAGGTTCAGAGTGGCATTTTGCCAGAACATTGCCGCGCGGCGATTTGGATCGAAGCCAACGTGAAAGGGGAAGTTGACGCCCTGCGTGCGGCCAGTAAAACATTTGCCGACAAACTGGCAACTTTTGAAGCGAAATTCCCGGACGCGCATCTTGGTGCGGTGGTTGCCTTTGGTAACAACACCTGGCGCGCTCTGAGCGGCGGCGTTGGGGCAGAAGAGCTGAAAGATTTTCCGGGCTACGGTAAAGGCCTTGCGCCGACGACCCAGTTCGATGTGTTGATCCACATTCTTTCTCTGCGTCACGACGTAAACTTCTCTGTCGCCCAGGCGGCGATGGAAGCCTTTGGTGACTGCATTGAAGTGAAAGAAGAGATCCACGGCTTCCGTTGGGTTGAAGAGCGTGACCTGAGCGGCTTTGTTGACGGTACGGAAAACCCGGCGGGTGAAGAGACGCGTCGCGAAGTGGCGGTTATCAAAGACGGCGTGGATGCGGGCGGCAGCTATGTGTTTGTCCAGCGTTGGGAACACAACCTGAAGCAGCTCAACCGGATGAGCGTTCACGATCAGGAGATGGTGATCGGGCGCACCAAAGAGGCCAACGAAGAGATCGACGGCGACGAACGTCCGGAAACCTCTCACCTCACCCGCGTTGATCTGAAAGAAGATGGCAAAGGGCTGAAGATTGTTCGCCAGAGCCTGCCGTACGGCACTGCCAGTGGCACTCACGGTCTGTACTTCTGCGCCTACTGCGCGCGTCTGCATAACATTGAGCAGCAACTGCTGAGCATGTTTGGCGATACCGATGGTAAGCGTGATGCGATGTTGCGTTTCACCAAACCGGTAACCGGCGGCTATTATTTCGCACCGTCGCTGGACAAGTTGATGGCGCTGTAA"</span></a>
+<a class="sourceLine" id="cb4-2" title="2"></a>
+<a class="sourceLine" id="cb4-3" title="3">mutations&lt;-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">137</span>,<span class="dv">143</span>,<span class="dv">147</span>,<span class="dv">232</span>,<span class="dv">234</span>)</a></code></pre></div>
 </div>
 <div id="quality-control" class="section level3">
 <h3 class="hasAnchor">
@@ -164,15 +164,15 @@ mutations&lt;-<span class="kw"><a href="https://www.rdocumentation.org/packages/
 <div id="forward-sequencing" class="section level4">
 <h4 class="hasAnchor">
 <a href="#forward-sequencing" class="anchor"></a>Forward Sequencing</h4>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">abfile&lt;-<span class="st">"sequences/Yfex_0activesite_for_EF01147142.ab1"</span><span class="er">)</span>
-<span class="kw"><a href="../reference/base_distribution.html">base_distribution</a></span>(<span class="dt">input_sequence=</span>input_sequence, <span class="dt">ab1file=</span>abfile, <span class="dt">replacements=</span>mutations)</code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1">abfile&lt;-<span class="st">"sequences/Yfex_0activesite_for_EF01147142.ab1"</span><span class="er">)</span></a>
+<a class="sourceLine" id="cb5-2" title="2"><span class="kw"><a href="../reference/base_distribution.html">base_distribution</a></span>(<span class="dt">input_sequence=</span>input_sequence, <span class="dt">ab1file=</span>abfile, <span class="dt">replacements=</span>mutations)</a></code></pre></div>
 <p><img src="QQC_files/figure-html/unnamed-chunk-4-1.png" width="700"><img src="QQC_files/figure-html/unnamed-chunk-4-2.png" width="700"><img src="QQC_files/figure-html/unnamed-chunk-4-3.png" width="700"><img src="QQC_files/figure-html/unnamed-chunk-4-4.png" width="700"><img src="QQC_files/figure-html/unnamed-chunk-4-5.png" width="700"><img src="QQC_files/figure-html/unnamed-chunk-4-6.png" width="700"><img src="QQC_files/figure-html/unnamed-chunk-4-7.png" width="700"><img src="QQC_files/figure-html/unnamed-chunk-4-8.png" width="700"><img src="QQC_files/figure-html/unnamed-chunk-4-9.png" width="700"><img src="QQC_files/figure-html/unnamed-chunk-4-10.png" width="700"><img src="QQC_files/figure-html/unnamed-chunk-4-11.png" width="700"><img src="QQC_files/figure-html/unnamed-chunk-4-12.png" width="700"><img src="QQC_files/figure-html/unnamed-chunk-4-13.png" width="700"><img src="QQC_files/figure-html/unnamed-chunk-4-14.png" width="700"><img src="QQC_files/figure-html/unnamed-chunk-4-15.png" width="700"></p>
 </div>
 <div id="reverse-sequencing" class="section level4">
 <h4 class="hasAnchor">
 <a href="#reverse-sequencing" class="anchor"></a>Reverse Sequencing</h4>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">abfile&lt;-<span class="st">"sequences/Yfex_activesite_rev_EF01147143.ab1"</span><span class="er">)</span>
-<span class="kw"><a href="../reference/base_distribution.html">base_distribution</a></span>(<span class="dt">input_sequence=</span>input_sequence, <span class="dt">ab1file=</span>abfile, <span class="dt">replacements=</span>mutations)</code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1">abfile&lt;-<span class="st">"sequences/Yfex_activesite_rev_EF01147143.ab1"</span><span class="er">)</span></a>
+<a class="sourceLine" id="cb6-2" title="2"><span class="kw"><a href="../reference/base_distribution.html">base_distribution</a></span>(<span class="dt">input_sequence=</span>input_sequence, <span class="dt">ab1file=</span>abfile, <span class="dt">replacements=</span>mutations)</a></code></pre></div>
 <pre><code>## [1] "Reverse sequence detected!"</code></pre>
 <p><img src="QQC_files/figure-html/unnamed-chunk-6-1.png" width="700"><img src="QQC_files/figure-html/unnamed-chunk-6-2.png" width="700"><img src="QQC_files/figure-html/unnamed-chunk-6-3.png" width="700"><img src="QQC_files/figure-html/unnamed-chunk-6-4.png" width="700"><img src="QQC_files/figure-html/unnamed-chunk-6-5.png" width="700"><img src="QQC_files/figure-html/unnamed-chunk-6-6.png" width="700"><img src="QQC_files/figure-html/unnamed-chunk-6-7.png" width="700"><img src="QQC_files/figure-html/unnamed-chunk-6-8.png" width="700"><img src="QQC_files/figure-html/unnamed-chunk-6-9.png" width="700"><img src="QQC_files/figure-html/unnamed-chunk-6-10.png" width="700"><img src="QQC_files/figure-html/unnamed-chunk-6-11.png" width="700"><img src="QQC_files/figure-html/unnamed-chunk-6-12.png" width="700"><img src="QQC_files/figure-html/unnamed-chunk-6-13.png" width="700"><img src="QQC_files/figure-html/unnamed-chunk-6-14.png" width="700"><img src="QQC_files/figure-html/unnamed-chunk-6-15.png" width="700"></p>
 </div>

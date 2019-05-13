@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Calculate Primers for Point Mutagenesis — mutate_spm • GoldenMutagenesis</title>
+<title>Calculate Primers for Multiple Site Saturation Mutagenesis — mutate_msd • GoldenMutagenesis</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,10 +30,9 @@
 
 
 
-<meta property="og:title" content="Calculate Primers for Point Mutagenesis — mutate_spm" />
+<meta property="og:title" content="Calculate Primers for Multiple Site Saturation Mutagenesis — mutate_msd" />
 
-<meta property="og:description" content="The mutate function designs the necessary set of primers for the desired mutations.
-An example is given in the vignette at https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/Point_Mutagenesis.md" />
+<meta property="og:description" content="The mutate_msd function designs the necessary set of primers for the desired mutations." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -119,23 +118,21 @@ An example is given in the vignette at https://github.com/ipb-halle/GoldenMutage
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Calculate Primers for Point Mutagenesis</h1>
+    <h1>Calculate Primers for Multiple Site Saturation Mutagenesis</h1>
     
-    <div class="hidden name"><code>mutate_spm.Rd</code></div>
+    <div class="hidden name"><code>mutate_msd.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>The mutate function designs the necessary set of primers for the desired mutations.
-An example is given in the vignette at <a href='https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/Point_Mutagenesis.md'>https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/Point_Mutagenesis.md</a></p>
+    <p>The mutate_msd function designs the necessary set of primers for the desired mutations.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>mutate_spm</span>(<span class='no'>input_sequence</span>, <span class='kw'>prefix</span> <span class='kw'>=</span> <span class='st'>"TT"</span>,
+    <pre class="usage"><span class='fu'>mutate_msd</span>(<span class='no'>input_sequence</span>, <span class='kw'>codon</span> <span class='kw'>=</span> <span class='st'>"NDT"</span>, <span class='kw'>prefix</span> <span class='kw'>=</span> <span class='st'>"TT"</span>,
   <span class='kw'>restriction_enzyme</span> <span class='kw'>=</span> <span class='st'>"GGTCTC"</span>, <span class='kw'>suffix</span> <span class='kw'>=</span> <span class='st'>"A"</span>, <span class='kw'>vector</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"AATG"</span>,
   <span class='st'>"AAGC"</span>), <span class='no'>replacements</span>, <span class='kw'>replacement_range</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>binding_min_length</span> <span class='kw'>=</span> <span class='fl'>4</span>,
-  <span class='kw'>binding_max_length</span> <span class='kw'>=</span> <span class='fl'>9</span>, <span class='kw'>target_temp</span> <span class='kw'>=</span> <span class='fl'>60</span>,
-  <span class='kw'>cuf</span> <span class='kw'>=</span> <span class='st'>"e_coli_316407.csv"</span>, <span class='kw'>fragment_min_size</span> <span class='kw'>=</span> <span class='fl'>100</span>)</pre>
+  <span class='kw'>binding_max_length</span> <span class='kw'>=</span> <span class='fl'>9</span>, <span class='kw'>target_temp</span> <span class='kw'>=</span> <span class='fl'>60</span>, <span class='kw'>fragment_min_size</span> <span class='kw'>=</span> <span class='fl'>100</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -143,6 +140,10 @@ An example is given in the vignette at <a href='https://github.com/ipb-halle/Gol
     <tr>
       <th>input_sequence</th>
       <td><p>The sequence which should be modified. This is an object of type character containing the sequence.</p></td>
+    </tr>
+    <tr>
+      <th>codon</th>
+      <td><p>The desired type of MSD mutation [default: NDT]</p></td>
     </tr>
     <tr>
       <th>prefix</th>
@@ -181,10 +182,6 @@ An example is given in the vignette at <a href='https://github.com/ipb-halle/Gol
       <td><p>Melting temperature of the binding sequence in <code><a href='https://www.rdocumentation.org/packages/base/topics/print'>print('\u00B0')</a></code>C [default: 60]</p></td>
     </tr>
     <tr>
-      <th>cuf</th>
-      <td><p>The Codon Usage Table which is being used to select the codon for an exchanged amino acid. [default: e_coli_316407.csv]</p></td>
-    </tr>
-    <tr>
       <th>fragment_min_size</th>
       <td><p>Minimal size of a generated gene fragment in base pairs [default 100]</p></td>
     </tr>
@@ -196,11 +193,13 @@ An example is given in the vignette at <a href='https://github.com/ipb-halle/Gol
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'>#Load the setup of the Point Mutation vignette and design the primers</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>Point_Mutagenesis_BbsI_setup</span>)
-<span class='no'>primers</span><span class='kw'>&lt;-</span><span class='fu'>mutate_spm</span>(<span class='no'>input_sequence</span>, <span class='kw'>prefix</span><span class='kw'>=</span><span class='st'>"TT"</span>, <span class='kw'>restriction_enzyme</span> <span class='kw'>=</span> <span class='no'>recognition_site_bbsi</span>,
-<span class='kw'>suffix</span> <span class='kw'>=</span> <span class='st'>"AA"</span>, <span class='kw'>vector</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"CTCA"</span>, <span class='st'>"CTCG"</span>), <span class='kw'>replacements</span> <span class='kw'>=</span> <span class='no'>mutations</span>, <span class='kw'>binding_min_length</span><span class='kw'>=</span><span class='fl'>4</span> ,
-<span class='kw'>binding_max_length</span><span class='kw'>=</span><span class='fl'>9</span>, <span class='kw'>target_temp</span><span class='kw'>=</span><span class='fl'>60</span>, <span class='kw'>cuf</span><span class='kw'>=</span><span class='no'>cuf</span>)</div></pre>
+    <pre class="examples"><div class='input'><span class='co'>#Load the setup of the MSD vignette and design the primers</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>MSD_BsaI_setup_lv2</span>)
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>mutations</span>)</div><div class='output co'>#&gt; [1] 137 143 147 232 234</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>recognition_site_bsai</span>)</div><div class='output co'>#&gt; [1] "GGTCTC"</div><div class='input'><span class='no'>primers</span><span class='kw'>&lt;-</span><span class='fu'>mutate_msd</span>(<span class='no'>input_sequence</span>, <span class='kw'>prefix</span><span class='kw'>=</span><span class='st'>"TT"</span> ,
+<span class='kw'>restriction_enzyme</span><span class='kw'>=</span><span class='no'>recognition_site_bsai</span>, <span class='kw'>suffix</span><span class='kw'>=</span><span class='st'>"A"</span>,
+<span class='kw'>vector</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"AATG"</span>, <span class='st'>"AAGC"</span>), <span class='kw'>replacements</span><span class='kw'>=</span><span class='no'>mutations</span>, <span class='kw'>replacement_range</span><span class='kw'>=</span><span class='fl'>5</span>,
+<span class='kw'>binding_min_length</span><span class='kw'>=</span><span class='fl'>4</span> , <span class='kw'>binding_max_length</span><span class='kw'>=</span><span class='fl'>9</span>, <span class='kw'>target_temp</span><span class='kw'>=</span><span class='fl'>60</span>,
+<span class='kw'>fragment_min_size</span><span class='kw'>=</span><span class='fl'>60</span> )</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
