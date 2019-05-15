@@ -899,14 +899,14 @@ primer_add_level<-function(primerset, prefix="TT" ,restriction_enzyme="GAAGAC", 
 #' 
 primer_prepare_level<-function(primerset, vector=c("AATG", "AAGC")){
   vector<-str_to_upper(vector)
-  if(str_sub("AATG", 2, 4)!="ATG") {
+  if(str_sub(vector[1], 2, 4)!="ATG") {
     warning("Working with unknown sequence for Level 2 vector")
     primerset@primers[[1]][[1]]@extra<-paste(primerset@primers[[1]][[1]]@extra, vector[1], sep="")
   }
-  else if(str_sub(primerset@primers[[1]][[1]]@binding_sequence, 1, 3) == "ATG") {
+  else if(str_sub(paste(primerset@primers[[1]][[1]]@extra,primerset@primers[[1]][[1]]@binding_sequence, sep=""), 1, 3) == "ATG") {
     primerset@primers[[1]][[1]]@extra<-paste(primerset@primers[[1]][[1]]@extra, str_sub(vector[1], 1, 1), sep="")
   } else {
-    stop("The binding_sequence of the primer did not start with ATG. Something went wrong. Please send a bug report to us.")
+    stop("The extra+binding_sequence of the primer did not start with ATG. Something went wrong. Please send a bug report to us.")
   }
   primerset@primers[[length(primerset@primers)]][[2]]@extra<-paste(primerset@primers[[length(primerset@primers)]][[2]]@extra, vector[2], sep="")
   return(primerset)
