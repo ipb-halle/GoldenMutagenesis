@@ -30,3 +30,10 @@ test_that("Adding level0 to a set of primers works for lowercase sequences", {
 })
 
 rm(primers)
+load("MSD_issue_27.RData")
+mutations<-c(232,234)
+primer_issue_27<-primers<-mutate_msd(input_sequence, prefix="TT" ,restriction_enzyme=recognition_site_bsai, suffix="A", vector=c("AATG", "AAGC"), replacements=mutations, replacement_range=5, binding_min_length=4 ,binding_max_length = 9, target_temp=60, fragment_min_size=60 )
+test_that("Checking for bug of issue #27", {
+  expect_that(primer_issue_27, is_identical_to(primers))
+})
+rm(primers)

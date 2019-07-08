@@ -210,12 +210,13 @@ mutate_spm<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", s
   #then calculate primers 
   fragments<-c()
   i<-1
+  first<-T
   #todo replace formular with binding_max_length
   repeat {
     #################################
     #################################
     #Creation of the first fragment/primer
-    if (i == 1) {
+    if (first == T) {
       #first replacement
       #check if it is on the beginning of the first fragment
       temp_fragment <- fragment(start = fragment_start)
@@ -247,10 +248,11 @@ mutate_spm<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", s
         else{
           temp_fragment@stop <-  positions_aa[i]
           temp_fragment@stop_mutation <- positions_aa[i]
-          fragments <- c(fragments, temp_fragment)
           i <- i + 1
         }
+        fragments <- c(fragments, temp_fragment)
       }
+      first<-F
     }
     #################################
     #################################
@@ -564,12 +566,13 @@ mutate_msd<-function(input_sequence, codon="NDT" ,prefix="TT" ,restriction_enzym
   #then calculate primers 
   fragments<-c()
   i<-1
+  first<-T
   #todo replace formular with binding_max_length
   repeat {
     #################################
     #################################
     #Creation of the first fragment/primer
-    if (i == 1) {
+    if (first == T) {
       #first replacement
       #check if it is on the beginning of the first fragment
       temp_fragment <- fragment(start = fragment_start)
@@ -601,10 +604,11 @@ mutate_msd<-function(input_sequence, codon="NDT" ,prefix="TT" ,restriction_enzym
         else{
           temp_fragment@stop <-  replacements[i] + 2
           temp_fragment@stop_mutation <- c(replacements[i])
-          fragments <- c(fragments, temp_fragment)
           i <- i + 1
         }
+        fragments <- c(fragments, temp_fragment)
       }
+      first<-F
     }
     #################################
     #################################
