@@ -140,7 +140,7 @@ domesticate<-function(input_sequence, restriction_enzyme="GGTCTC", cuf="e_coli_3
 #' @param suffix Spacer nucleotides matching the cleavage pattern of the enzyme [default: A]
 #' @param vector Four basepair overhangs complementary to the created overhangs in the acceptor vector  [default: c("AATG", "AAGC")]
 #' @param replacements The desired substitutions
-#' @param replacement_range  Maximum distance between two randomization sites to be incoporated into a single primer in amino acid residues [default: 5]
+#' @param replacement_range  Maximum distance in amino acid residues between two randomization sites to be incoporated into a single primer (reverse, end of the fragment) - has a cascading effect for following mutations [default: 2]
 #' @param binding_min_length The minimal threshold value of the length of the template binding sequence in amino acid residues [default: 4]
 #' @param binding_max_length Maximal length of the binding sequence in amino acid residues [default: 9]
 #' @param target_temp Melting temperature of the binding sequence in \code{print('\u00B0')}C [default: 60]
@@ -157,7 +157,7 @@ domesticate<-function(input_sequence, restriction_enzyme="GGTCTC", cuf="e_coli_3
 #' suffix = "AA", vector=c("CTCA", "CTCG"), replacements = mutations, binding_min_length=4 ,
 #' binding_max_length=9, target_temp=60, cuf=cuf)
 #' 
-mutate_spm<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", suffix="A", vector=c("AATG", "AAGC"), replacements,replacement_range=5, binding_min_length=4 ,binding_max_length=9, target_temp=60, cuf="e_coli_316407.csv", fragment_min_size=100) {#change to binding_max_length_max? and min?
+mutate_spm<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", suffix="A", vector=c("AATG", "AAGC"), replacements,replacement_range=2, binding_min_length=4 ,binding_max_length=9, target_temp=60, cuf="e_coli_316407.csv", fragment_min_size=100) {#change to binding_max_length_max? and min?
   cuf_list<-get_cu_table(cuf)
   prefix<-str_to_upper(prefix)
   vector<-str_to_upper(vector)
@@ -203,211 +203,10 @@ mutate_spm<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", s
         }
       }
       codons<-c(codons, codon)
-    }
-  
-  replacement_distances<-as.matrix(dist(positions_aa))
-  #First calculate fragments
-  #then calculate primers 
-  fragments<-c()
-  i<-1
-  first<-T
-  #todo replace formular with binding_max_length
-  repeat {
-    #################################
-    #################################
-    #Creation of the first fragment/primer
-    if (first == T) {
-      #first replacement
-      #check if it is on the beginning of the first fragment
-      temp_fragment <- fragment(start = fragment_start)
-      if (positions_aa[i] <  (min_fragment+fragment_start - 1)) {
-        #if (positions_aa[i] <= fragment_start - 1 + replacement_range + 2) {
-        temp_fragment@start_mutation <- positions_aa[i]
-        if (length(positions_aa) == 1) {
-          temp_fragment@stop <- length(codon_seq)
-          fragments <- c(fragments, temp_fragment)
-          break
-        }
-      }
-      else {
-        # we will create a new fragment
-        #check if there is enough space to create a new fragment
-        if (length(positions_aa) == 1) {
-          temp_fragment@stop <-  positions_aa[i]
-          temp_fragment@stop_mutation <- positions_aa[i]
-          fragments <- c(fragments, temp_fragment)
-          temp_fragment <-
-            fragment(start = fragments[[1]]@stop + 1,
-                     stop = length(codon_seq))
-          fragments <- c(fragments, temp_fragment)
-          break
-        }
-        if (replacement_distances[i + 1, i] < 3) {
-          temp_fragment@stop <- positions_aa[i] - 1
-        }
-        else{
-          temp_fragment@stop <-  positions_aa[i]
-          temp_fragment@stop_mutation <- positions_aa[i]
-          i <- i + 1
-        }
-        fragments <- c(fragments, temp_fragment)
-      }
-      first<-F
-    }
-    #################################
-    #################################
-    #generic part for all fragments
-    mutations_in_fragment_range <-
-      as.numeric(which(
-        replacement_distances[, i] < (min_fragment) &
-          replacement_distances[, i] > 0
-      ))
-    mutations_in_fragment_range <-
-      mutations_in_fragment_range[which(mutations_in_fragment_range > i)]
-    ###distinguish between fragment start and end
-    ###if the minimal binding length is very high and the distance of the mutations is very short, you will get very long primers!
-    if (length(temp_fragment@stop) == 0) {
-      if (any(temp_fragment@start_mutation[length(temp_fragment@start_mutation)] == positions_aa[i])) {
-        if (length(mutations_in_fragment_range) != 0) {
-          #we won't create a new fragment until we have enough space between the mutations to create a forward and a reverse primer
-          for (mutation in mutations_in_fragment_range[1:(length(mutations_in_fragment_range) - 1)]) {
-            temp_fragment@start_mutation <-
-              c(temp_fragment@start_mutation, positions_aa[mutation])
-            i <-
-              mutations_in_fragment_range[length(mutations_in_fragment_range)]
-          }
-          rm(mutation)
-        }
-        else {
-          i <- i + 1
-        }
-      }
-      else {
-        #We can finish the fragment here
-        if (replacement_distances[i + 1, i] < 3) {
-          #Check if we have the next mutation on the same primer
-          temp_fragment@stop = positions_aa[i] - 1
-        }
-        else {
-          #End the fragment with the mutation
-          temp_fragment@stop <- positions_aa[i]
-          temp_fragment@stop_mutation <-
-            c(temp_fragment@stop_mutation, positions_aa[i])
-          i <- i + 1
-        }
-        fragments <- c(fragments, temp_fragment)
-      }
-    }  
-    else {
-      ###create a new fragment in forward direction
-      #we will always start with a mutation in forward direction (execpt the first one)
-      temp_new_fragment <- fragment(start = temp_fragment@stop + 1)
-      temp_old_fragment <- temp_fragment
-      temp_fragment <- temp_new_fragment
-      rm(temp_new_fragment)
-      #does the fragment need additional shifiting?
-      if (positions_aa[i] - temp_fragment@start < (min_fragment)) {
-        #Mutation(s) at the beginning of the fragment
-        #Check if there are any mutations after the current mutation which are too far away
-        if (length(mutations_in_fragment_range[mutations_in_fragment_range > replacement_range]) > 0) {
-          #Then put the current mutation to the end of the last fragment
-          fragments[[length(fragments)]]@stop <- positions_aa[i]
-          fragments[[length(fragments)]]@stop_mutation <-
-            c(fragments[[length(fragments)]]@stop_mutation, positions_aa[i])
-          temp_fragment <- fragments[[length(fragments)]]
-          rm(temp_new_fragment)
-          rm(temp_old_fragment)
-          i <- i + 1
-        }
-        else {
-          if (length(temp_old_fragment@stop_mutation) == 0) {
-            #there is no mutation at the end, we can shift anyway
-            fragments[[length(fragments)]]@stop <-
-              positions_aa[i]
-          }
-          else {
-            #Check the difference between the last and the current mutation
-            last_mutation <-
-              fragments[[length(fragments)]]@stop_mutation[length(fragments[[length(fragments)]]@stop_mutation)]
-            diff <- positions_aa[i] - last_mutation - 1
-            if (diff <= replacement_range) {
-              fragments[[length(fragments)]]@stop <- positions_aa[i]#edit here
-              temp_fragment@start <-
-                fragments[[length(fragments)]]@stop + 1
-              fragments[[length(fragments)]]@stop_mutation <-
-                c(fragments[[length(fragments)]]@stop_mutation, positions_aa[i])
-              i <- i + 1
-            }
-            else{
-              fragments[[length(fragments)]]@stop <-
-                fragments[[length(fragments)]]@stop + replacement_range
-              temp_fragment@start <-
-                fragments[[length(fragments)]]@stop + 1
-              temp_fragment@start_mutation <-
-                c(temp_fragment@start_mutation, positions_aa[i])
-            }
-          }
-        }
-      }
-    }
-    #################################
-    #################################
-    #part for the last mutation and the last fragment
-    if (i == length(positions_aa)) {
-      if (any(temp_fragment@start_mutation[length(temp_fragment@start_mutation)] == positions_aa[i])) {
-        #we started a fragment with the mutation on the forward part
-        #just end it here
-        temp_fragment@stop <- length(codon_seq)
-        fragments <- c(fragments, temp_fragment)
-        rm(temp_fragment)
-        break
-      }
-      else{
-        if ((length(codon_seq) - positions_aa[i-1]) >= (min_fragment)) {
-          if(length(temp_fragment@stop)!=0) {
-            temp_new_fragment <- fragment(start = temp_fragment@stop + 1)
-            #temp_old_fragment <- temp_fragment
-            temp_fragment <- temp_new_fragment
-            rm(temp_new_fragment)
-          }
-          else {
-            if(length(temp_fragment@start)==0) {
-              stop("Internal error. Please give a bug report!")
-            }
-          }
-          if(positions_aa[i]-temp_fragment@start < binding_max_length+2 ) {
-            temp_fragment@start_mutation<-positions_aa[i]
-            temp_fragment@stop<-length(codon_seq)
-            fragments <- c(fragments, temp_fragment)
-            break
-          }
-          else {
-            temp_fragment@stop_mutation<-positions_aa[i]
-            if ((length(codon_seq) - positions_aa[i]) > (min_fragment)) {
-              temp_fragment@stop<-temp_fragment@stop_mutation
-              fragments <- c(fragments, temp_fragment)
-              temp_fragment<-fragment(start = temp_fragment@stop + 1, stop = length(codon_seq))
-              fragments <- c(fragments, temp_fragment)
-              break
-            }
-            else{
-              temp_fragment@stop<-length(codon_seq)
-              fragments <- c(fragments, temp_fragment)
-              break
-            }
-          }
-        }
-        else {
-          temp_fragment@stop<-length(codon_seq)
-          temp_fragment@stop_mutation <-
-            c(temp_fragment@stop_mutation, positions_aa[i])
-          fragments[length(fragments)] <- temp_fragment
-          break
-        }
-      }
-    }
   }
   
+  fragments<-make_fragments(mutations=positions_aa,seq=codon_seq,start=fragment_start, distance=replacement_range, fsize=fragment_min_size, buffer=0)
+
   primers<-vector("list", length(fragments))
   for(n in 1:length(fragments)){
     cur_fragment<-fragments[[n]]
@@ -503,7 +302,7 @@ mutate_spm<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", s
 #' @param suffix Spacer nucleotides matching the cleavage pattern of the enzyme [default: A]
 #' @param vector Four basepair overhangs complementary to the created overhangs in the acceptor vector  [default: c("AATG", "AAGC")]
 #' @param replacements The desired substitutions
-#' @param replacement_range  Maximum distance between two randomization sites to be incoporated into a single primer in amino acid residues [default: 5]
+#' @param replacement_range  Maximum distance in amino acid residues between two randomization sites to be incoporated into a single primer (reverse, end of the fragment) - has a cascading effect for following mutations [default: 3]
 #' @param binding_min_length The minimal threshold value of the length of the template binding sequence in amino acid residues [default: 4]
 #' @param binding_max_length Maximal length of the binding sequence in amino acid residues [default: 9]
 #' @param target_temp Melting temperature of the binding sequence in \code{print('\u00B0')}C [default: 60]
@@ -522,7 +321,7 @@ mutate_spm<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", s
 #' vector=c("AATG", "AAGC"), replacements=mutations, replacement_range=5,
 #' binding_min_length=4 , binding_max_length=9, target_temp=60,
 #' fragment_min_size=60 )
-mutate_msd<-function(input_sequence, codon="NDT" ,prefix="TT" ,restriction_enzyme="GGTCTC", suffix="A", vector=c("AATG", "AAGC"), replacements, replacement_range=5, binding_min_length=4 ,binding_max_length=9, target_temp=60, fragment_min_size=100 ) {
+mutate_msd<-function(input_sequence, codon="NDT" ,prefix="TT" ,restriction_enzyme="GGTCTC", suffix="A", vector=c("AATG", "AAGC"), replacements, replacement_range=3, binding_min_length=4 ,binding_max_length=9, target_temp=60, fragment_min_size=100 ) {
   codon<-str_to_upper(codon)
   prefix<-str_to_upper(prefix)
   suffix<-str_to_upper(suffix)
@@ -559,206 +358,7 @@ mutate_msd<-function(input_sequence, codon="NDT" ,prefix="TT" ,restriction_enzym
   } else{
     fragment_start<-1
   }
-  #next_replacement<-replacements[1]
-  #current_replacement<-0
-  replacement_distances<-as.matrix(dist(replacements))
-  #First calculate fragments
-  #then calculate primers 
-  fragments<-c()
-  i<-1
-  first<-T
-  #todo replace formular with binding_max_length
-  repeat {
-    #################################
-    #################################
-    #Creation of the first fragment/primer
-    if (first == T) {
-      #first replacement
-      #check if it is on the beginning of the first fragment
-      temp_fragment <- fragment(start = fragment_start)
-      if (replacements[i] <  (min_fragment+fragment_start - 1)) {
-        #if (replacements[i] <= fragment_start - 1 + replacement_range + 2) {
-        temp_fragment@start_mutation <- replacements[i]
-        if (length(replacements) == 1) {
-          temp_fragment@stop <- length(codon_seq)
-          fragments <- c(fragments, temp_fragment)
-          break
-        }
-      }
-      else {
-        # we will create a new fragment
-        #check if there is enough space to create a new fragment
-        if (length(replacements) == 1) {
-          temp_fragment@stop <-  replacements[i] + 2
-          temp_fragment@stop_mutation <- c(replacements[i])
-          fragments <- c(fragments, temp_fragment)
-          temp_fragment <-
-            fragment(start = fragments[[1]]@stop + 1,
-                     stop = length(codon_seq))
-          fragments <- c(fragments, temp_fragment)
-          break
-        }
-        if (replacement_distances[i + 1, i] < 3) {
-          temp_fragment@stop <- replacements[i] - 1
-        }
-        else{
-          temp_fragment@stop <-  replacements[i] + 2
-          temp_fragment@stop_mutation <- c(replacements[i])
-          i <- i + 1
-        }
-        fragments <- c(fragments, temp_fragment)
-      }
-      first<-F
-    }
-    #################################
-    #################################
-    #generic part for all fragments
-    mutations_in_fragment_range <-
-      as.numeric(which(
-        replacement_distances[, i] < (min_fragment) &
-          replacement_distances[, i] > 0
-      ))
-    mutations_in_fragment_range <-
-      mutations_in_fragment_range[which(mutations_in_fragment_range > i)]
-    ###distinguish between fragment start and end
-    ###if the minimal binding length is very high and the distance of the mutations is very short, you will get very long primers!
-    if (length(temp_fragment@stop) == 0) {
-      if (any(temp_fragment@start_mutation[length(temp_fragment@start_mutation)] == replacements[i])) {
-        if (length(mutations_in_fragment_range) != 0) {
-          #we won't create a new fragment until we have enough space between the mutations to create a forward and a reverse primer
-          for (mutation in mutations_in_fragment_range[1:(length(mutations_in_fragment_range) - 1)]) {
-            temp_fragment@start_mutation <-
-              c(temp_fragment@start_mutation, replacements[mutation])
-            i <-
-              mutations_in_fragment_range[length(mutations_in_fragment_range)]
-          }
-          rm(mutation)
-        }
-        else {
-          i <- i + 1
-        }
-      }
-      else {
-        #We can finish the fragment here
-        if (replacement_distances[i + 1, i] < 3) {
-          #Check if we have the next mutation on the same primer
-          temp_fragment@stop = replacements[i] - 1
-        }
-        else {
-          #End the fragment with the mutation
-          temp_fragment@stop <- replacements[i] + 2
-          temp_fragment@stop_mutation <-
-            c(temp_fragment@stop_mutation, replacements[i])
-          i <- i + 1
-        }
-        fragments <- c(fragments, temp_fragment)
-      }
-    }  
-    else {
-      ###create a new fragment in forward direction
-      #we will always start with a mutation in forward direction (execpt the first one)
-      temp_new_fragment <- fragment(start = temp_fragment@stop + 1)
-      temp_old_fragment <- temp_fragment
-      temp_fragment <- temp_new_fragment
-      rm(temp_new_fragment)
-      #does the fragment need additional shifiting?
-      if (replacements[i] - temp_fragment@start < (min_fragment)) {
-        #Mutation(s) at the beginning of the fragment
-        #Check if there are any mutations after the current mutation which are too far away
-        if (length(mutations_in_fragment_range[mutations_in_fragment_range > replacement_range]) > 0) {
-          #Then put the current mutation to the end of the last fragment
-          fragments[[length(fragments)]]@stop <- replacements[i] + 1
-          fragments[[length(fragments)]]@stop_mutation <-
-            c(fragments[[length(fragments)]]@stop_mutation, replacements[i])
-          temp_fragment <- fragments[[length(fragments)]]
-          rm(temp_new_fragment)
-          rm(temp_old_fragment)
-          i <- i + 1
-        }
-        else {
-          if (length(temp_old_fragment@stop_mutation) == 0) {
-            #there is no mutation at the end, we can shift anyway
-            fragments[[length(fragments)]]@stop <-
-              replacements[i] - 1
-          }
-          else {
-            #Check the difference between the last and the current mutation
-            last_mutation <-
-              fragments[[length(fragments)]]@stop_mutation[length(fragments[[length(fragments)]]@stop_mutation)]
-            diff <- replacements[i] - last_mutation - 1
-            if (diff <= replacement_range) {
-              fragments[[length(fragments)]]@stop <- replacements[i] - 1
-            }
-            else{
-              fragments[[length(fragments)]]@stop <-
-                fragments[[length(fragments)]]@stop + replacement_range
-            }
-          }
-          temp_fragment@start <-
-            fragments[[length(fragments)]]@stop + 1
-          temp_fragment@start_mutation <-
-            c(temp_fragment@start_mutation, replacements[i])
-          
-        }
-      }
-    }
-    #################################
-    #################################
-    #part for the last mutation and the last fragment
-    if (i == length(replacements)) {
-      if (any(temp_fragment@start_mutation[length(temp_fragment@start_mutation)] == replacements[i])) {
-        #we started a fragment with the mutation on the forward part
-        #just end it here
-        temp_fragment@stop <- length(codon_seq)
-        fragments <- c(fragments, temp_fragment)
-        rm(temp_fragment)
-        break
-      }
-      else{
-        if ((length(codon_seq) - replacements[i-1]) >= (min_fragment)) {
-          if(length(temp_fragment@stop)!=0) {
-            temp_new_fragment <- fragment(start = temp_fragment@stop + 1)
-            #temp_old_fragment <- temp_fragment
-            temp_fragment <- temp_new_fragment
-            rm(temp_new_fragment)
-          }
-          else {
-            if(length(temp_fragment@start)==0) {
-              stop("Internal error. Please give a bug report!")
-            }
-          }
-          if(replacements[i]-temp_fragment@start < binding_max_length+2 ) {
-            temp_fragment@start_mutation<-replacements[i]
-            temp_fragment@stop<-length(codon_seq)
-            fragments <- c(fragments, temp_fragment)
-            break
-          }
-          else {
-            temp_fragment@stop_mutation<-replacements[i]
-            if ((length(codon_seq) - replacements[i]) > (min_fragment)) {
-              temp_fragment@stop<-temp_fragment@stop_mutation+2
-              fragments <- c(fragments, temp_fragment)
-              temp_fragment<-fragment(start = temp_fragment@stop + 1, stop = length(codon_seq))
-              fragments <- c(fragments, temp_fragment)
-              break
-            }
-            else{
-              temp_fragment@stop<-length(codon_seq)
-              fragments <- c(fragments, temp_fragment)
-              break
-            }
-          }
-        }
-        else {
-          temp_fragment@stop<-length(codon_seq)
-          temp_fragment@stop_mutation <-
-            c(temp_fragment@stop_mutation, replacements[i])
-          fragments[length(fragments)] <- temp_fragment
-          break
-        }
-      }
-    }
-  }
+  fragments<-make_fragments(mutations=replacements,seq=codon_seq,start=fragment_start, distance=replacement_range, fsize=fragment_min_size, buffer=2)
   
   primers<-vector("list", length(fragments))
   for(n in 1:length(fragments)){

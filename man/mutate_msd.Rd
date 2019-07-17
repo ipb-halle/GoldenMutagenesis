@@ -6,7 +6,7 @@
 \usage{
 mutate_msd(input_sequence, codon = "NDT", prefix = "TT",
   restriction_enzyme = "GGTCTC", suffix = "A", vector = c("AATG",
-  "AAGC"), replacements, replacement_range = 5, binding_min_length = 4,
+  "AAGC"), replacements, replacement_range = 3, binding_min_length = 4,
   binding_max_length = 9, target_temp = 60, fragment_min_size = 100)
 }
 \arguments{
@@ -24,7 +24,7 @@ mutate_msd(input_sequence, codon = "NDT", prefix = "TT",
 
 \item{replacements}{The desired substitutions}
 
-\item{replacement_range}{Maximum distance between two randomization sites to be incoporated into a single primer in amino acid residues [default: 5]}
+\item{replacement_range}{Maximum distance in amino acid residues between two randomization sites to be incoporated into a single primer (reverse, end of the fragment) - has a cascading effect for following mutations [default: 3]}
 
 \item{binding_min_length}{The minimal threshold value of the length of the template binding sequence in amino acid residues [default: 4]}
 
