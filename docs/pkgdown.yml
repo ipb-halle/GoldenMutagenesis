@@ -1,0 +1,10 @@
+pandoc: '2.5'
+pkgdown: 1.3.0
+pkgdown_sha: ~
+articles:
+  MSD: MSD.html
+  MSD2: MSD2.html
+  MSD3: MSD3.html
+  Point_Mutagenesis: Point_Mutagenesis.html
+  QQC: QQC.html
+

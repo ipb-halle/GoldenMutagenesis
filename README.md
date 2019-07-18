@@ -1,8 +1,12 @@
 README
 ================
 Chris Ulpinnis & Pascal Püllmann
-2018-10-12\
+2018-10-11
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
 [![Travis-CI Build Status](https://travis-ci.org/ipb-halle/GoldenMutagenesis.svg?branch=master)](https://travis-ci.org/ipb-halle/GoldenMutagenesis)
+
 # GoldenMutagenesis
 
 The Golden Gate cloning technique has been proven to be a highly
@@ -32,17 +36,27 @@ devtools::install_github("ipb-halle/GoldenMutagenesis")
 To start with this library we recommend to have a look on our
 vignettes\!  
 [Point
-Mutagenesis](https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/Point_Mutagenesis.md)  
+Mutagenesis](https://ipb-halle.github.io/GoldenMutagenesis/articles/Point_Mutagenesis.html)  
 [Multiple Site Directed Mutagenesis -
-Example1](https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/MSD.md)  
+Example1](https://ipb-halle.github.io/GoldenMutagenesis/articles/MSD.html)  
 [Multiple Site Directed Mutagenesis -
-Example2](https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/MSD2.md)  
+Example2](https://ipb-halle.github.io/GoldenMutagenesis/articles/MSD2.html)  
 [Multiple Site Directed Mutagenesis -
-Example3](https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/MSD3.md)  
+Example3](https://ipb-halle.github.io/GoldenMutagenesis/articles/MSD3.html)  
 [Quick Quality
-Control](https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/QQC.md)  
+Control](https://ipb-halle.github.io/GoldenMutagenesis/articles/QQC.html)  
 
 ## Interactive Example
+
+## Webtool Beta Version
+**You can try our webtool at http://msbi.ipb-halle.de/GoldenMutagenesisWeb or on binderhub at [![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/ipb-halle/GoldenMutagenesisWeb/master?urlpath=shiny).** 
+
+
+The Webtools git repository is available at: https://github.com/ipb-halle/GoldenMutagenesisWeb 
+
+
+*Please note that the webtool is still in beta phase. There are still errors and also the user interface is not the final user experience. If you encounter any problems please send an email to me.* 
+
 
 ## You can try out our interactive user notebooks for Mutagenesis:
 
@@ -51,5 +65,7 @@ Control](https://github.com/ipb-halle/GoldenMutagenesis/blob/master/vignettes/QQ
 [![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/ipb-halle/GoldenMutagenesis/binder?filepath=notebooks%2FMSD_USER.ipynb)
 
 ### Single Point
-
 [![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/ipb-halle/GoldenMutagenesis/binder?filepath=notebooks%2FSPM_USER.ipynb)
+
+### Domestication only
+[![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/ipb-halle/GoldenMutagenesis/binder?filepath=notebooks%2FDomesticate_only_USER.ipynb)

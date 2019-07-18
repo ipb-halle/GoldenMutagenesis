@@ -80,7 +80,7 @@ mutations_bsai
 
 ````
 
-The mutate function designs the necessary set of primers for the desired mutations.\ 
+The mutate_spm function designs the necessary set of primers for the desired mutations.\ 
 \
 The function has the following parameters:\
 **prefix**: Additional nucleobases in 5' position of the recognition site [default: TT]\
@@ -88,16 +88,17 @@ The function has the following parameters:\
 **suffix**: Spacer nucleotides matching the cleavage pattern of the enzyme [default: A]\
 **vector**: Four basepair overhangs complementary to the created overhangs in the acceptor vector  [default: c("AATG", "AAGC")]\
 **replacements**: The desired substitutions\
-**primer_min_length**: The minimal threshold value of the template binding sequence [default: 4]\
-**primer_length**: Maximal length of the binding sequence [default: 9]\
+**binding_min_length**: The minimal threshold value of the template binding sequence [default: 4]\
+**binding_max_length**: Maximal length of the binding sequence [default: 9]\
 **target_temp**: Melting temperature of the binding sequence in °C [default: 60]\
 **cuf**: The Codon Usage Table which is being used to select the codon for an exchanged amino acid. [default: e_coli_316407.csv]\
+**fragment_min_size**: The minimal size of a generated gene fragment in base pairs [default: 100]\
 \
 It will return an object of the class primer_set.
 
 ````{r}
 mutations<-c(list(c(66, "V")), mutations_bbsi)
-primers<-mutate(input_sequence, prefix="TT", restriction_enzyme = recognition_site_bbsi, suffix = "AA", vector=c("CTCA", "CTCG"), replacements = mutations, binding_min_length=4 ,primer_length=9, target_temp=60, cuf=cuf)
+primers<-mutate_spm(input_sequence, prefix="TT", restriction_enzyme = recognition_site_bbsi, suffix = "AA", vector=c("CTCA", "CTCG"), replacements = mutations, binding_min_length=4 ,binding_max_length = 9, target_temp=60, fragment_min_size = 60, cuf=cuf)
 primers
 ````
 Objects of the classes "primer", "primer_msd" and "primer_set" can have a slim textual output by using the function print_primer.
