@@ -26,6 +26,18 @@ test_that("Preparing for level2 works", {
 })
 
 rm(primers)
+load("SPM_5V.RData")
+load("SPM_5V_240E.RData")
+load("SPM_5V_240E_212E.RData")
+
+test_that("Mutations on start and stop positions are calculated correctly", {
+  expect_that(mutate_spm(input_sequence, prefix="TT", restriction_enzyme = recognition_site_bbsi, suffix = "AA", vector=c("CTCA", "CTCG"), replacements = list(c("5", "V")), binding_min_length=4 ,binding_max_length=9, target_temp=60, cuf=cuf), is_identical_to(primers_5v))
+  expect_that(mutate_spm(input_sequence, prefix="TT", restriction_enzyme = recognition_site_bbsi, suffix = "AA", vector=c("CTCA", "CTCG"), replacements = list(c("5", "V"), c("240", "E")), binding_min_length=4 ,binding_max_length=9, target_temp=60, cuf=cuf), is_identical_to(primers_5v_240e))
+  expect_that(mutate_spm(input_sequence, prefix="TT", restriction_enzyme = recognition_site_bbsi, suffix = "AA", vector=c("CTCA", "CTCG"), replacements = list(c("5", "V"), c("240", "E"), c("212", "E")), binding_min_length=4 ,binding_max_length=9, target_temp=60, cuf=cuf), is_identical_to(primers_5v_240e_212e))
+  expect_that(mutate_spm(input_sequence, prefix="TT", restriction_enzyme = recognition_site_bbsi, suffix = "AA", vector=c("CTCA", "CTCG"), replacements = list(c("5", "V")), binding_min_length=4 ,binding_max_length=9, target_temp=60, cuf=cuf)@primers[[1]][[1]], is_identical_to(mutate_spm(input_sequence, prefix="TT", restriction_enzyme = recognition_site_bbsi, suffix = "AA", vector=c("CTCA", "CTCG"), replacements = list(c("5", "V"), c("240", "E"), c("212", "E")), binding_min_length=4 ,binding_max_length=9, target_temp=60, cuf=cuf)@primers[[1]][[1]]))
+  expect_that(mutate_spm(input_sequence, prefix="TT", restriction_enzyme = recognition_site_bbsi, suffix = "AA", vector=c("CTCA", "CTCG"), replacements = list(c("5", "V"), c("240", "E")), binding_min_length=4 ,binding_max_length=9, target_temp=60, cuf=cuf)@primers[[1]][[2]]@binding_sequence, is_identical_to(mutate_spm(input_sequence, prefix="TT", restriction_enzyme = recognition_site_bbsi, suffix = "AA", vector=c("CTCA", "CTCG"), replacements = list(c("5", "V"), c("240", "E"), c("212", "E")), binding_min_length=4 ,binding_max_length=9, target_temp=60, cuf=cuf)@primers[[2]][[2]]@binding_sequence))
+  
+})
 
 test_that("Domestication is working for known sequences", {
   expect_that(domesticate(input_sequence, recognition_site_bbsi, cuf) ,is_identical_to(list(c(143, "K"))))

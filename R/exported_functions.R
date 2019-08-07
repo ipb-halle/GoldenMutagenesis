@@ -227,6 +227,11 @@ mutate_spm<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", s
       suffix_f<-suffix
       suffix_r<-paste(comp(s2c(suffix), forceToLower = F), sep="", collapse = "")
       stop_r<-cur_fragment@stop-2
+      if(n==length(fragments)){#if there is just one single fragment - e.g. one mutation at the start or end
+        overhang_r<-""
+        stop_r<-cur_fragment@stop
+        vector_r<-vector[2]
+      }
     } 
     else if(n==length(fragments)) {
       vector_f<-""
@@ -266,6 +271,17 @@ mutate_spm<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", s
       temp_primer@binding_sequence<-paste(paste(codon_seq[(cur_fragment@stop-2-binding_max_length-1):stop_r], collapse=""), sep="")
       if(n!=length(fragments))
         temp_primer@binding_sequence<-paste(temp_primer@binding_sequence, str_sub(codon_seq[cur_fragment@stop-1], end=2) ,sep="")
+      #check if the mutation is also the end
+      if(length(cur_fragment@stop_mutation)==1){
+          if(cur_fragment@stop_mutation[1] != cur_fragment@stop) {
+            if(cur_fragment@stop_mutation[1]<=stop_r) # if it is bigger than stop_r, it is partly in the overlap...
+              temp_primer@extra<-paste(paste(codon_seq[cur_fragment@stop_mutation[1]:stop_r], collapse = ""), sep="")
+            if(n!=length(fragments)) #...and handeled here, for the last fragment stop_r is stop
+              temp_primer@extra<-paste(temp_primer@extra, str_sub(codon_seq[cur_fragment@stop-1], end=2) ,sep="")
+            temp_primer@extra<-paste(comp(rev(s2c(temp_primer@extra)), ambiguous = T,forceToLower = F), collapse = "")
+            temp_primer@binding_sequence<-paste(paste(codon_seq[(cur_fragment@stop_mutation[1]-1-binding_max_length-1):(cur_fragment@stop_mutation[1]-1)], collapse=""), sep="")
+          }
+      }
       temp_primer@binding_sequence<-paste(str_to_upper(comp(rev(s2c(temp_primer@binding_sequence)))), collapse="")
       temp_primer<-sequence_length_temperature(temp_primer, primer_min=binding_min_length, target_temp=primers[[n]][[1]]@temperature)
     }
@@ -372,6 +388,11 @@ mutate_msd<-function(input_sequence, codon="NDT" ,prefix="TT" ,restriction_enzym
       suffix_f<-suffix
       suffix_r<-paste(comp(s2c(suffix), forceToLower = F), sep="", collapse = "")
       stop_r<-cur_fragment@stop-2
+      if(n==length(fragments)){#if there is just one single fragment - e.g. one mutation at the start or end
+        overhang_r<-""
+        stop_r<-cur_fragment@stop
+        vector_r<-vector[2]
+      }
     } 
     else if(n==length(fragments)) {
       vector_f<-""
@@ -508,11 +529,11 @@ primer_prepare_level<-function(primerset, vector=c("AATG", "AAGC")){
     primerset@primers[[1]][[1]]@extra<-paste(primerset@primers[[1]][[1]]@extra, vector[1], sep="")
   }
   else if(str_sub(paste(primerset@primers[[1]][[1]]@extra,primerset@primers[[1]][[1]]@binding_sequence, sep=""), 1, 3) == "ATG") {
-    primerset@primers[[1]][[1]]@extra<-paste(primerset@primers[[1]][[1]]@extra, str_sub(vector[1], 1, 1), sep="")
+    primerset@primers[[1]][[1]]@extra<-paste(str_sub(vector[1], 1, 1),primerset@primers[[1]][[1]]@extra, sep="")
   } else {
     stop("The extra+binding_sequence of the primer did not start with ATG. Something went wrong. Please send a bug report to us.")
   }
-  primerset@primers[[length(primerset@primers)]][[2]]@extra<-paste(primerset@primers[[length(primerset@primers)]][[2]]@extra, vector[2], sep="")
+  primerset@primers[[length(primerset@primers)]][[2]]@extra<-paste(vector[2], primerset@primers[[length(primerset@primers)]][[2]]@extra,  sep="")
   return(primerset)
 }
 
