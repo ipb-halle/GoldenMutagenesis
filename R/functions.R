@@ -153,7 +153,7 @@ make_fragments<-function(mutations, fsize, buffer=0, seq, start, distance=2){
         stop_pos<-fragments[[k]]@stop_mutation[1]
         if(length(fragments[[k+1]]@start_mutation)>0){
           start_pos<-fragments[[k+1]]@start_mutation[length(fragments[[k+1]]@start_mutation)]
-          mid_stop<-stop_pos+(round(start_pos-stop_pos)/2)-1
+          mid_stop<-stop_pos+(round((start_pos-stop_pos)/2))-1
           newstop<-max(fragments[[k]]@stop, min(mid_stop, (fragments[[k+1]]@start_mutation[1]-1)))
           fragments[[k]]@stop<-newstop
           fragments[[k+1]]@start<-newstop+1
