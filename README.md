@@ -7,6 +7,8 @@ Chris Ulpinnis & Pascal Püllmann
 
 [![Travis-CI Build Status](https://travis-ci.org/ipb-halle/GoldenMutagenesis.svg?branch=master)](https://travis-ci.org/ipb-halle/GoldenMutagenesis)
 
+<img src=https://raw.githubusercontent.com/ipb-halle/GoldenMutagenesis/master/inst/gm_biocsticker.png height="150px"></img>
+
 # GoldenMutagenesis
 
 The Golden Gate cloning technique has been proven to be a highly
