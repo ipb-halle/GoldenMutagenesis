@@ -16,4 +16,4 @@ Suggests: knitr,
     rmarkdown, 
     testthat
 VignetteBuilder: knitr
-Remotes: bioc::release/sangerseqR, bioc::release/Biostrings, bioc::release/BioGenerics
+Remotes: bioc::release/sangerseqR, bioc::release/Biostrings, bioc::release/BiocGenerics
