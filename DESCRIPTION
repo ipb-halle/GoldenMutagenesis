@@ -16,3 +16,4 @@ Suggests: knitr,
     rmarkdown, 
     testthat
 VignetteBuilder: knitr
+biocView: Software, Technology, QualityControl
