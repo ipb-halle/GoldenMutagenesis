@@ -4,8 +4,12 @@
 \alias{calculate_tm_nnb}
 \title{Calculate melting temperature based on next neighbor calculation}
 \usage{
-calculate_tm_nnb(oligo_sequence, primer_concentration = 50,
-  salt_concentration = 50, offset = 0)
+calculate_tm_nnb(
+  oligo_sequence,
+  primer_concentration = 50,
+  salt_concentration = 50,
+  offset = 0
+)
 }
 \arguments{
 \item{oligo_sequence}{A string containing an oligo sequence.}

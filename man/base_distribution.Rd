@@ -4,8 +4,7 @@
 \alias{base_distribution}
 \title{Create a graphical evaluation of sequencing results}
 \usage{
-base_distribution(input_sequence, ab1file, replacements,
-  trace_cutoff = 80)
+base_distribution(input_sequence, ab1file, replacements, trace_cutoff = 80)
 }
 \arguments{
 \item{input_sequence}{The sequence which was modified. This is an object of type character containing the sequence.}

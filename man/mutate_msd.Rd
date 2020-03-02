@@ -4,10 +4,20 @@
 \alias{mutate_msd}
 \title{Calculate Primers for Multiple Site Saturation Mutagenesis}
 \usage{
-mutate_msd(input_sequence, codon = "NDT", prefix = "TT",
-  restriction_enzyme = "GGTCTC", suffix = "A", vector = c("AATG",
-  "AAGC"), replacements, replacement_range = 3, binding_min_length = 4,
-  binding_max_length = 9, target_temp = 60, fragment_min_size = 100)
+mutate_msd(
+  input_sequence,
+  codon = "NDT",
+  prefix = "TT",
+  restriction_enzyme = "GGTCTC",
+  suffix = "A",
+  vector = c("AATG", "AAGC"),
+  replacements,
+  replacement_range = 3,
+  binding_min_length = 4,
+  binding_max_length = 9,
+  target_temp = 60,
+  fragment_min_size = 100
+)
 }
 \arguments{
 \item{input_sequence}{The sequence which should be modified. This is an object of type character containing the sequence.}
