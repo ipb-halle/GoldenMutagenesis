@@ -2,8 +2,8 @@ Package: GoldenMutagenesis
 Type: Package
 Encoding: UTF-8
 Title: A tool to calculate and validate primers for Golden Gate Cloning
-Version: 1.2.2
-Date: 2019-08-08
+Version: 1.2.3
+Date: 2020-03-02
 Author: Chris Ulpinnis & Pascal Püllmann
 Maintainer: Chris Ulpinnis <Chris.Ulpinnis@ipb-halle.de>
 Description: The Golden Gate cloning technique has been proven to be a highly efficient toolbox for a variety of cloning setups. Based on its modular concept it is particularly suitable for the use in multiple-site mutagenesis approaches. In this technical note we developed a protocol termed Golden Mutagenesis for the rapid, easy, reliable and cheap formation of mutagenesis libraries. One to five positions could be altered in parallel or simultaneously within two days. To facilitate the implementation of this technique, this R-library has been developed for the automated primer design and the graphical evaluation of sequencing results to determine the quality of the library.
