@@ -108,7 +108,7 @@ domesticate<-function(input_sequence, restriction_enzyme="GGTCTC", cuf="e_coli_3
   prot_sequence<-translate(sequence)
   matches <- do.call(rbind, str_locate_all(input_sequence, c(restriction_enzyme, restriction_enzyme_reverse))) # Returns positions of every match in a string
   if(nrow(matches) == 0) {
-    print("No domestication needed.")
+    message("No domestication needed.")
     return(list())
   }
   split_seq<-splitseq(sequence)
@@ -195,7 +195,7 @@ mutate_spm<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", s
             alt_codons[[j]]<-cuf_vector[str_to_upper(codons_tmp)]
           }
           max_in_list<-which.max(unlist(lapply(alt_codons, function(x) x[which.max(x)]))) 
-          codons[positions[max_in_list]]<-str_to_upper(names(alt_codons[[max_in_list]][which.max(alt_codons[[max_in_list]])]))
+          codons[which(positions_aa==positions[max_in_list])]<-str_to_upper(names(alt_codons[[max_in_list]][which.max(alt_codons[[max_in_list]])]))
         }
       }
     }
