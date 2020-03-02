@@ -157,7 +157,7 @@ domesticate<-function(input_sequence, restriction_enzyme="GGTCTC", cuf="e_coli_3
 #' suffix = "AA", vector=c("CTCA", "CTCG"), replacements = mutations, binding_min_length=4 ,
 #' binding_max_length=9, target_temp=60, cuf=cuf)
 #' 
-mutate_spm<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", suffix="A", vector=c("AATG", "AAGC"), replacements,replacement_range=2, binding_min_length=4 ,binding_max_length=9, target_temp=60, cuf="e_coli_316407.csv", fragment_min_size=100) {#change to binding_max_length_max? and min?
+mutate_spm<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", suffix="A", vector=c("AATG", "AAGC"), replacements,replacement_range=2, binding_min_length=4, binding_max_length=9, target_temp=60, cuf="e_coli_316407.csv", fragment_min_size=100) {#change to binding_max_length_max? and min?
   cuf_list<-get_cu_table(cuf)
   prefix<-str_to_upper(prefix)
   vector<-str_to_upper(vector)
@@ -174,6 +174,34 @@ mutate_spm<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", s
   prot_sequence<-seqinr::translate(sequence)
   primers<-vector("list")
   
+  check_offtargets<-function(codon_seq, codons, positions_aa, restriction_enzyme="GGTCTC", cuf="e_coli_316407.csv") {
+    cuf_vector<-get_cu_table(cuf, list=F)
+    seq<-paste(codon_seq, collapse = "")
+    restriction_enzyme_s2c<-s2c(restriction_enzyme)
+    restriction_enzyme_s2c_reverse<-comp(restriction_enzyme_s2c)
+    restriction_enzyme_s2c_reverse<-rev(restriction_enzyme_s2c_reverse)
+    restriction_enzyme_reverse<-str_to_upper(paste(restriction_enzyme_s2c_reverse, collapse = ""))
+    matches <- do.call(rbind, str_locate_all(seq, c(restriction_enzyme, restriction_enzyme_reverse))) # Returns positions of every match in a string
+    if(nrow(matches) > 0) {
+      for(i in 1:nrow(matches)){
+        start<-ceiling(matches[i,"start"]/3)
+        end<-ceiling(matches[i, "end"]/3)
+        positions<-positions_aa[positions_aa >= start & positions_aa <= end]
+        if(length(positions > 0)){
+          alt_codons<-syncodons(codon_seq_tmp[positions])
+          for(j in 1:length(alt_codons)){ #filter out the codon which we already know
+            codons_tmp<-alt_codons[[j]]
+            codons_tmp<-codons_tmp[which(codons_tmp != names(alt_codons[j]))]
+            alt_codons[[j]]<-cuf_vector[str_to_upper(codons_tmp)]
+          }
+          max_in_list<-which.max(unlist(lapply(alt_codons, function(x) x[which.max(x)]))) 
+          codons[positions[max_in_list]]<-str_to_upper(names(alt_codons[[max_in_list]][which.max(alt_codons[[max_in_list]])]))
+        }
+      }
+    }
+    return(codons)
+  }
+  
   if(str_sub(vector[1], 2) == "ATG"){
     fragment_start<-2
   } else{
@@ -184,6 +212,7 @@ mutate_spm<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", s
   positions_aa<-vector()
   aminoacids<-vector()
   codons<-vector()
+  codon_seq_tmp<-codon_seq
   
   for(i in 1:length(replacements)) {
       position_aa<-as.numeric(replacements[[i]][1])
@@ -195,7 +224,7 @@ mutate_spm<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", s
       codon<-str_to_upper(names(which.max(cuf_list[[aminoacid]]))[1])
       if(codon == codon_seq[position_aa]) {
         if(length(cuf_list[[aminoacid]] == 1)) {
-          stop(paste("There is no syn. codon for", aminoacid ,sep=""))
+          stop(paste("There is no syn. codon for ", aminoacid ,sep=""))
         }
         else {
           old_codon<-which.max(cuf_list[[aminoacid]])
@@ -203,6 +232,13 @@ mutate_spm<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", s
         }
       }
       codons<-c(codons, codon)
+      codon_seq_tmp[position_aa]<-codon
+  }
+  
+  codons<-check_offtargets(codon_seq = codon_seq_tmp, codons = codons, positions_aa = positions_aa, restriction_enzyme = "GGTCTC", cuf = cuf)
+  codons<-check_offtargets(codon_seq = codon_seq_tmp, codons = codons, positions_aa = positions_aa, restriction_enzyme = "GAAGAC", cuf = cuf)
+  if(restriction_enzyme != "GGTCTC" | restriction_enzyme != "GAAGAC") {
+    codons<-check_offtargets(codon_seq = codon_seq_tmp, codons = codons, positions_aa = positions_aa, restriction_enzyme = restriction_enzyme, cuf = cuf)
   }
   
   fragments<-make_fragments(mutations=positions_aa,seq=codon_seq,start=fragment_start, distance=replacement_range, fsize=fragment_min_size, buffer=0)
