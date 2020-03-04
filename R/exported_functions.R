@@ -380,7 +380,7 @@ mutate_msd<-function(input_sequence, codon="NDT" ,prefix="TT" ,restriction_enzym
   vector<-str_to_upper(vector)
   restriction_enzyme<-str_to_upper(restriction_enzyme)
   input_sequence<-str_to_upper(input_sequence)
-  possible_codons<-c("NNN", "NNK", "NNS", "NDT", "DBK", "NRT")
+  possible_codons<-c("NNN", "NNK", "NNS", "NDT", "DBK", "NRT", "VHG", "VRK", "NYC", "KST")
   if(!(codon %in% possible_codons)) {
     stop(paste(codon, "is not a valid codon. Please select one of the following:", paste(possible_codons, collapse = " ") ,sep=" "))
   }
