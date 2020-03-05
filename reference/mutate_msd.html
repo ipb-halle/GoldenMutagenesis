@@ -36,7 +36,8 @@
 
 
 <meta property="og:title" content="Calculate Primers for Multiple Site Saturation Mutagenesis — mutate_msd" />
-<meta property="og:description" content="The mutate_msd function designs the necessary set of primers for the desired mutations." />
+<meta property="og:description" content="The mutate_msd function designs the necessary set of primers for the desired mutations.
+Note that you can also select TTG in saturation mutagenesis to apply the 22c trick." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -130,7 +131,8 @@
     </div>
 
     <div class="ref-description">
-    <p>The mutate_msd function designs the necessary set of primers for the desired mutations.</p>
+    <p>The mutate_msd function designs the necessary set of primers for the desired mutations.
+Note that you can also select TTG in saturation mutagenesis to apply the 22c trick.</p>
     </div>
 
     <pre class="usage"><span class='fu'>mutate_msd</span>(
@@ -177,7 +179,7 @@
     </tr>
     <tr>
       <th>replacements</th>
-      <td><p>The desired substitutions</p></td>
+      <td><p>The desired substitutions. Can be a numeric vector or a list of character vectors with position and codon. See <a href='articles/MSD3.html'><code>vignette("MSD3", package = "goldenmutagenesis")</code></a> for examples.</p></td>
     </tr>
     <tr>
       <th>replacement_range</th>
