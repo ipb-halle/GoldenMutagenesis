@@ -7,7 +7,7 @@ Chris Ulpinnis & Pascal Püllmann
 
 [![Travis-CI Build Status](https://travis-ci.org/ipb-halle/GoldenMutagenesis.svg?branch=master)](https://travis-ci.org/ipb-halle/GoldenMutagenesis)
 [![GitHub license](https://img.shields.io/github/license/ipb-halle/GoldenMutagenesis)](https://github.com/ipb-halle/GoldenMutagenesis/blob/master/LICENSE)
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/ipb-halle/GoldenMutagenesis)](https://github.com/ipb-halle/GoldenMutagenesis/releases)]
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/ipb-halle/GoldenMutagenesis)](https://github.com/ipb-halle/GoldenMutagenesis/releases)
 [![GitHub issues](https://img.shields.io/github/issues/ipb-halle/GoldenMutagenesis)](https://github.com/ipb-halle/GoldenMutagenesis/issues)
 
 # GoldenMutagenesis
