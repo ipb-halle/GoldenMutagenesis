@@ -87,56 +87,66 @@
 <div id="readme" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#readme" class="anchor"></a>README</h1></div>
-<p>Chris Ulpinnis &amp; Pascal Püllmann 2018-10-11</p>
+<p>Chris Ulpinnis &amp; Pascal Püllmann 2020-03-05</p>
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-<p><a href="https://travis-ci.org/ipb-halle/GoldenMutagenesis"><img src="https://travis-ci.org/ipb-halle/GoldenMutagenesis.svg?branch=master" alt="Travis-CI Build Status"></a></p>
-<p><img src="https://raw.githubusercontent.com/ipb-halle/GoldenMutagenesis/master/inst/gm_biocsticker.png" height="150px"></p>
+<p><a href="https://travis-ci.org/ipb-halle/GoldenMutagenesis"><img src="https://travis-ci.org/ipb-halle/GoldenMutagenesis.svg?branch=master" alt="Travis-CI Build Status"></a> <a href="https://github.com/ipb-halle/GoldenMutagenesis/blob/master/LICENSE"><img src="https://img.shields.io/github/license/ipb-halle/GoldenMutagenesis" alt="GitHub license"></a> <a href="https://github.com/ipb-halle/GoldenMutagenesis/releases"><img src="https://img.shields.io/github/v/release/ipb-halle/GoldenMutagenesis" alt="GitHub release (latest by date)"></a>] <a href="https://github.com/ipb-halle/GoldenMutagenesis/issues"><img src="https://img.shields.io/github/issues/ipb-halle/GoldenMutagenesis" alt="GitHub issues"></a></p>
 </div>
 <div id="goldenmutagenesis" class="section level1">
 <h1 class="hasAnchor">
 <a href="#goldenmutagenesis" class="anchor"></a>GoldenMutagenesis</h1>
-<p>The Golden Gate cloning technique has been proven to be a highly efficient toolbox for a variety of cloning setups. Based on its modular concept it is particularly suitable for the use in multiple-site mutagenesis approaches. In this technical note we developed a protocol termed Golden Mutagenesis for the rapid, easy, reliable and cheap formation of mutagenesis libraries. One to five positions could be altered in parallel or simultaneously within two days. To facilitate the implementation of this technique, this R-library has been developed for the automated primer design and the graphical evaluation of sequencing results to determine the quality of the library.<br>
-This library is currently still under development and will be enhanced by an R shiny web-application.</p>
+<p><img src="https://raw.githubusercontent.com/ipb-halle/GoldenMutagenesis/master/inst/gm_biocsticker.png" height="150px"></p>
+<div id="abstract" class="section level2">
+<h2 class="hasAnchor">
+<a href="#abstract" class="anchor"></a>Abstract</h2>
+<p>The Golden Gate cloning technique has been proven to be a highly efficient toolbox for a variety of cloning setups. Based on its modular concept it is particularly suitable for the use in multiple-site mutagenesis approaches. In this technical note we developed a protocol termed Golden Mutagenesis for the rapid, easy, reliable and cheap formation of mutagenesis libraries. One to five positions could be altered in parallel or simultaneously within two days. To facilitate the implementation of this technique, this R-library has been developed for the automated primer design and the graphical evaluation of sequencing results to determine the quality of the library.</p>
+<p>The publication is available at <a href="https://rdcu.be/bMfta" class="uri">https://rdcu.be/bMfta</a>.</p>
+</div>
+<div id="web-interface" class="section level2">
+<h2 class="hasAnchor">
+<a href="#web-interface" class="anchor"></a>Web-interface</h2>
+<p>A web-based user-interface is available at <a href="https://msbi.ipb-halle.de/GoldenMutagenesisWeb" class="uri">https://msbi.ipb-halle.de/GoldenMutagenesisWeb</a>.</p>
+<p>The GitHub page of the webinterface can be found at <a href="https://github.com/ipb-halle/GoldenMutagenesisWeb" class="uri">https://github.com/ipb-halle/GoldenMutagenesisWeb</a>.</p>
+<p>A docker container containing the web interface can be found at <a href="https://hub.docker.com/r/sneumann/goldenmutagenesisweb" class="uri">https://hub.docker.com/r/sneumann/goldenmutagenesisweb</a>.</p>
+</div>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<p>You can install GoldenMutagenesis from github with:</p>
+<p>You can install GoldenMutagenesis from GitHub with:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># install.packages("devtools")</span></span>
 <span id="cb1-2"><a href="#cb1-2"></a>devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">"ipb-halle/GoldenMutagenesis"</span>)</span></code></pre></div>
 </div>
-<div id="example" class="section level2">
+<div id="documentation" class="section level2">
 <h2 class="hasAnchor">
-<a href="#example" class="anchor"></a>Example</h2>
-<p>To start with this library we recommend to have a look on our vignettes!<br><a href="https://ipb-halle.github.io/GoldenMutagenesis/articles/Point_Mutagenesis.html">Point Mutagenesis</a><br><a href="https://ipb-halle.github.io/GoldenMutagenesis/articles/MSD.html">Multiple Site Directed Mutagenesis - Example1</a><br><a href="https://ipb-halle.github.io/GoldenMutagenesis/articles/MSD2.html">Multiple Site Directed Mutagenesis - Example2</a><br><a href="https://ipb-halle.github.io/GoldenMutagenesis/articles/MSD3.html">Multiple Site Directed Mutagenesis - Example3</a><br><a href="https://ipb-halle.github.io/GoldenMutagenesis/articles/QQC.html">Quick Quality Control</a></p>
+<a href="#documentation" class="anchor"></a>Documentation</h2>
+<p>The documentation can be accessed at <a href="https://ipb-halle.github.io/GoldenMutagenesis/" class="uri">https://ipb-halle.github.io/GoldenMutagenesis/</a>.</p>
 </div>
-<div id="interactive-example" class="section level2">
+<div id="examples" class="section level2">
 <h2 class="hasAnchor">
-<a href="#interactive-example" class="anchor"></a>Interactive Example</h2>
-</div>
-<div id="webtool-beta-version" class="section level2">
-<h2 class="hasAnchor">
-<a href="#webtool-beta-version" class="anchor"></a>Webtool Beta Version</h2>
-<p><strong>You can try our webtool at <a href="http://msbi.ipb-halle.de/GoldenMutagenesisWeb" class="uri">http://msbi.ipb-halle.de/GoldenMutagenesisWeb</a> or on binderhub at <a href="https://mybinder.org/v2/gh/ipb-halle/GoldenMutagenesisWeb/master?urlpath=shiny"><img src="https://mybinder.org/badge.svg" alt="Binder"></a>.</strong></p>
-<p>The Webtools git repository is available at: <a href="https://github.com/ipb-halle/GoldenMutagenesisWeb" class="uri">https://github.com/ipb-halle/GoldenMutagenesisWeb</a></p>
-<p><em>Please note that the webtool is still in beta phase. There are still errors and also the user interface is not the final user experience. If you encounter any problems please send an email to me.</em></p>
-</div>
-<div id="you-can-try-out-our-interactive-user-notebooks-for-mutagenesis" class="section level2">
-<h2 class="hasAnchor">
-<a href="#you-can-try-out-our-interactive-user-notebooks-for-mutagenesis" class="anchor"></a>You can try out our interactive user notebooks for Mutagenesis:</h2>
-<div id="multiple-site-directed" class="section level3">
+<a href="#examples" class="anchor"></a>Examples</h2>
+<div id="vignettes" class="section level3">
 <h3 class="hasAnchor">
-<a href="#multiple-site-directed" class="anchor"></a>Multiple Site Directed</h3>
+<a href="#vignettes" class="anchor"></a>Vignettes</h3>
+<p>To start with this library we recommend to have a look at our vignettes!<br><a href="https://ipb-halle.github.io/GoldenMutagenesis/articles/Point_Mutagenesis.html">Point Mutagenesis</a><br><a href="https://ipb-halle.github.io/GoldenMutagenesis/articles/MSD.html">Multiple Site Directed Mutagenesis - Example1</a><br><a href="https://ipb-halle.github.io/GoldenMutagenesis/articles/MSD2.html">Multiple Site Directed Mutagenesis - Example2</a><br><a href="https://ipb-halle.github.io/GoldenMutagenesis/articles/MSD3.html">Multiple Site Directed Mutagenesis - Example3</a><br><a href="https://ipb-halle.github.io/GoldenMutagenesis/articles/QQC.html">Quick Quality Control</a></p>
+</div>
+<div id="jupiter-notebooks-at-binder" class="section level3">
+<h3 class="hasAnchor">
+<a href="#jupiter-notebooks-at-binder" class="anchor"></a>Jupiter Notebooks at binder</h3>
+<p>You can also use predefined Jupiter notebooks on binder to use the library.</p>
+<div id="multiple-site-directed-mutagenesis" class="section level4">
+<h4 class="hasAnchor">
+<a href="#multiple-site-directed-mutagenesis" class="anchor"></a>Multiple Site Directed Mutagenesis</h4>
 <p><a href="https://mybinder.org/v2/gh/ipb-halle/GoldenMutagenesis/binder?filepath=notebooks%2FMSD_USER.ipynb"><img src="https://mybinder.org/badge.svg" alt="Binder"></a></p>
 </div>
-<div id="single-point" class="section level3">
-<h3 class="hasAnchor">
-<a href="#single-point" class="anchor"></a>Single Point</h3>
+<div id="single-point-mutagenesis" class="section level4">
+<h4 class="hasAnchor">
+<a href="#single-point-mutagenesis" class="anchor"></a>Single Point Mutagenesis</h4>
 <p><a href="https://mybinder.org/v2/gh/ipb-halle/GoldenMutagenesis/binder?filepath=notebooks%2FSPM_USER.ipynb"><img src="https://mybinder.org/badge.svg" alt="Binder"></a></p>
 </div>
-<div id="domestication-only" class="section level3">
-<h3 class="hasAnchor">
-<a href="#domestication-only" class="anchor"></a>Domestication only</h3>
+<div id="domestication-only" class="section level4">
+<h4 class="hasAnchor">
+<a href="#domestication-only" class="anchor"></a>Domestication only</h4>
 <p><a href="https://mybinder.org/v2/gh/ipb-halle/GoldenMutagenesis/binder?filepath=notebooks%2FDomesticate_only_USER.ipynb"><img src="https://mybinder.org/badge.svg" alt="Binder"></a></p>
+</div>
 </div>
 </div>
 </div>
