@@ -346,6 +346,7 @@ mutate_spm<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", s
 #' Calculate Primers for Multiple Site Saturation Mutagenesis
 #' 
 #' The mutate_msd function designs the necessary set of primers for the desired mutations.
+#' Note that you can also select TTG in saturation mutagenesis to apply the 22c trick.
 #' 
 #' @param input_sequence The sequence which should be modified. This is an object of type character containing the sequence. 
 #' @param codon The desired type of MSD mutation [default: NDT]
@@ -353,7 +354,7 @@ mutate_spm<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", s
 #' @param restriction_enzyme Recognition site sequence of the respective restriction enzyme [default: GGTCTC]
 #' @param suffix Spacer nucleotides matching the cleavage pattern of the enzyme [default: A]
 #' @param vector Four basepair overhangs complementary to the created overhangs in the acceptor vector  [default: c("AATG", "AAGC")]
-#' @param replacements The desired substitutions
+#' @param replacements The desired substitutions. Can be a numeric vector or a list of character vectors with position and codon. See \href{articles/MSD3.html}{\code{vignette("MSD3", package = "goldenmutagenesis")}} for examples.
 #' @param replacement_range  Maximum distance in amino acid residues between two randomization sites to be incoporated into a single primer (reverse, end of the fragment) - has a cascading effect for following mutations [default: 3]
 #' @param binding_min_length The minimal threshold value of the length of the template binding sequence in amino acid residues [default: 4]
 #' @param binding_max_length Maximal length of the binding sequence in amino acid residues [default: 9]
@@ -380,7 +381,7 @@ mutate_msd<-function(input_sequence, codon="NDT" ,prefix="TT" ,restriction_enzym
   vector<-str_to_upper(vector)
   restriction_enzyme<-str_to_upper(restriction_enzyme)
   input_sequence<-str_to_upper(input_sequence)
-  possible_codons<-c("NNN", "NNK", "NNS", "NDT", "DBK", "NRT", "VHG", "VRK", "NYC", "KST")
+  possible_codons<-c("NNN", "NNK", "NNS", "NDT", "DBK", "NRT", "VHG", "VRK", "NYC", "KST", "TTG")
   if(!(codon %in% possible_codons)) {
     stop(paste(codon, "is not a valid codon. Please select one of the following:", paste(possible_codons, collapse = " ") ,sep=" "))
   }
