@@ -32,7 +32,7 @@ mutate_msd(
 
 \item{vector}{Four basepair overhangs complementary to the created overhangs in the acceptor vector  [default: c("AATG", "AAGC")]}
 
-\item{replacements}{The desired substitutions}
+\item{replacements}{The desired substitutions. Can be a numeric vector or a list of character vectors with position and codon. See \href{articles/MSD3.html}{\code{vignette("MSD3", package = "goldenmutagenesis")}} for examples.}
 
 \item{replacement_range}{Maximum distance in amino acid residues between two randomization sites to be incoporated into a single primer (reverse, end of the fragment) - has a cascading effect for following mutations [default: 3]}
 
@@ -49,6 +49,7 @@ An object of class Primerset with the designed Primers.
 }
 \description{
 The mutate_msd function designs the necessary set of primers for the desired mutations.
+Note that you can also select TTG in saturation mutagenesis to apply the 22c trick.
 }
 \examples{
 #Load the setup of the MSD vignette and design the primers
