@@ -1,16 +1,19 @@
 README
 ================
 Chris Ulpinnis & Pascal Püllmann
-2018-10-11
+2020-03-05
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 [![Travis-CI Build Status](https://travis-ci.org/ipb-halle/GoldenMutagenesis.svg?branch=master)](https://travis-ci.org/ipb-halle/GoldenMutagenesis)
-
-<img src=https://raw.githubusercontent.com/ipb-halle/GoldenMutagenesis/master/inst/gm_biocsticker.png height="150px"></img>
+[![GitHub license](https://img.shields.io/github/license/ipb-halle/GoldenMutagenesis)](https://github.com/ipb-halle/GoldenMutagenesis/blob/master/LICENSE)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/ipb-halle/GoldenMutagenesis)](https://github.com/ipb-halle/GoldenMutagenesis/releases)]
+[![GitHub issues](https://img.shields.io/github/issues/ipb-halle/GoldenMutagenesis)](https://github.com/ipb-halle/GoldenMutagenesis/issues)
 
 # GoldenMutagenesis
+<img src=https://raw.githubusercontent.com/ipb-halle/GoldenMutagenesis/master/inst/gm_biocsticker.png height="150px"></img>
 
+## Abstract
 The Golden Gate cloning technique has been proven to be a highly
 efficient toolbox for a variety of cloning setups. Based on its modular
 concept it is particularly suitable for the use in multiple-site
@@ -21,21 +24,33 @@ altered in parallel or simultaneously within two days. To facilitate the
 implementation of this technique, this R-library has been developed for
 the automated primer design and the graphical evaluation of sequencing
 results to determine the quality of the library.  
-This library is currently still under development and will be enhanced
-by an R shiny web-application.
+
+The publication is available at https://rdcu.be/bMfta. 
+
+## Web-interface
+A web-based user-interface is available at https://msbi.ipb-halle.de/GoldenMutagenesisWeb.
+
+The GitHub page of the webinterface can be found at https://github.com/ipb-halle/GoldenMutagenesisWeb.
+
+A docker container containing the web interface can be found at https://hub.docker.com/r/sneumann/goldenmutagenesisweb.
 
 ## Installation
 
-You can install GoldenMutagenesis from github with:
+You can install GoldenMutagenesis from GitHub with:
 
 ``` r
 # install.packages("devtools")
 devtools::install_github("ipb-halle/GoldenMutagenesis")
 ```
 
-## Example
+## Documentation
 
-To start with this library we recommend to have a look on our
+The documentation can be accessed at https://ipb-halle.github.io/GoldenMutagenesis/.
+
+## Examples
+
+### Vignettes
+To start with this library we recommend to have a look at our
 vignettes\!  
 [Point
 Mutagenesis](https://ipb-halle.github.io/GoldenMutagenesis/articles/Point_Mutagenesis.html)  
@@ -48,26 +63,15 @@ Example3](https://ipb-halle.github.io/GoldenMutagenesis/articles/MSD3.html)
 [Quick Quality
 Control](https://ipb-halle.github.io/GoldenMutagenesis/articles/QQC.html)  
 
-## Interactive Example
+### Jupiter Notebooks at binder
 
-## Webtool Beta Version
-**You can try our webtool at http://msbi.ipb-halle.de/GoldenMutagenesisWeb or on binderhub at [![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/ipb-halle/GoldenMutagenesisWeb/master?urlpath=shiny).** 
+You can also use predefined Jupiter notebooks on binder to use the library.
 
-
-The Webtools git repository is available at: https://github.com/ipb-halle/GoldenMutagenesisWeb 
-
-
-*Please note that the webtool is still in beta phase. There are still errors and also the user interface is not the final user experience. If you encounter any problems please send an email to me.* 
-
-
-## You can try out our interactive user notebooks for Mutagenesis:
-
-### Multiple Site Directed
-
+#### Multiple Site Directed Mutagenesis
 [![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/ipb-halle/GoldenMutagenesis/binder?filepath=notebooks%2FMSD_USER.ipynb)
 
-### Single Point
+#### Single Point Mutagenesis
 [![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/ipb-halle/GoldenMutagenesis/binder?filepath=notebooks%2FSPM_USER.ipynb)
 
-### Domestication only
+#### Domestication only
 [![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/ipb-halle/GoldenMutagenesis/binder?filepath=notebooks%2FDomesticate_only_USER.ipynb)
