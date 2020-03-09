@@ -346,7 +346,7 @@ mutate_spm<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", s
 #' Calculate Primers for Multiple Site Saturation Mutagenesis
 #' 
 #' The mutate_msd function designs the necessary set of primers for the desired mutations.
-#' Note that you can also select TTG in saturation mutagenesis to apply the 22c trick.
+#' Note that you can also select TGG in saturation mutagenesis to apply the 22c trick.
 #' 
 #' @param input_sequence The sequence which should be modified. This is an object of type character containing the sequence. 
 #' @param codon The desired type of MSD mutation [default: NDT]
@@ -381,7 +381,7 @@ mutate_msd<-function(input_sequence, codon="NDT" ,prefix="TT" ,restriction_enzym
   vector<-str_to_upper(vector)
   restriction_enzyme<-str_to_upper(restriction_enzyme)
   input_sequence<-str_to_upper(input_sequence)
-  possible_codons<-c("NNN", "NNK", "NNS", "NDT", "DBK", "NRT", "VHG", "VRK", "NYC", "KST", "TTG")
+  possible_codons<-c("NNN", "NNK", "NNS", "NDT", "DBK", "NRT", "VHG", "VRK", "NYC", "KST", "TGG")
   if(!(codon %in% possible_codons)) {
     stop(paste(codon, "is not a valid codon. Please select one of the following:", paste(possible_codons, collapse = " ") ,sep=" "))
   }
