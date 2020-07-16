@@ -1,10 +1,11 @@
 pandoc: 2.7.3
-pkgdown: 1.4.1.9000
-pkgdown_sha: 732fb5b9ccc0ef87a73dfd0772ae661a4039b2a8
+pkgdown: 1.5.1
+pkgdown_sha: ~
 articles:
   MSD: MSD.html
   MSD2: MSD2.html
   MSD3: MSD3.html
   Point_Mutagenesis: Point_Mutagenesis.html
   QQC: QQC.html
+last_built: 2020-07-16T13:53Z
 
