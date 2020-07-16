@@ -50,7 +50,7 @@ The documentation can be accessed at https://ipb-halle.github.io/GoldenMutagenes
 ## Examples
 
 ### Vignettes
-To start with this library we recommend to have a look at our
+To start with this library we recommend to take a look at our
 vignettes\!  
 [Point
 Mutagenesis](https://ipb-halle.github.io/GoldenMutagenesis/articles/Point_Mutagenesis.html)  
