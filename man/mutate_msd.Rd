@@ -49,7 +49,7 @@ An object of class Primerset with the designed Primers.
 }
 \description{
 The mutate_msd function designs the necessary set of primers for the desired mutations.
-Note that you can also select TTG in saturation mutagenesis to apply the 22c trick.
+Note that you can also select TGG in saturation mutagenesis to apply the 22c trick.
 }
 \examples{
 #Load the setup of the MSD vignette and design the primers
