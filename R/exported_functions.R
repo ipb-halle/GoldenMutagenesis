@@ -108,7 +108,7 @@ domesticate<-function(input_sequence, restriction_enzyme="GGTCTC", cuf="e_coli_3
   prot_sequence<-translate(sequence)
   matches <- do.call(rbind, str_locate_all(input_sequence, c(restriction_enzyme, restriction_enzyme_reverse))) # Returns positions of every match in a string
   if(nrow(matches) == 0) {
-    print("No domestication needed.")
+    message("No domestication needed.")
     return(list())
   }
   split_seq<-splitseq(sequence)
@@ -157,7 +157,7 @@ domesticate<-function(input_sequence, restriction_enzyme="GGTCTC", cuf="e_coli_3
 #' suffix = "AA", vector=c("CTCA", "CTCG"), replacements = mutations, binding_min_length=4 ,
 #' binding_max_length=9, target_temp=60, cuf=cuf)
 #' 
-mutate_spm<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", suffix="A", vector=c("AATG", "AAGC"), replacements,replacement_range=2, binding_min_length=4 ,binding_max_length=9, target_temp=60, cuf="e_coli_316407.csv", fragment_min_size=100) {#change to binding_max_length_max? and min?
+mutate_spm<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", suffix="A", vector=c("AATG", "AAGC"), replacements,replacement_range=2, binding_min_length=4, binding_max_length=9, target_temp=60, cuf="e_coli_316407.csv", fragment_min_size=100) {#change to binding_max_length_max? and min?
   cuf_list<-get_cu_table(cuf)
   prefix<-str_to_upper(prefix)
   vector<-str_to_upper(vector)
@@ -174,6 +174,34 @@ mutate_spm<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", s
   prot_sequence<-seqinr::translate(sequence)
   primers<-vector("list")
   
+  check_offtargets<-function(codon_seq, codons, positions_aa, restriction_enzyme="GGTCTC", cuf="e_coli_316407.csv") {
+    cuf_vector<-get_cu_table(cuf, list=F)
+    seq<-paste(codon_seq, collapse = "")
+    restriction_enzyme_s2c<-s2c(restriction_enzyme)
+    restriction_enzyme_s2c_reverse<-comp(restriction_enzyme_s2c)
+    restriction_enzyme_s2c_reverse<-rev(restriction_enzyme_s2c_reverse)
+    restriction_enzyme_reverse<-str_to_upper(paste(restriction_enzyme_s2c_reverse, collapse = ""))
+    matches <- do.call(rbind, str_locate_all(seq, c(restriction_enzyme, restriction_enzyme_reverse))) # Returns positions of every match in a string
+    if(nrow(matches) > 0) {
+      for(i in 1:nrow(matches)){
+        start<-ceiling(matches[i,"start"]/3)
+        end<-ceiling(matches[i, "end"]/3)
+        positions<-positions_aa[positions_aa >= start & positions_aa <= end]
+        if(length(positions > 0)){
+          alt_codons<-syncodons(codon_seq_tmp[positions])
+          for(j in 1:length(alt_codons)){ #filter out the codon which we already know
+            codons_tmp<-alt_codons[[j]]
+            codons_tmp<-codons_tmp[which(codons_tmp != names(alt_codons[j]))]
+            alt_codons[[j]]<-cuf_vector[str_to_upper(codons_tmp)]
+          }
+          max_in_list<-which.max(unlist(lapply(alt_codons, function(x) x[which.max(x)]))) 
+          codons[which(positions_aa==positions[max_in_list])]<-str_to_upper(names(alt_codons[[max_in_list]][which.max(alt_codons[[max_in_list]])]))
+        }
+      }
+    }
+    return(codons)
+  }
+  
   if(str_sub(vector[1], 2) == "ATG"){
     fragment_start<-2
   } else{
@@ -184,6 +212,7 @@ mutate_spm<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", s
   positions_aa<-vector()
   aminoacids<-vector()
   codons<-vector()
+  codon_seq_tmp<-codon_seq
   
   for(i in 1:length(replacements)) {
       position_aa<-as.numeric(replacements[[i]][1])
@@ -195,7 +224,7 @@ mutate_spm<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", s
       codon<-str_to_upper(names(which.max(cuf_list[[aminoacid]]))[1])
       if(codon == codon_seq[position_aa]) {
         if(length(cuf_list[[aminoacid]] == 1)) {
-          stop(paste("There is no syn. codon for", aminoacid ,sep=""))
+          stop(paste("There is no syn. codon for ", aminoacid ,sep=""))
         }
         else {
           old_codon<-which.max(cuf_list[[aminoacid]])
@@ -203,6 +232,13 @@ mutate_spm<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", s
         }
       }
       codons<-c(codons, codon)
+      codon_seq_tmp[position_aa]<-codon
+  }
+  
+  codons<-check_offtargets(codon_seq = codon_seq_tmp, codons = codons, positions_aa = positions_aa, restriction_enzyme = "GGTCTC", cuf = cuf)
+  codons<-check_offtargets(codon_seq = codon_seq_tmp, codons = codons, positions_aa = positions_aa, restriction_enzyme = "GAAGAC", cuf = cuf)
+  if(restriction_enzyme != "GGTCTC" | restriction_enzyme != "GAAGAC") {
+    codons<-check_offtargets(codon_seq = codon_seq_tmp, codons = codons, positions_aa = positions_aa, restriction_enzyme = restriction_enzyme, cuf = cuf)
   }
   
   fragments<-make_fragments(mutations=positions_aa,seq=codon_seq,start=fragment_start, distance=replacement_range, fsize=fragment_min_size, buffer=0)
@@ -227,6 +263,11 @@ mutate_spm<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", s
       suffix_f<-suffix
       suffix_r<-paste(comp(s2c(suffix), forceToLower = F), sep="", collapse = "")
       stop_r<-cur_fragment@stop-2
+      if(n==length(fragments)){#if there is just one single fragment - e.g. one mutation at the start or end
+        overhang_r<-""
+        stop_r<-cur_fragment@stop
+        vector_r<-vector[2]
+      }
     } 
     else if(n==length(fragments)) {
       vector_f<-""
@@ -266,6 +307,17 @@ mutate_spm<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", s
       temp_primer@binding_sequence<-paste(paste(codon_seq[(cur_fragment@stop-2-binding_max_length-1):stop_r], collapse=""), sep="")
       if(n!=length(fragments))
         temp_primer@binding_sequence<-paste(temp_primer@binding_sequence, str_sub(codon_seq[cur_fragment@stop-1], end=2) ,sep="")
+      #check if the mutation is also the end
+      if(length(cur_fragment@stop_mutation)==1){
+          if(cur_fragment@stop_mutation[1] != cur_fragment@stop) {
+            if(cur_fragment@stop_mutation[1]<=stop_r) # if it is bigger than stop_r, it is partly in the overlap...
+              temp_primer@extra<-paste(paste(codon_seq[cur_fragment@stop_mutation[1]:stop_r], collapse = ""), sep="")
+            if(n!=length(fragments)) #...and handeled here, for the last fragment stop_r is stop
+              temp_primer@extra<-paste(temp_primer@extra, str_sub(codon_seq[cur_fragment@stop-1], end=2) ,sep="")
+            temp_primer@extra<-paste(comp(rev(s2c(temp_primer@extra)), ambiguous = T,forceToLower = F), collapse = "")
+            temp_primer@binding_sequence<-paste(paste(codon_seq[(cur_fragment@stop_mutation[1]-1-binding_max_length-1):(cur_fragment@stop_mutation[1]-1)], collapse=""), sep="")
+          }
+      }
       temp_primer@binding_sequence<-paste(str_to_upper(comp(rev(s2c(temp_primer@binding_sequence)))), collapse="")
       temp_primer<-sequence_length_temperature(temp_primer, primer_min=binding_min_length, target_temp=primers[[n]][[1]]@temperature)
     }
@@ -294,6 +346,7 @@ mutate_spm<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", s
 #' Calculate Primers for Multiple Site Saturation Mutagenesis
 #' 
 #' The mutate_msd function designs the necessary set of primers for the desired mutations.
+#' Note that you can also select TGG in saturation mutagenesis to apply the 22c trick.
 #' 
 #' @param input_sequence The sequence which should be modified. This is an object of type character containing the sequence. 
 #' @param codon The desired type of MSD mutation [default: NDT]
@@ -301,7 +354,7 @@ mutate_spm<-function(input_sequence, prefix="TT" ,restriction_enzyme="GGTCTC", s
 #' @param restriction_enzyme Recognition site sequence of the respective restriction enzyme [default: GGTCTC]
 #' @param suffix Spacer nucleotides matching the cleavage pattern of the enzyme [default: A]
 #' @param vector Four basepair overhangs complementary to the created overhangs in the acceptor vector  [default: c("AATG", "AAGC")]
-#' @param replacements The desired substitutions
+#' @param replacements The desired substitutions. Can be a numeric vector or a list of character vectors with position and codon. See \href{articles/MSD3.html}{\code{vignette("MSD3", package = "goldenmutagenesis")}} for examples.
 #' @param replacement_range  Maximum distance in amino acid residues between two randomization sites to be incoporated into a single primer (reverse, end of the fragment) - has a cascading effect for following mutations [default: 3]
 #' @param binding_min_length The minimal threshold value of the length of the template binding sequence in amino acid residues [default: 4]
 #' @param binding_max_length Maximal length of the binding sequence in amino acid residues [default: 9]
@@ -328,7 +381,7 @@ mutate_msd<-function(input_sequence, codon="NDT" ,prefix="TT" ,restriction_enzym
   vector<-str_to_upper(vector)
   restriction_enzyme<-str_to_upper(restriction_enzyme)
   input_sequence<-str_to_upper(input_sequence)
-  possible_codons<-c("NNN", "NNK", "NNS", "NDT", "DBK", "NRT")
+  possible_codons<-c("NNN", "NNK", "NNS", "NDT", "DBK", "NRT", "VHG", "VRK", "NYC", "KST", "TGG")
   if(!(codon %in% possible_codons)) {
     stop(paste(codon, "is not a valid codon. Please select one of the following:", paste(possible_codons, collapse = " ") ,sep=" "))
   }
@@ -372,6 +425,11 @@ mutate_msd<-function(input_sequence, codon="NDT" ,prefix="TT" ,restriction_enzym
       suffix_f<-suffix
       suffix_r<-paste(comp(s2c(suffix), forceToLower = F), sep="", collapse = "")
       stop_r<-cur_fragment@stop-2
+      if(n==length(fragments)){#if there is just one single fragment - e.g. one mutation at the start or end
+        overhang_r<-""
+        stop_r<-cur_fragment@stop
+        vector_r<-vector[2]
+      }
     } 
     else if(n==length(fragments)) {
       vector_f<-""
@@ -508,11 +566,11 @@ primer_prepare_level<-function(primerset, vector=c("AATG", "AAGC")){
     primerset@primers[[1]][[1]]@extra<-paste(primerset@primers[[1]][[1]]@extra, vector[1], sep="")
   }
   else if(str_sub(paste(primerset@primers[[1]][[1]]@extra,primerset@primers[[1]][[1]]@binding_sequence, sep=""), 1, 3) == "ATG") {
-    primerset@primers[[1]][[1]]@extra<-paste(primerset@primers[[1]][[1]]@extra, str_sub(vector[1], 1, 1), sep="")
+    primerset@primers[[1]][[1]]@extra<-paste(str_sub(vector[1], 1, 1),primerset@primers[[1]][[1]]@extra, sep="")
   } else {
     stop("The extra+binding_sequence of the primer did not start with ATG. Something went wrong. Please send a bug report to us.")
   }
-  primerset@primers[[length(primerset@primers)]][[2]]@extra<-paste(primerset@primers[[length(primerset@primers)]][[2]]@extra, vector[2], sep="")
+  primerset@primers[[length(primerset@primers)]][[2]]@extra<-paste(vector[2], primerset@primers[[length(primerset@primers)]][[2]]@extra,  sep="")
   return(primerset)
 }
 

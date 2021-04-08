@@ -4,10 +4,20 @@
 \alias{mutate_msd}
 \title{Calculate Primers for Multiple Site Saturation Mutagenesis}
 \usage{
-mutate_msd(input_sequence, codon = "NDT", prefix = "TT",
-  restriction_enzyme = "GGTCTC", suffix = "A", vector = c("AATG",
-  "AAGC"), replacements, replacement_range = 3, binding_min_length = 4,
-  binding_max_length = 9, target_temp = 60, fragment_min_size = 100)
+mutate_msd(
+  input_sequence,
+  codon = "NDT",
+  prefix = "TT",
+  restriction_enzyme = "GGTCTC",
+  suffix = "A",
+  vector = c("AATG", "AAGC"),
+  replacements,
+  replacement_range = 3,
+  binding_min_length = 4,
+  binding_max_length = 9,
+  target_temp = 60,
+  fragment_min_size = 100
+)
 }
 \arguments{
 \item{input_sequence}{The sequence which should be modified. This is an object of type character containing the sequence.}
@@ -22,7 +32,7 @@ mutate_msd(input_sequence, codon = "NDT", prefix = "TT",
 
 \item{vector}{Four basepair overhangs complementary to the created overhangs in the acceptor vector  [default: c("AATG", "AAGC")]}
 
-\item{replacements}{The desired substitutions}
+\item{replacements}{The desired substitutions. Can be a numeric vector or a list of character vectors with position and codon. See \href{articles/MSD3.html}{\code{vignette("MSD3", package = "goldenmutagenesis")}} for examples.}
 
 \item{replacement_range}{Maximum distance in amino acid residues between two randomization sites to be incoporated into a single primer (reverse, end of the fragment) - has a cascading effect for following mutations [default: 3]}
 
@@ -39,6 +49,7 @@ An object of class Primerset with the designed Primers.
 }
 \description{
 The mutate_msd function designs the necessary set of primers for the desired mutations.
+Note that you can also select TGG in saturation mutagenesis to apply the 22c trick.
 }
 \examples{
 #Load the setup of the MSD vignette and design the primers

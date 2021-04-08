@@ -19,6 +19,14 @@ test_that("Known primers are calculated correctly (MSD) for lowercase sequences"
 load("MSD_BsaI_result_lv0.RData")
 primer_test_lvl0<-primer_add_level(primers,  prefix="TT", restriction_enzyme="GAAGAC", suffix="AA", vector=c("CTCA", "CTCG"))
 
+load("MSD_5_265.RData")
+load("MSD_265.RData")
+
+test_that("Start and End Positions are calculated correctly", {
+  expect_that(mutate_msd(input_sequence = input_sequence, replacements = c(5, 265), restriction_enzyme = recognition_site_bsai), is_identical_to(primers_5_265))
+  expect_that(mutate_msd(input_sequence = input_sequence, replacements = c(265), restriction_enzyme = recognition_site_bsai), is_identical_to(primers_265))
+})
+
 test_that("Adding level0 to a set of primers works", {
   expect_that(primer_test_lvl0, is_identical_to(primers_lvl0))
 })

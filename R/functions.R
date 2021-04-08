@@ -79,15 +79,39 @@ make_fragments<-function(mutations, fsize, buffer=0, seq, start, distance=2){
     }
     i<-cm
     repeat{
-      if((mutations[i] - start) >= fsize){#Iterate until we have a mutation on the end of the fragment
-        if(i<length(mutations)){
-          if((mutations[i+1] - mutations[i])<distance){#Integrate next mutation
-            i<-i+1
-            next
+      if((mutations[i] + buffer - start) >= fsize){#Iterate until we have a mutation on the end of the fragment
+          if(length(seq) - mutations[i] < fsize){# the last fragment would be too small 
+             #next mutation should have at least 1 or buffer +1 difference
+              if(((length(seq) - fsize) - start >= fsize) & !is.null(fragments)) {
+                this_fragment@stop<-length(seq)-fsize
+                fragments<-c(fragments, this_fragment)
+                start=length(seq)-(fsize-1)
+                this_fragment<-fragment(start=start)
+                end=length(seq)
+                endm=length(mutations)
+              } else {
+                end<-length(seq)
+                endm=length(mutations)
+              }
+              break
+            }
+          if(i<length(mutations)){
+            if((mutations[i+1] - mutations[i])<distance){#Integrate next mutation
+              i<-i+1
+              next
+            }
           }
-        }
         endm<-i
         end<-mutations[i] + buffer
+        if(i == 1) { #if there was more than one mutation, we are already safe
+          if(length(seq)-end < fsize) {
+            this_fragment@stop<-length(seq)-fsize-1-buffer
+            fragments<-c(fragments, this_fragment)
+            this_fragment@start<-length(seq)-fsize-buffer
+            end<-length(seq)
+            endm<-1
+          }
+        }
         #buffer and distance must be at least equal
         break
       }
@@ -102,7 +126,7 @@ make_fragments<-function(mutations, fsize, buffer=0, seq, start, distance=2){
     }
     #Is the mutation at the end or start of a fragment?
     this_fragment@stop=end
-    mid<-start+round((this_fragment@stop - this_fragment@start)/2)
+    mid<-this_fragment@start+round((this_fragment@stop - this_fragment@start)/2)
     if(cm<=length(mutations)){
       for(j in cm:endm){
         if(mutations[j] < mid){
@@ -123,23 +147,25 @@ make_fragments<-function(mutations, fsize, buffer=0, seq, start, distance=2){
     start<-this_fragment@stop+1
   }
   #Optimize Fragments - Shift start and stop
-  for (k in 1:(length(fragments)-1)) {
-    if(length(fragments[[k]]@stop_mutation)>0){
-      stop_pos<-fragments[[k]]@stop_mutation[1]
-      if(length(fragments[[k+1]]@start_mutation)>0){
-        start_pos<-fragments[[k+1]]@start_mutation[length(fragments[[k+1]]@start_mutation)]
-        mid_stop<-stop_pos+(round(start_pos-stop_pos)/2)-1
-        newstop<-max(fragments[[k]]@stop, min(mid_stop, (fragments[[k+1]]@start_mutation[1]-1)))
-        fragments[[k]]@stop<-newstop
-        fragments[[k+1]]@start<-newstop+1
+  if(length(fragments)>1){
+    for (k in 1:(length(fragments)-1)) {
+      if(length(fragments[[k]]@stop_mutation)>0){
+        stop_pos<-fragments[[k]]@stop_mutation[1]
+        if(length(fragments[[k+1]]@start_mutation)>0){
+          start_pos<-fragments[[k+1]]@start_mutation[length(fragments[[k+1]]@start_mutation)]
+          mid_stop<-stop_pos+(round((start_pos-stop_pos)/2))-1
+          newstop<-max(fragments[[k]]@stop, min(mid_stop, (fragments[[k+1]]@start_mutation[1]-1)))
+          fragments[[k]]@stop<-newstop
+          fragments[[k+1]]@start<-newstop+1
+        }
+        else{
+          next
+        }
       }
       else{
         next
+        #This should never be the case
       }
-    }
-    else{
-      next
-      #This should never be the case
     }
   }
   return(fragments)

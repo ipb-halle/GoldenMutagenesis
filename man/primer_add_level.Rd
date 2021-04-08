@@ -4,9 +4,13 @@
 \alias{primer_add_level}
 \title{Add a level to exisiting Primerset}
 \usage{
-primer_add_level(primerset, prefix = "TT",
-  restriction_enzyme = "GAAGAC", suffix = "AA", vector = c("CTCA",
-  "CTCG"))
+primer_add_level(
+  primerset,
+  prefix = "TT",
+  restriction_enzyme = "GAAGAC",
+  suffix = "AA",
+  vector = c("CTCA", "CTCG")
+)
 }
 \arguments{
 \item{primerset}{An exisiting Primerset (in Level 2)}
